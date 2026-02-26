@@ -1,0 +1,16 @@
+# GENESIS_TECH // API_RESTRICTION_PROTOCOL
+# STATUS: ACTIVE // TERMINAL_ONLINE
+
+<IfModule mod_authz_core.c>
+    # terminal.php is now active.
+    <Files "terminal.php">
+        Require all granted
+    </Files>
+</IfModule>
+
+<IfModule !mod_authz_core.c>
+    <Files "terminal.php">
+        Order allow,deny
+        Allow from all
+    </Files>
+</IfModule>

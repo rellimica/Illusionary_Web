@@ -1,0 +1,64 @@
+ErrorDocument 404 /error/404.php
+ErrorDocument 403 /error/403.php
+ErrorDocument 401 /error/401.php
+ErrorDocument 500 /error/500.php
+ErrorDocument 503 /maintenance.php
+
+<FilesMatch "^\.">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# Disable directory listing
+Options -Indexes
+
+# Block access to .env file
+<Files .env>
+    Order allow,deny
+    Deny from all
+</Files>
+# Block access to config.php
+<Files config.php>
+    Order allow,deny
+    Deny from all
+</Files>
+# Block access to pawnshop.php
+<Files pawnshop.php>
+    Order allow,deny
+    Deny from all
+</Files>
+
+# Mobile device detection — serve /mobile/ versions transparently
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Skip if already in /mobile/, /admin/, or /api/
+    RewriteCond %{REQUEST_URI} !^/mobile/ [NC]
+    RewriteCond %{REQUEST_URI} !^/admin/ [NC]
+    RewriteCond %{REQUEST_URI} !^/api/ [NC]
+
+    # Match mobile User-Agents
+    RewriteCond %{HTTP_USER_AGENT} "Mobile|Android|iPhone|iPad|iPod|webOS|BlackBerry|Opera Mini|IEMobile" [NC]
+
+    # Rewrite matching pages to their mobile versions
+    RewriteRule ^(index|trade|draw|about|auth)\.php$ /mobile/$1.php [L]
+</IfModule>
+
+# <IfModule mod_rewrite.c>
+#     RewriteEngine On
+# 
+#     # 1. EXCLUSIONS: Skip if it's the maintenance page OR if it's an API call
+#     RewriteCond %{REQUEST_URI} !^/maintenance\.php$
+#     RewriteCond %{REQUEST_URI} !^/api [NC]
+# 
+#     # 2. TARGET: Only affect files ending in .php
+#     RewriteCond %{REQUEST_URI} \.php$ [NC]
+# 
+#     # 3. SELECTIVE DOWN TIME: List the specific PHP pages to put under maintenance
+#     # Example: affects profile.php and settings.php
+#     RewriteCond %{REQUEST_URI} ^/(trade|draw) [NC]
+# 
+#     # 4. Apply 503 status to the matches
+#     RewriteRule ^.*$ - [R=503,L]
+# </IfModule>
+

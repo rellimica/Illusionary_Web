@@ -1,0 +1,359 @@
+/* --- ILLUSIONARY CARD VARIATIONS --- 
+   Consolidated styles for card visual effects across desktop and mobile.
+*/
+
+/* 1. Base Variation Filters - Imagery & Stamps */
+.variant-gold img,
+.variant-gold .card-stamp,
+.variant-gold.modal-card-img,
+.variant-gold.modal-stamp-overlay,
+.variant-gold.detail-visual,
+.variant-gold.m-detail-img,
+.variant-gold.m-detail-visual,
+img.variant-gold,
+.card-stamp.variant-gold {
+    filter: sepia(1) saturate(7) hue-rotate(-15deg) brightness(1.1) contrast(1.1) !important;
+}
+
+.variant-inverted img,
+.variant-inverted .card-stamp,
+.variant-inverted.modal-card-img,
+.variant-inverted.modal-stamp-overlay,
+.variant-inverted.detail-visual,
+.variant-inverted.m-detail-img,
+.variant-inverted.m-detail-visual,
+img.variant-inverted,
+.card-stamp.variant-inverted {
+    filter: invert(1) !important;
+}
+
+.variant-corrupted img,
+.variant-corrupted .card-stamp,
+.variant-corrupted.modal-card-img,
+.variant-corrupted.modal-stamp-overlay,
+.variant-corrupted.detail-visual,
+.variant-corrupted.m-detail-img,
+.variant-corrupted.m-detail-visual,
+img.variant-corrupted,
+.card-stamp.variant-corrupted {
+    filter: invert(1) hue-rotate(180deg) !important;
+}
+
+.variant-static img,
+.variant-static .card-stamp,
+.variant-static.modal-card-img,
+.variant-static.modal-stamp-overlay,
+.variant-static.detail-visual,
+.variant-static.m-detail-img,
+.variant-static.m-detail-visual,
+img.variant-static,
+.card-stamp.variant-static {
+    filter: grayscale(1) brightness(1.2) !important;
+}
+
+.variant-legacy img,
+.variant-legacy .card-stamp,
+.variant-legacy.modal-card-img,
+.variant-legacy.modal-stamp-overlay,
+.variant-legacy.detail-visual,
+.variant-legacy.m-detail-img,
+.variant-legacy.m-detail-visual,
+img.variant-legacy,
+.card-stamp.variant-legacy {
+    filter: sepia(0.8) contrast(1.1) !important;
+}
+
+.variant-phase img,
+.variant-phase .card-stamp,
+.variant-phase.modal-card-img,
+.variant-phase.modal-stamp-overlay,
+.variant-phase.detail-visual,
+.variant-phase.m-detail-img,
+.variant-phase.m-detail-visual,
+img.variant-phase,
+.card-stamp.variant-phase {
+    filter: hue-rotate(120deg) !important;
+}
+
+.variant-ghost img,
+.variant-ghost .card-stamp,
+.variant-ghost.modal-card-img,
+.variant-ghost.modal-stamp-overlay,
+.variant-ghost.detail-visual,
+.variant-ghost.m-detail-img,
+.variant-ghost.m-detail-visual,
+img.variant-ghost,
+.card-stamp.variant-ghost {
+    opacity: 0.6;
+    filter: brightness(1.5) !important;
+}
+
+/* 2. Animated Variants */
+.variant-shimmer {
+    position: relative;
+    overflow: hidden;
+}
+
+.variant-shimmer::after {
+    content: "";
+    position: absolute;
+    top: -100%;
+    left: -100%;
+    width: 300%;
+    height: 300%;
+    background: linear-gradient(45deg, transparent 45%, rgba(255, 255, 255, 0.6) 50%, transparent 55%);
+    animation: shimmer-sweep 2s infinite linear;
+    pointer-events: none;
+    z-index: 2;
+}
+
+.variant-glitch {
+    animation: glitch-jitter 0.2s infinite;
+}
+
+.variant-glitch:hover {
+    filter: drop-shadow(2px 0 red) drop-shadow(-2px 0 blue) !important;
+}
+
+.variant-pulse {
+    animation: pulse-glow 2s infinite ease-in-out;
+}
+
+.variant-holo img,
+.variant-holo .card-stamp,
+.variant-holo.modal-card-img,
+.variant-holo.modal-stamp-overlay,
+.variant-holo.detail-visual,
+.variant-holo.m-detail-img,
+.variant-holo.m-detail-visual,
+img.variant-holo,
+.card-stamp.variant-holo {
+    filter: contrast(1.15) saturate(1.1) !important;
+}
+
+.variant-holo.detail-visual,
+.variant-holo.m-detail-visual {
+    position: relative;
+    overflow: hidden;
+}
+
+.variant-holo.detail-visual::after,
+.variant-holo.m-detail-visual::after {
+    content: "";
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(to right,
+            hsla(0.0, 100%, 50%, 0.4) 0.0%,
+            hsla(7.2, 100%, 50%, 0.4) 2.04%,
+            hsla(14.4, 100%, 50%, 0.4) 4.08%,
+            hsla(21.6, 100%, 50%, 0.4) 6.12%,
+            hsla(28.8, 100%, 50%, 0.4) 8.16%,
+            hsla(36.0, 100%, 50%, 0.4) 10.2%,
+            hsla(43.2, 100%, 50%, 0.4) 12.24%,
+            hsla(50.4, 100%, 50%, 0.4) 14.29%,
+            hsla(57.6, 100%, 50%, 0.4) 16.33%,
+            hsla(64.8, 100%, 50%, 0.4) 18.37%,
+            hsla(72.0, 100%, 50%, 0.4) 20.41%,
+            hsla(79.2, 100%, 50%, 0.4) 22.45%,
+            hsla(86.4, 100%, 50%, 0.4) 24.49%,
+            hsla(93.6, 100%, 50%, 0.4) 26.53%,
+            hsla(100.8, 100%, 50%, 0.4) 28.57%,
+            hsla(108.0, 100%, 50%, 0.4) 30.61%,
+            hsla(115.2, 100%, 50%, 0.4) 32.65%,
+            hsla(122.4, 100%, 50%, 0.4) 34.69%,
+            hsla(129.6, 100%, 50%, 0.4) 36.73%,
+            hsla(136.8, 100%, 50%, 0.4) 38.78%,
+            hsla(144.0, 100%, 50%, 0.4) 40.82%,
+            hsla(151.2, 100%, 50%, 0.4) 42.86%,
+            hsla(158.4, 100%, 50%, 0.4) 44.9%,
+            hsla(165.6, 100%, 50%, 0.4) 46.94%,
+            hsla(172.8, 100%, 50%, 0.4) 48.98%,
+            hsla(180.0, 100%, 50%, 0.4) 51.02%,
+            hsla(187.2, 100%, 50%, 0.4) 53.06%,
+            hsla(194.4, 100%, 50%, 0.4) 55.1%,
+            hsla(201.6, 100%, 50%, 0.4) 57.14%,
+            hsla(208.8, 100%, 50%, 0.4) 59.18%,
+            hsla(216.0, 100%, 50%, 0.4) 61.22%,
+            hsla(223.2, 100%, 50%, 0.4) 63.27%,
+            hsla(230.4, 100%, 50%, 0.4) 65.31%,
+            hsla(237.6, 100%, 50%, 0.4) 67.35%,
+            hsla(244.8, 100%, 50%, 0.4) 69.39%,
+            hsla(252.0, 100%, 50%, 0.4) 71.43%,
+            hsla(259.2, 100%, 50%, 0.4) 73.47%,
+            hsla(266.4, 100%, 50%, 0.4) 75.51%,
+            hsla(273.6, 100%, 50%, 0.4) 77.55%,
+            hsla(280.8, 100%, 50%, 0.4) 79.59%,
+            hsla(288.0, 100%, 50%, 0.4) 81.63%,
+            hsla(295.2, 100%, 50%, 0.4) 83.67%,
+            hsla(302.4, 100%, 50%, 0.4) 85.71%,
+            hsla(309.6, 100%, 50%, 0.4) 87.76%,
+            hsla(316.8, 100%, 50%, 0.4) 89.8%,
+            hsla(324.0, 100%, 50%, 0.4) 91.84%,
+            hsla(331.2, 100%, 50%, 0.4) 93.88%,
+            hsla(338.4, 100%, 50%, 0.4) 95.92%,
+            hsla(345.6, 100%, 50%, 0.4) 97.96%,
+            hsla(352.8, 100%, 50%, 0.4) 100.0%);
+    background-size: 50% 100%;
+    mix-blend-mode: color-dodge;
+    transform: rotate(25deg);
+    animation: holo-sweep 10s infinite linear;
+    pointer-events: none;
+    z-index: 2;
+}
+
+/* 3. Thematic Variants */
+.variant-blood-moon img,
+.variant-blood-moon.modal-card-img,
+.variant-blood-moon.modal-stamp-overlay,
+.variant-blood-moon.detail-visual,
+.variant-blood-moon.m-detail-img,
+.variant-blood-moon.m-detail-visual,
+img.variant-blood-moon,
+.card-stamp.variant-blood-moon {
+    filter: sepia(1) saturate(8) hue-rotate(-45deg) brightness(0.6) contrast(1.4) !important;
+}
+
+/* 4. Special Chip/Pill Backgrounds */
+.sn-chip.variant-gold,
+.sn-pill.variant-gold,
+.summary-card.variant-gold,
+.m-detail-sn-pill.variant-gold {
+    background: rgba(255, 215, 0, 0.15);
+    border-color: rgba(255, 215, 0, 0.2);
+}
+
+.sn-chip.variant-holo,
+.sn-pill.variant-holo,
+.summary-card.variant-holo,
+.m-detail-sn-pill.variant-holo {
+    background: linear-gradient(90deg, rgba(255, 0, 128, 0.2), rgba(0, 255, 255, 0.2));
+    border-color: rgba(255, 255, 255, 0.3);
+    color: #fff;
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+}
+
+.sn-chip.variant-inverted,
+.sn-pill.variant-inverted,
+.summary-card.variant-inverted,
+.m-detail-sn-pill.variant-inverted {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.sn-chip.variant-corrupted,
+.sn-pill.variant-corrupted,
+.summary-card.variant-corrupted,
+.m-detail-sn-pill.variant-corrupted {
+    background: rgba(0, 0, 0, 0.6);
+    border-color: rgba(0, 0, 0, 0.2);
+}
+
+.sn-chip.variant-static,
+.sn-pill.variant-static,
+.summary-card.variant-static,
+.m-detail-sn-pill.variant-static {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.sn-chip.variant-legacy,
+.sn-pill.variant-legacy,
+.summary-card.variant-legacy,
+.m-detail-sn-pill.variant-legacy {
+    background: rgba(100, 80, 50, 0.15);
+}
+
+.sn-chip.variant-shimmer,
+.sn-pill.variant-shimmer,
+.summary-card.variant-shimmer,
+.m-detail-sn-pill.variant-shimmer {
+    border-color: rgba(255, 255, 255, 0.4);
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+}
+
+.sn-chip.variant-toxic,
+.sn-pill.variant-toxic,
+.summary-card.variant-toxic,
+.m-detail-sn-pill.variant-toxic {
+    background: rgba(0, 255, 0, 0.1);
+    border-color: rgba(0, 255, 0, 0.2);
+    color: #4dfa7c;
+}
+
+.sn-chip.variant-blood-moon,
+.sn-pill.variant-blood-moon,
+.summary-card.variant-blood-moon,
+.m-detail-sn-pill.variant-blood-moon {
+    background: rgba(255, 0, 0, 0.1);
+    border-color: rgba(255, 0, 0, 0.2);
+    color: #ff4e4e;
+}
+
+.sn-chip.variant-blueprint,
+.sn-pill.variant-blueprint,
+.summary-card.variant-blueprint,
+.m-detail-sn-pill.variant-blueprint {
+    background: #000c24;
+    border-color: #4e7cfe;
+    color: #4e7cfe;
+}
+
+/* --- KEYFRAMES --- */
+@keyframes shimmer-sweep {
+    0% {
+        transform: translate(-20%, -20%);
+    }
+
+    100% {
+        transform: translate(20%, 20%);
+    }
+}
+
+@keyframes holo-sweep {
+    0% {
+        background-position: 0% 0%;
+    }
+
+    100% {
+        background-position: 100% 0%;
+    }
+}
+
+@keyframes glitch-jitter {
+    0% {
+        transform: translate(0);
+    }
+
+    20% {
+        transform: translate(-2px, 1px);
+    }
+
+    40% {
+        transform: translate(-2px, -1px);
+    }
+
+    60% {
+        transform: translate(2px, 1px);
+    }
+
+    80% {
+        transform: translate(2px, -1px);
+    }
+
+    100% {
+        transform: translate(0);
+    }
+}
+
+@keyframes pulse-glow {
+
+    0%,
+    100% {
+        box-shadow: 0 0 5px rgba(0, 229, 255, 0.2);
+    }
+
+    50% {
+        box-shadow: 0 0 20px rgba(0, 229, 255, 0.6);
+    }
+}

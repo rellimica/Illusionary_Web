@@ -1,0 +1,29 @@
+# GENESIS_TECH // LORE_VAULT_SECURITY
+# ASSET_PROTECTION: ACTIVE
+
+<IfModule mod_authz_core.c>
+    # Authorized Terminal Entry Point
+    <Files "null-os.php">
+        Require all granted
+    </Files>
+
+    # RESTRICTED: PREVENT DIRECT BROWSER ACCESS
+    # TEMPORARY_LOCKOUT: ZEKE and VYPER are NOT ready for reveal.
+    <FilesMatch "^(subject-null|subject-zeke|subject-vyper|genesis-archive)\.php$">
+        Require all denied
+    </FilesMatch>
+
+    # General directory protection
+    <FilesMatch "^(?!null-os\.php$).*$">
+        Require all denied
+    </FilesMatch>
+</IfModule>
+
+<IfModule !mod_authz_core.c>
+    Order deny,allow
+    Deny from all
+    <Files "null-os.php">
+        Allow from all
+    </Files>
+</IfModule>
+

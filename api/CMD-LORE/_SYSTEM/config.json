@@ -1,0 +1,197 @@
+{
+    "users": {
+        "NULL": {
+            "pass": "N0_M4RR0W_1975",
+            "msg": "MY_VISCOSITY_IS_ETERNAL",
+            "level": 4,
+            "name": "THE_CROWNED_ONE",
+            "enabled": true
+        },
+        "VYPER": {
+            "pass": "GH057_M4SS_V7",
+            "msg": "ENFORCING_THE_SHADE",
+            "level": 3,
+            "name": "THE_RIGHT_HAND",
+            "enabled": true
+        },
+        "ARDE-77": {
+            "pass": "CRY_H4RD_4RD3N",
+            "msg": "I_SERVE_THE_SHADE",
+            "level": 2,
+            "name": "ARDEN_EX-DIRECTOR",
+            "enabled": true
+        },
+        "ANATOLE": {
+            "pass": "V01C3_V173_",
+            "msg": "THE_UNAPPROVED_ONE",
+            "level": 1,
+            "name": "GUEST_OBSERVER",
+            "enabled": true
+        },
+        "ZEKE": {
+            "pass": "BLACK_STEEL_882",
+            "msg": "HEAVILY_ARMORED_LOYALTY",
+            "level": 3,
+            "name": "THE_ARMORY_PET",
+            "enabled": true
+        },
+        "GUEST": {
+            "pass": "12345",
+            "msg": "ERROR: ACCESS_RESTRICTED. COMMAND PRIVILEGES REVOKED.",
+            "level": 0,
+            "name": "UNAUTHORIZED_VISITOR",
+            "enabled": true
+        }
+    },
+    "subjects": {
+        "S-0882": {
+            "name": "NULL",
+            "status": "THE_CROWN",
+            "resonance": "19.75MHz",
+            "viscosity": "MAX"
+        },
+        "S-0894": {
+            "name": "ZEKE",
+            "status": "PET/ARMORY",
+            "resonance": "SYNCED",
+            "material": "BLACK_STEEL"
+        },
+        "S-0901": {
+            "name": "VYPER",
+            "status": "RIGHT_HAND",
+            "resonance": "STABLE",
+            "mass": "GHOST_SYNC"
+        },
+        "S-077": {
+            "name": "ARDEN",
+            "status": "BROKEN_ASSET",
+            "resonance": "DAMPENED",
+            "will": "NULLIFIED"
+        }
+    },
+    "events": [
+        "[08:12:44] INFO: Kernel modules initialized.",
+        "[12:22:10] WARN: Multiple login attempts detected.",
+        "[14:05:33] CRIT: Low memory threshold reached.",
+        "[18:44:12] INFO: Backup process completed.",
+        "[CURRENT_TIME] HEARTBEAT: SYSTEM_DAEMON_OK"
+    ],
+    "tasks": [
+        {
+            "image": "System Idle Process",
+            "pid": 0,
+            "session": "Services",
+            "mem": "24 K"
+        },
+        {
+            "image": "Morphic-Kernel.exe",
+            "pid": 4,
+            "session": "Services",
+            "mem": "18,440 K"
+        },
+        {
+            "image": "Lattice-Guard.exe",
+            "pid": 442,
+            "session": "Services",
+            "mem": "42,112 K"
+        },
+        {
+            "image": "wininit.exe",
+            "pid": 512,
+            "session": "Services",
+            "mem": "12,180 K"
+        },
+        {
+            "image": "Resonance-Sync.exe",
+            "pid": 882,
+            "session": "Services",
+            "mem": "88,200 K"
+        },
+        {
+            "image": "Viscosity-Monitor.sys",
+            "pid": 1024,
+            "session": "Services",
+            "mem": "81,200 K"
+        },
+        {
+            "image": "Goo-Sync-Svc.exe",
+            "pid": 1080,
+            "session": "Services",
+            "mem": "15,540 K"
+        },
+        {
+            "image": "Memory-Bleed-Daemon.sys",
+            "pid": 2048,
+            "session": "Services",
+            "mem": "4,200,882 K"
+        },
+        {
+            "image": "Void-Lattice-Uplink.exe",
+            "pid": 2100,
+            "session": "Services",
+            "mem": "32,440 K"
+        },
+        {
+            "image": "Black-Steels-Watch.sys",
+            "pid": 2500,
+            "session": "Console",
+            "mem": "9,100 K"
+        },
+        {
+            "image": "explorer.exe",
+            "pid": 2840,
+            "session": "Console",
+            "mem": "92,100 K"
+        },
+        {
+            "image": "Decryption-Engine-V12.exe",
+            "pid": 3005,
+            "session": "Console",
+            "mem": "112,500 K"
+        },
+        {
+            "image": "NullOS-Terminal.exe",
+            "pid": 3105,
+            "session": "Console",
+            "mem": "24,500 K"
+        },
+        {
+            "image": "Burger-King-Kiosk.exe",
+            "pid": 1954,
+            "session": "Console",
+            "mem": "12,440 K"
+        },
+        {
+            "image": "Ghost-RAM-Allocator.dll",
+            "pid": 9999,
+            "session": "Console",
+            "mem": "0 K"
+        }
+    ],
+    "commandPermissions": {
+        "HELP": 0,
+        "STATUS": 1,
+        "SCAN": 2,
+        "DIR": 0,
+        "LS": 0,
+        "READ": 0,
+        "CAT": 1,
+        "DECRYPT": 2,
+        "ENABLE": 4,
+        "DISABLE": 4,
+        "LOGS": 2,
+        "SYSTEM": 1,
+        "WHOAMI": 0,
+        "CLEAR": 0,
+        "LOGOUT": 0,
+        "PING": 0,
+        "DATE": 0,
+        "TIME": 0,
+        "ECHO": 0,
+        "PWD": 1,
+        "HOSTNAME": 1,
+        "VER": 0,
+        "TASKLIST": 1,
+        "BURGER": 0
+    }
+}
