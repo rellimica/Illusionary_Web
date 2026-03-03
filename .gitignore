@@ -1,1 +1,3 @@
 .env
+tmp_banner_cache.json
+user_cache.json
