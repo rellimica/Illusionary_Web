@@ -55,7 +55,16 @@ if (!function_exists('getDiscordUser')) {
 // Whitelist of Discord IDs recognized as Administrators
 $ALLOWED_DISCORD_IDS = [
     '332684782888550410',
-    '613130816809336842'
+    '613130816809336842',
+    '701867923358351511'
+];
+
+/**
+ * Whitelist of Discord IDs recognized as Read-Only Administrators.
+ * These users can view the dashboard but cannot perform write operations.
+ */
+$READ_ONLY_ADMIN_IDS = [
+    '701867923358351511'
 ];
 
 // Reveal / Countdown Settings
@@ -70,7 +79,7 @@ $TRADES_ENABLED = true;
 
 // --- GLOBAL NOTICE BANNER ---
 $GLOBAL_BANNER_ENABLED = false; // Set to true to show the banner
-$GLOBAL_BANNER_TEXT    = "Burger Time! -Null";
+$GLOBAL_BANNER_TEXT    = "The Pawnshop is now open for business.";
 $GLOBAL_BANNER_TYPE    = "info"; // info, warning, critical,danger
 
 // Reveal Timestamp Calculation
@@ -100,22 +109,55 @@ if (isset($ENABLE_REVEAL_COUNTDOWN) && $ENABLE_REVEAL_COUNTDOWN && $reveal_times
     }
 }
 
+// --- TERMS OF SERVICE GATE ---
+if (isset($_SESSION['user_authenticated']) && $_SESSION['user_authenticated'] === true) {
+    $current_page = basename($_SERVER['PHP_SELF']);
+    // Avoid redirect loop and allow logout/auth pages
+    $allowed_pages = ['tos.php', 'auth.php', 'server.php', 'logout.php'];
+    $is_callback = strpos($_SERVER['PHP_SELF'], '/callback/') !== false;
+    $is_api = defined('IS_API');
+
+    if (!in_array($current_page, $allowed_pages) && !$is_callback && !$is_api) {
+        // Fetch ToS status if not in session or to ensure fresh data
+        if (!isset($_SESSION['tos_accepted'])) {
+            // We need a DB connection here if not already present
+            // However, most pages establish their own. For the gate, we'll check if we can query.
+            // A more performant way is to store it in the session upon login.
+        }
+
+        if (isset($_SESSION['tos_accepted']) && $_SESSION['tos_accepted'] == 0) {
+            $ua = $_SERVER['HTTP_USER_AGENT'] ?? '';
+            $is_mobile = preg_match('/iPhone|Android|webOS|BlackBerry|iPod/i', $ua);
+            $tos_path = $is_mobile ? "/mobile/tos.php" : "/tos.php";
+            header("Location: $tos_path");
+            exit;
+        }
+    }
+}
+
 
 // --- PAWNSHOP CONFIGURATION ---
+$PAWNSHOP_ROTATION_OFFSET = 0; // Increment this to manually force a rotation of daily cards.
 $CARD_RARITY_VALUES = [
     'common'    => 1,
     'uncommon'  => 1,
-    'rare'      => 1,
-    'epic'      => 1,
-    'legendary' => 1,
-    'mythic'    => 1,
-    'relic'     => 1
+    'rare'      => 2,
+    'epic'      => 3,
+    'legendary' => 4,
+    'unique'    => 5,
+    'relic'     => 6
 ];
 
 // Helper to check if a user is an admin
 function isAdmin($userId) {
     global $ALLOWED_DISCORD_IDS;
     return in_array($userId, $ALLOWED_DISCORD_IDS);
+}
+
+// Helper to check if an admin is restricted to Read-Only mode
+function isReadOnlyAdmin($userId) {
+    global $READ_ONLY_ADMIN_IDS;
+    return in_array($userId, $READ_ONLY_ADMIN_IDS);
 }
 
 // --- SECURE SERIAL NUMBER SCRAMBLER ---

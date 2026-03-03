@@ -100,6 +100,7 @@ if ($partner_id || $trade_view_id) {
     <link rel="shortcut icon" href="/favicon/favicon.ico">
     <link rel="stylesheet" href="/mobile/mobile.css">
     <link rel="stylesheet" href="/variations.css">
+    <link rel="preload" href="/illusionary.png" as="image">
     <?php require_once __DIR__ . '/../theme-config.php'; injectTheme($THEME); ?>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
     <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
@@ -335,7 +336,7 @@ if ($partner_id || $trade_view_id) {
         <!-- ===== TRADE HUB (Default) ===== -->
         <div class="tw-hub">
             <div class="tw-hub-header">
-                <img src="/illusionary.png" class="tw-hub-logo">
+                <img src="/illusionary.png" class="tw-hub-logo" loading="lazy">
                 <h2 class="gradient-text tw-hub-title">Trading Floor</h2>
                 <p class="tw-hub-subtitle">Select a collector to begin a guided trade.</p>
             </div>
@@ -516,7 +517,7 @@ if ($partner_id || $trade_view_id) {
                 };
 
                 div.innerHTML = `
-                    <img src="${imagesPath}${c.filename}" alt="${c.name}">
+                    <img src="${imagesPath}${c.filename}" alt="${c.name}" loading="lazy">
                     ${!isTradeable ? '<div class="tw-lock-badge">🔒</div>' : ''}
                     ${selectedCount > 0 ? `<div class="tw-selected-badge">${selectedCount}</div>` : ''}
                     <div class="tw-card-label">${c.name.replace(/_/g, ' ')}</div>
@@ -610,7 +611,7 @@ if ($partner_id || $trade_view_id) {
                     const sn = inst ? (typeof inst === 'object' ? inst.sn : inst) : '?';
                     html += `
                         <div class="tw-staged-card ${inst && inst.variant ? 'variant-' + inst.variant : ''}" onclick="removeSN('${side}', ${id}, ${iid})">
-                            <img src="${imagesPath}${meta.filename}" class="${inst && inst.variant ? 'variant-' + inst.variant : ''}">
+                            <img src="${imagesPath}${meta.filename}" class="${inst && inst.variant ? 'variant-' + inst.variant : ''}" loading="lazy">
                             <span class="tw-staged-sn">#${sn}</span>
                             <span class="tw-staged-x">×</span>
                         </div>

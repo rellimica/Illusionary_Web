@@ -17,6 +17,13 @@ if (!isAdmin($my_id) && $request_scope !== 'admin') {
     exit;
 }
 
+// Block write operations for read-only administrators
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isReadOnlyAdmin($my_id)) {
+    http_response_code(403);
+    echo json_encode(['success' => false, 'error' => 'Permission Denied: You are in Read-Only mode.']);
+    exit;
+}
+
 // Additional Helpers from admin.php
 $CACHE_FILE = '../users_cache.json';
 function getDiscordUserCached($id, $bot_token) {

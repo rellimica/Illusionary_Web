@@ -17,7 +17,7 @@
     --rare: #4e7cfe;
     --epic: #a335ee;
     --legendary: #ff8000;
-    --mythic: #ff4e4e;
+    --unique: #ff4e4e;
     --mana-color: #ff4e4e;
 }
 
@@ -531,9 +531,9 @@ body {
 }
 
 /* Rarity borders for mobile cards */
-.m-card-item.rarity-mythic.owned {
-    border-color: var(--mythic);
-    box-shadow: 0 0 10px var(--mythic);
+.m-card-item.rarity-unique.owned {
+    border-color: var(--unique);
+    box-shadow: 0 0 10px var(--unique);
 }
 
 .m-card-item.rarity-legendary.owned {

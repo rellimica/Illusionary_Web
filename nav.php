@@ -322,6 +322,7 @@ $banner_type    = $GLOBAL_BANNER_TYPE ?? 'info';
     <a href="<?php echo $is_mobile_dir ? 'trade.php' : $prefix . 'trade.php'; ?>" id="navTrade" class="sidebar-link <?php echo $current_page === 'trade.php' ? 'active' : ''; ?>">Trading Center</a>
     <a href="<?php echo $is_mobile_dir ? 'pawnshop.php' : $prefix . 'pawnshop.php'; ?>" id="navPawn" class="sidebar-link <?php echo $current_page === 'pawnshop.php' ? 'active' : ''; ?>">Null's Pawnshop</a>
     <a href="<?php echo $is_mobile_dir ? 'about.php' : $prefix . 'about.php'; ?>" id="navAbout" class="sidebar-link <?php echo $current_page === 'about.php' ? 'active' : ''; ?>">About Illusionary</a>
+    <a href="<?php echo $is_mobile_dir ? 'tos.php' : $prefix . 'tos.php'; ?>" id="navTos" class="sidebar-link <?php echo $current_page === 'tos.php' ? 'active' : ''; ?>">Terms of Service</a>
     
     <?php if ($is_admin): ?>
         <div style="height: 1px; background: rgba(255,255,255,0.1); margin: 15px 20px;"></div>
@@ -334,7 +335,7 @@ $banner_type    = $GLOBAL_BANNER_TYPE ?? 'info';
 
     <div style="margin-top: auto; padding: 30px 20px; border-top: 1px solid rgba(255,255,255,0.05); text-align: center;">
         <img src="<?php echo $prefix; ?>illusionary.png" style="width: 50px; opacity: 0.15; filter: grayscale(1); margin-bottom: 15px;">
-        <div style="font-size: 0.5rem; color: #333; margin-top: 8px; letter-spacing: 2px; font-weight: 800;">BUILD v2.6.0</div>
+        <div style="font-size: 0.5rem; color: #333; margin-top: 8px; letter-spacing: 2px; font-weight: 800;">BUILD v2.9.0</div>
         <a href="javascript:void(0)" onclick="reportIssue()" style="display: inline-block; margin-top: 10px; font-size: 0.6rem; color: #ff4e4e; text-decoration: none; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; opacity: 0.7; transition: opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.7'">
             Report a Bug
         </a>
@@ -372,7 +373,7 @@ $banner_type    = $GLOBAL_BANNER_TYPE ?? 'info';
             return null;
         }
         if (!response.ok) {
-            throw new Error(data.error || `System Error ${response.status}`);
+            throw new Error(data.error || data.message || `System Error ${response.status}`);
         }
         return data;
     }
@@ -433,7 +434,7 @@ $banner_type    = $GLOBAL_BANNER_TYPE ?? 'info';
         const page = '<?php echo $current_page; ?>';
         const fullUrl = window.location.href;
         const isAdmin = '<?php echo $is_admin ? "YES" : "NO"; ?>';
-        const build = 'v2.6.0'; // Hardcoded sync with sidebar
+        const build = 'v2.9.0'; // Hardcoded sync with sidebar
         const timestamp = '<?php echo date('Y-m-d H:i:s'); ?>';
         const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
         const userAgent = navigator.userAgent;

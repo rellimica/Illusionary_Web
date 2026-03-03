@@ -369,7 +369,7 @@ $IMAGES_PATH = 'images/images/';
                         
                         // Universal Confetti
                         const rarity = forgeData.card.rarity;
-                        const isHigh = ['Legendary', 'Mythic', 'Epic'].includes(rarity);
+                        const isHigh = ['Legendary', 'Unique', 'Epic'].includes(rarity);
                         confetti({ 
                             particleCount: isHigh ? 150 : 60, 
                             spread: isHigh ? 100 : 60, 
@@ -421,7 +421,7 @@ $IMAGES_PATH = 'images/images/';
         }
 
         function getRarityColor(r) {
-            const colors = { 'Common': '#b0b0b0', 'Uncommon': '#4dfa7c', 'Rare': '#4e7cfe', 'Epic': '#a335ee', 'Legendary': '#ff8000', 'Mythic': '#ff4e4e' };
+            const colors = { 'Common': '#b0b0b0', 'Uncommon': '#4dfa7c', 'Rare': '#4e7cfe', 'Epic': '#a335ee', 'Legendary': '#ff8000', 'Unique': '#ff4e4e' };
             return colors[r] || '#fff';
         }
     </script>

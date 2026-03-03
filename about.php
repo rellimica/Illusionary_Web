@@ -209,7 +209,7 @@ $IMAGES_PATH = 'images/images/';
                     </div>
                     <?php endif; ?>
                 </div>
-                <p style="font-size: 0.7rem; opacity: 0.4; margin-top: 25px;">Version 2.6.0 &copy; <?php echo date('Y'); ?> Illusionary. All rights reserved.</p>
+                <p style="font-size: 0.7rem; opacity: 0.4; margin-top: 25px;">Version 2.9.0 &copy; <?php echo date('Y'); ?> Illusionary. All rights reserved.</p>
             </div>
         </div>
     </main>

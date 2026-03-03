@@ -200,6 +200,7 @@ $login_url = 'https://discord.com/oauth2/authorize?' . http_build_query($params)
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;800&family=Inter:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/mobile/mobile.css">
     <link rel="stylesheet" href="/variations.css">
+    <link rel="preload" href="/illusionary.png" as="image">
     <?php 
     require_once __DIR__ . '/../theme-config.php';
     injectTheme($THEME);
@@ -209,7 +210,7 @@ $login_url = 'https://discord.com/oauth2/authorize?' . http_build_query($params)
     <div class="m-login-glow"></div>
     
     <div class="m-login-box">
-        <img src="/illusionary.png" alt="Illusionary Logo" class="m-login-logo">
+        <img src="/illusionary.png" alt="Illusionary Logo" class="m-login-logo" loading="lazy">
         <h1 class="gradient-text m-login-title">ILLUSIONARY</h1>
         <p class="m-login-subtitle">Authorize your Discord identity to access the Illusionary Dashboard.</p>
         

@@ -26,7 +26,7 @@ $THEME = [
     'rarity_rare'      => '#4e7cfe',
     'rarity_epic'      => '#a335ee',
     'rarity_legendary' => '#ff8000',
-    'rarity_mythic'    => '#ff4e4e',
+    'rarity_unique'    => '#ff4e4e',
     'rarity_test_card' => '#ff00ea', // Developer/Test Magenta
     'rarity_relic' => '#ff0000ff', // Above Unique
     

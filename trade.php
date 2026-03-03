@@ -134,6 +134,7 @@ if ($partner_id || $trade_view_id) {
     <link rel="shortcut icon" href="favicon/favicon.ico">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="variations.css">
+    <link rel="preload" href="illusionary.png" as="image">
     <?php 
     require_once 'theme-config.php';
     injectTheme($THEME);
@@ -821,7 +822,7 @@ if ($partner_id || $trade_view_id) {
                 <main class="empty-desk" style="display: block; overflow-y: auto;">
                     <div style="max-width: 1000px; margin: 0 auto; width: 100%;">
                         <div style="text-align: center; margin-bottom: 50px; padding-top: 40px;">
-                            <img src="illusionary.png" style="width: 100px; opacity: 0.5; margin-bottom: 1rem;">
+                            <img src="illusionary.png" style="width: 100px; opacity: 0.5; margin-bottom: 1rem;" loading="lazy">
                             <h2 style="font-size: 2.5rem; margin-bottom: 5px;">Trading Floor</h2>
                             <p style="font-size: 0.9rem; opacity: 0.7;">Select a collector from the hub or browse active requests below.</p>
                         </div>
@@ -1167,7 +1168,7 @@ if ($partner_id || $trade_view_id) {
                 };
                 
                 div.innerHTML = `
-                    <img src="${imagesPath}${c.filename}">
+                    <img src="${imagesPath}${c.filename}" loading="lazy">
                     ${isTradeable ? '' : '<div class="lock-overlay">UNTRADEABLE</div>'}
                     <div class="name">${c.name.replace(/_/g, ' ')}</div>
                     <div class="qty">x${c.count} Vaulted</div>
@@ -1218,7 +1219,7 @@ if ($partner_id || $trade_view_id) {
                     div.className = 'staged-card';
                     div.onclick = () => removeFromTrade(side, id, iid);
                     div.innerHTML = `
-                        <img src="${imagesPath}${meta.filename}">
+                        <img src="${imagesPath}${meta.filename}" loading="lazy">
                         <div class="count-badge" style="font-size:0.55rem; padding: 2px 4px;">#${sn || '?'}</div>
                     `;
                     div.title = meta.name.replace(/_/g, ' ') + ` (SN #${sn || '?'})`;
@@ -1297,7 +1298,7 @@ if ($partner_id || $trade_view_id) {
                                 <div class="summary-item-grid">
                                     ${items.map(itm => `
                                         <div class="summary-card ${itm.rarity_class} ${itm.variations ? 'variant-' + itm.variations : ''}" style="border-top: 3px solid var(--${itm.rarity_class});">
-                                            <img src="${imagesPath}${itm.filename}" class="${itm.variations ? 'variant-' + itm.variations : ''}">
+                                            <img src="${imagesPath}${itm.filename}" class="${itm.variations ? 'variant-' + itm.variations : ''}" loading="lazy">
                                             <div class="sn-label">${itm.sn_display ? "#" + itm.sn_display : "x" + itm.count}</div>
                                             <div class="name" style="color: var(--${itm.rarity_class}); font-weight: 800;">${itm.rarity_name.toUpperCase()}</div>
                                             <div class="name" style="font-size: 0.65rem; opacity: 0.8;">${itm.name.replace(/_/g, ' ')}</div>

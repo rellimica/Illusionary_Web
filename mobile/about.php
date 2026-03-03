@@ -130,7 +130,7 @@ $collaborators[] = [
                 </div>
             </div>
 
-            <p style="font-size: 0.65rem; opacity: 0.4; text-align: center; margin-top: 25px;">Version 2.6.0 &copy; <?php echo date('Y'); ?> Illusionary. All rights reserved.</p>
+            <p style="font-size: 0.65rem; opacity: 0.4; text-align: center; margin-top: 25px;">Version 2.9.0 &copy; <?php echo date('Y'); ?> Illusionary. All rights reserved.</p>
         </div>
     </main>
 </body>

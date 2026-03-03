@@ -162,6 +162,22 @@ if (isset($_GET['code'])) {
             $_SESSION['user_authenticated'] = true;
             $_SESSION['user_data'] = $user;
             
+            // Fetch and store ToS status
+            try {
+                $host = $env['MYSQL_HOST'] ?? 'localhost';
+                $db   = $env['MYSQL_DATABASE'] ?? '';
+                $u    = $env['MYSQL_USER'] ?? '';
+                $p    = $env['MYSQL_PASSWORD'] ?? '';
+                $dsn  = "mysql:host=$host;dbname=$db;charset=utf8mb4";
+                $pdo_auth = new PDO($dsn, $u, $p);
+                $stmt_tos = $pdo_auth->prepare("SELECT tos_accepted FROM users WHERE discord_id = ?");
+                $stmt_tos->execute([$user['id']]);
+                $user_r = $stmt_tos->fetch(PDO::FETCH_ASSOC);
+                $_SESSION['tos_accepted'] = $user_r ? (int)$user_r['tos_accepted'] : 0;
+            } catch (Exception $e) {
+                $_SESSION['tos_accepted'] = 0; // Default to not accepted if DB fails
+            }
+
             $ua = $_SERVER['HTTP_USER_AGENT'] ?? '';
             $mobile_default = preg_match('/iPhone|Android|webOS|BlackBerry|iPod/i', $ua) ? '/index.php' : '/index.php';
             $target = $_SESSION['redirect_url'] ?? $mobile_default;
@@ -210,7 +226,16 @@ if (isset($_GET['kicked'])) {
 $banner_images = [];
 $img_dir = '/images/images/';
 $img_physical_dir = __DIR__ . '/images/images/';
-if (is_dir($img_physical_dir)) {
+
+// Use a simple file-based cache for the image list to avoid repeated disk scanning
+$cache_file = __DIR__ . '/tmp_banner_cache.json';
+$cache_expiry = 3600; // 1 hour
+
+if (file_exists($cache_file) && (time() - filemtime($cache_file) < $cache_expiry)) {
+    $banner_images = json_decode(file_get_contents($cache_file), true) ?: [];
+}
+
+if (empty($banner_images) && is_dir($img_physical_dir)) {
     $files = scandir($img_physical_dir);
     $exclude = ['back.png', 'null.png', 'background.png', 'red_mana.png'];
     foreach ($files as $file) {
@@ -220,6 +245,10 @@ if (is_dir($img_physical_dir)) {
             }
         }
     }
+    file_put_contents($cache_file, json_encode($banner_images));
+}
+
+if (!empty($banner_images)) {
     shuffle($banner_images);
     $banner_images = array_slice($banner_images, 0, 40);
 }
@@ -256,6 +285,8 @@ $login_url = 'https://discord.com/oauth2/authorize?' . http_build_query($params)
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;800&family=Inter:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/style.css">
     <link rel="stylesheet" href="/variations.css">
+    <link rel="preload" href="/illusionary.png" as="image">
+    <link rel="preload" href="/favicon/favicon-32x32.png" as="image">
     <?php 
     require_once __DIR__ . '/theme-config.php';
     injectTheme($THEME);
@@ -462,7 +493,7 @@ $login_url = 'https://discord.com/oauth2/authorize?' . http_build_query($params)
                 foreach($loop_set as $img): 
                 ?>
                     <div class="banner-card">
-                        <img src="<?php echo $img; ?>" alt="Card Preview">
+                        <img src="<?php echo $img; ?>" alt="Card Preview" loading="lazy">
                     </div>
                 <?php endforeach; ?>
             </div>

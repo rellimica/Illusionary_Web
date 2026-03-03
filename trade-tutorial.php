@@ -208,7 +208,6 @@
 
     function closeTradeTour() {
         document.getElementById('tradeTutorialOverlay').style.display = 'none';
-        localStorage.setItem('trade_tutorial_seen', 'true');
         document.querySelectorAll('.tour-spotlight').forEach(el => el.classList.remove('tour-spotlight'));
         const container = document.querySelector('.trade-container');
         if (container) {
@@ -328,10 +327,4 @@
         Object.assign(box.style, pos);
     }
 
-    // Auto-start for new users
-    window.addEventListener('load', () => {
-        if (!localStorage.getItem('trade_tutorial_seen')) {
-            setTimeout(startTradeTour, 2000);
-        }
-    });
 </script>

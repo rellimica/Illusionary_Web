@@ -86,6 +86,7 @@ $total_pages = ceil($filtered_possible / $limit);
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Outfit:wght@400;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/mobile/mobile.css">
     <link rel="stylesheet" href="/variations.css">
+    <link rel="preload" href="/illusionary.png" as="image">
     <?php 
     require_once __DIR__ . '/../theme-config.php';
     injectTheme($THEME);
@@ -244,6 +245,7 @@ $total_pages = ceil($filtered_possible / $limit);
                             const img = document.createElement('img');
                             img.src = IMAGES_PATH + card.filename;
                             img.alt = card.name;
+                            img.loading = "lazy";
 
                             div.appendChild(img);
 
@@ -253,7 +255,7 @@ $total_pages = ceil($filtered_possible / $limit);
                         } else {
                             div.className = "m-card-item unowned";
                             div.onclick = openLockedDetail;
-                            div.innerHTML = `<img src="${IMAGES_PATH}back.png" alt="Locked Card" style="opacity:0.3; filter:grayscale(1);">`;
+                            div.innerHTML = `<img src="${IMAGES_PATH}back.png" alt="Locked Card" style="opacity:0.3; filter:grayscale(1);" loading="lazy">`;
                         }
                     } else {
                         div.className = "m-card-item empty";
@@ -403,7 +405,7 @@ $total_pages = ceil($filtered_possible / $limit);
                 'Rare': 'var(--rare)', 
                 'Epic': 'var(--epic)', 
                 'Legendary': 'var(--legendary)',
-                'Mythic': 'var(--mythic)',
+                'Unique': 'var(--unique)',
                 'Relic': 'var(--relic)'
             }[rarity] || '#fff';
         }
