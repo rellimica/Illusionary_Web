@@ -75,12 +75,19 @@ try {
     $stmt->execute([$selectedCard['id'], $my_id]);
     $serialNumber = $pdo->lastInsertId();
 
-    // B. Check if they already own it (for UI "New!" badge)
+    // B. Assign Random Variant via Stored Procedure
+    $stmt = $pdo->prepare("CALL AssignRandomVariant(?, @variant)");
+    $stmt->execute([$serialNumber]);
+    $variantData = $stmt->fetch(PDO::FETCH_ASSOC);
+    $assignedVariant = $variantData['assigned_variant'] ?? null;
+    $stmt->closeCursor(); // Important to clear the result set for further queries if needed
+
+    // C. Check if they already own it (for UI "New!" badge)
     $stmt = $pdo->prepare("SELECT 1 FROM user_cards WHERE user_discord_id = ? AND card_id = ?");
     $stmt->execute([$my_id, $selectedCard['id']]);
     $isNew = ($stmt->fetch() === false);
 
-    // C. Atomic increment in summary table
+    // D. Atomic increment in summary table
     $stmt = $pdo->prepare("
         INSERT INTO user_cards (user_discord_id, card_id, count) 
         VALUES (?, ?, 1)
@@ -88,7 +95,7 @@ try {
     ");
     $stmt->execute([$my_id, $selectedCard['id']]);
 
-    // D. Get final balance
+    // E. Get final balance
     $stmt = $pdo->prepare("SELECT tokens FROM users WHERE discord_id = ?");
     $stmt->execute([$my_id]);
     $newBalance = $stmt->fetchColumn();
@@ -101,6 +108,7 @@ try {
         'card' => [
             'id' => $selectedCard['id'],
             'sn' => $serialNumber,
+            'variant' => $assignedVariant,
             'name' => str_replace('_', ' ', $selectedCard['name']),
             'rarity' => $selectedCard['rarity_name'],
             'tier' => $selectedCard['rarity_tier'],

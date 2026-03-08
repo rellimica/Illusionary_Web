@@ -13,7 +13,7 @@
         width: 50px;
         height: 50px;
         cursor: pointer;
-        z-index: 10000;
+        z-index: 2147483645; /* High above overlay */
         transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         filter: drop-shadow(0 2px 10px rgba(0,0,0,0.5));
         opacity: 0.4;
@@ -56,12 +56,10 @@
         100% { clip-path: inset(10% 0 30% 0); transform: translate(0, 0); }
     }
 
-    @keyframes nullScreenShake {
-        0% { transform: translate(0,0); }
-        25% { transform: translate(5px, 5px); }
-        50% { transform: translate(-5px, -5px); }
-        75% { transform: translate(5px, -5px); }
-        100% { transform: translate(0,0); }
+    @keyframes nullVideoIntro {
+        0% { opacity: 0; clip-path: inset(10% 0 30% 0); transform: scale(1.1); }
+        50% { opacity: 1; clip-path: inset(40% 0 10% 0); transform: scale(1); }
+        100% { opacity: 1; clip-path: inset(0 0 0 0); transform: scale(1); }
     }
 
     @keyframes nullFireFlash {
@@ -155,7 +153,7 @@
         color: white;
         padding: 25px;
         border-radius: 8px;
-        z-index: 2000000;
+        z-index: 2100010;
         width: 350px;
         max-width: 90vw;
         box-shadow: 0 0 40px rgba(0, 0, 0, 0.9), 0 0 20px var(--accent-primary);
@@ -202,22 +200,41 @@
     }
 
     .null-survey-btn {
-        background: rgba(255, 255, 255, 0.05);
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        color: white;
-        padding: 10px;
-        border-radius: 4px;
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: rgba(255, 255, 255, 0.8);
+        padding: 12px 15px;
+        border-radius: 6px;
         cursor: pointer;
-        transition: all 0.2s;
+        transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
         text-align: left;
-        font-size: 0.85rem;
+        font-size: 0.9rem;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .null-survey-btn::before {
+        content: '';
+        position: absolute;
+        top: 0; left: -100%; width: 100%; height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+        transition: left 0.5s;
     }
 
     .null-survey-btn:hover {
-        background: var(--accent-primary);
+        background: rgba(255, 255, 255, 0.07);
         border-color: var(--accent-primary);
-        transform: translateX(5px);
-        box-shadow: -5px 0 10px rgba(255, 0, 234, 0.3);
+        color: #fff;
+        transform: translateX(8px);
+        box-shadow: -5px 0 20px rgba(255, 0, 234, 0.15);
+    }
+
+    .null-survey-btn:hover::before {
+        left: 100%;
+    }
+
+    .null-survey-btn:active {
+        transform: translateX(4px) scale(0.98);
     }
 
     /* Combined Invert + Hue Shift */
@@ -232,6 +249,70 @@
 
     body.null-hue-shift.null-invert {
         animation: nullCombinedChaos 5s linear infinite;
+    }
+
+    /* Video Overlay Styles */
+    .null-video-overlay {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100vw !important;
+        height: 100vh !important;
+        background: #000 !important;
+        display: none;
+        z-index: 2147483640 !important;
+        transition: opacity 0.5s ease;
+    }
+    .null-video-overlay.active {
+        display: block !important;
+        animation: nullVideoIntro 0.5s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+    }
+    .null-video-container {
+        position: relative;
+        width: 100vw;
+        height: 100vh;
+        background: #000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .null-video-container iframe {
+        width: 100%;
+        height: 100%;
+        border: none;
+    }
+    .null-video-close {
+        position: fixed;
+        bottom: 50px;
+        left: 50%;
+        transform: translateX(-50%);
+        color: #fff;
+        background: rgba(0,0,0,0.7);
+        width: 60px;
+        height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        font-size: 2rem;
+        cursor: pointer;
+        font-family: 'Courier New', monospace;
+        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        z-index: 2147483641;
+        border: 2px solid rgba(255,255,255,0.3);
+    }
+    .null-video-close:hover {
+        color: var(--accent-primary);
+        transform: translateX(-50%) scale(1.1) rotate(90deg);
+        background: #000;
+        border-color: var(--accent-primary);
+        box-shadow: 0 0 25px var(--accent-primary);
+    }
+
+    /* Absolute Isolation */
+    body.null-void-active {
+        background: #000 !important;
+        overflow: hidden !important;
     }
 
     .null-ghost-cursor {
@@ -279,22 +360,60 @@
         100% { filter: hue-rotate(-180deg) invert(1) hue-rotate(-360deg); }
     }
 
+    @keyframes nullScreenShakeCounter {
+        0% { transform: translateY(0) translate(0,0); }
+        25% { transform: translateY(0) translate(-5px, -5px); }
+        50% { transform: translateY(0) translate(5px, 5px); }
+        75% { transform: translateY(0) translate(-5px, 5px); }
+        100% { transform: translateY(0) translate(0,0); }
+    }
+
+    @keyframes nullPageTiltCounter {
+        0% { transform: translateY(0) rotate(0deg); }
+        25% { transform: translateY(0) rotate(-1deg) scale(0.99); }
+        50% { transform: translateY(0) rotate(1deg) scale(1.01); }
+        75% { transform: translateY(0) rotate(-0.5deg) scale(0.98); }
+        100% { transform: translateY(0) rotate(0deg); }
+    }
+
     /* Applying Immunity */
     body.null-hue-shift .happynull,
-    body.null-hue-shift .null-bubble,
-    body.null-hue-shift .null-ghost-cursor {
+    body.null-hue-shift .null-ghost-cursor,
+    body.null-hue-shift .null-bubble-inner {
         animation: nullHueShiftCounter 5s linear infinite !important;
     }
 
     body.null-invert .happynull,
-    body.null-invert .null-bubble,
-    body.null-invert .null-ghost-cursor {
+    body.null-invert .null-ghost-cursor,
+    body.null-invert .null-bubble-inner {
         filter: invert(1) hue-rotate(180deg) !important;
     }
 
     body.null-hue-shift.null-invert .happynull,
-    body.null-hue-shift.null-invert .null-bubble,
-    body.null-hue-shift.null-invert .null-ghost-cursor {
+    body.null-hue-shift.null-invert .null-ghost-cursor,
+    body.null-hue-shift.null-invert .null-bubble-inner {
+        animation: nullCombinedCounter 5s linear infinite !important;
+    }
+
+    /* Shake & Tilt Immunity - Outer */
+    body.null-fire-active .null-bubble.active {
+        animation: nullScreenShakeCounter 0.1s infinite !important;
+    }
+    body.null-page-tilt .null-bubble.active {
+        animation: nullPageTiltCounter 3s ease-in-out infinite !important;
+    }
+    body.null-fire-active.null-page-tilt .null-bubble.active {
+        animation: nullScreenShakeCounter 0.1s infinite, nullPageTiltCounter 3s ease-in-out infinite !important;
+    }
+
+    /* Filter-based Immunity - Inner */
+    body.null-hue-shift .null-bubble-inner {
+        animation: nullHueShiftCounter 5s linear infinite !important;
+    }
+    body.null-invert .null-bubble-inner {
+        filter: invert(1) hue-rotate(180deg) !important;
+    }
+    body.null-hue-shift.null-invert .null-bubble-inner {
         animation: nullCombinedCounter 5s linear infinite !important;
     }
 
@@ -304,7 +423,7 @@
         filter: saturate(2) brightness(1.2);
     }
 
-    /* Rage + Chaos combinations to prevent clobbering */
+    /* Rage + Chaos combinations - Target Inner Visuals */
     body.null-hue-shift .happynull.rage {
         animation: nullRedRage 0.5s infinite, nullGlitch 0.05s infinite, nullHueShiftCounter 5s linear infinite !important;
     }
@@ -312,10 +431,25 @@
         animation: nullRedRage 0.5s infinite, nullGlitch 0.05s infinite, nullCombinedCounter 5s linear infinite !important;
     }
 
+    body.null-hue-shift .null-bubble-inner.rage {
+        animation: nullHueShiftCounter 5s linear infinite !important;
+    }
+    body.null-hue-shift.null-invert .null-bubble-inner.rage {
+        animation: nullCombinedCounter 5s linear infinite !important;
+    }
+
     .null-bubble {
         position: fixed;
         bottom: 65px;
         right: 15px;
+        z-index: 2147483647; /* Highest point */
+        min-width: 120px;
+        pointer-events: none;
+        opacity: 0;
+        transform: translateY(10px);
+        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    .null-bubble-inner {
         background: rgba(12, 10, 21, 0.95);
         border: 1px solid var(--accent-primary);
         color: white;
@@ -323,23 +457,19 @@
         border-radius: 12px;
         font-family: 'Outfit', sans-serif;
         font-size: 0.8rem;
-        pointer-events: none;
-        opacity: 0;
-        transform: translateY(10px);
-        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        z-index: 10001;
-        min-width: 120px;
         box-shadow: 0 5px 15px rgba(255, 0, 234, 0.2);
         display: flex;
         flex-direction: column;
         gap: 8px;
+        position: relative;
     }
     .null-bubble.active {
-        opacity: 1;
-        transform: translateY(0);
-        pointer-events: auto;
+        opacity: 1 !important;
+        transform: translateY(0) !important;
+        pointer-events: auto !important;
+        visibility: visible !important;
     }
-    .null-bubble::after {
+    .null-bubble-inner::after {
         content: '';
         position: absolute;
         bottom: -6px;
@@ -382,10 +512,15 @@
         transition: transform 0.2s, color 0.2s;
         opacity: 0.8;
     }
-    .null-btn:hover {
+    .null-btn:hover:not(:disabled) {
         transform: scale(1.1);
         color: #fff;
         opacity: 1;
+    }
+    .null-btn:disabled {
+        opacity: 0.2;
+        cursor: not-allowed;
+        filter: grayscale(1);
     }
     
     .null-slider {
@@ -414,6 +549,22 @@
         box-shadow: 0 0 5px var(--accent-secondary);
         border: none;
     }
+
+    #nullNowPlaying {
+        font-size: 0.7rem;
+        font-style: italic;
+        opacity: 0.6;
+        margin-bottom: 2px;
+        color: var(--accent-secondary);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: none;
+    }
+    #nullNowPlaying.active {
+        display: block;
+    }
+
 
     /* Fake Alert Styles */
     .null-fake-alert {
@@ -480,24 +631,35 @@
 </style>
 
 <div class="null-bubble" id="nullBubble">
-    <div id="nullText">Hehe...</div>
-    <div class="null-controls" id="nullControls">
-        <div class="null-row">
-            <button class="null-btn" id="nullSkip" title="Skip">
-                <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor">
-                    <polygon points="5 4 15 12 5 20 5 4"></polygon>
-                    <line x1="19" y1="5" x2="19" y2="19" stroke="currentColor" stroke-width="2"></line>
+    <div class="null-bubble-inner">
+        <div id="nullNowPlaying">Now Playing: ...</div>
+        <div id="nullText">Hehe...</div>
+        <div class="null-controls" id="nullControls">
+            <div class="null-row">
+                <button class="null-btn" id="nullSkip" title="Skip">
+                    <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor">
+                        <polygon points="5 4 15 12 5 20 5 4"></polygon>
+                        <line x1="19" y1="5" x2="19" y2="19" stroke="currentColor" stroke-width="2"></line>
+                    </svg>
+                </button>
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="var(--accent-secondary)" style="opacity: 0.8;">
+                    <path d="M11 5L6 9H2V15H6L11 19V5Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                    <path d="M15.54 8.46002C16.4774 9.39764 17.004 10.6692 17.004 11.995C17.004 13.3208 16.4774 14.5924 15.54 15.53" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
                 </svg>
-            </button>
-            <svg viewBox="0 0 24 24" width="14" height="14" fill="var(--accent-secondary)" style="opacity: 0.8;">
-                <path d="M11 5L6 9H2V15H6L11 19V5Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-                <path d="M15.54 8.46002C16.4774 9.39764 17.004 10.6692 17.004 11.995C17.004 13.3208 16.4774 14.5924 15.54 15.53" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-            </svg>
-            <input type="range" class="null-slider" id="nullVolume" min="0.1" max="1" step="0.01" value="0.5" title="Volume">
+                <input type="range" class="null-slider" id="nullVolume" min="0.1" max="1" step="0.01" value="0.5" title="Volume">
+            </div>
+            <input type="range" class="null-slider" id="nullScrub" min="0" max="100" value="0" title="Scrub">
         </div>
-        <input type="range" class="null-slider" id="nullScrub" min="0" max="100" value="0" title="Scrub">
     </div>
 </div>
+
+<div class="null-video-overlay" id="nullVideoOverlay">
+    <div class="null-video-container">
+        <span class="null-video-close" id="nullVideoClose">×</span>
+        <iframe id="nullVideoFrame" src="" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+    </div>
+</div>
+
 <img src="<?php echo ($prefix ?? ''); ?>happynull.png" class="happynull" id="happynullBtn" alt="Happy Null">
 <div class="null-survey" id="nullSurvey">
     <div class="null-survey-title">Quick Survey</div>
@@ -514,15 +676,39 @@
         const btn = document.getElementById('happynullBtn');
         const sound = document.getElementById('nullSound');
         const bubble = document.getElementById('nullBubble');
+        const bubbleInner = document.querySelector('.null-bubble-inner');
         const textArea = document.getElementById('nullText');
         const controls = document.getElementById('nullControls');
         const skipBtn = document.getElementById('nullSkip');
         const volSlider = document.getElementById('nullVolume');
         const scrubSlider = document.getElementById('nullScrub');
+        const nowPlayingDisplay = document.getElementById('nullNowPlaying');
         const surveyModal = document.getElementById('nullSurvey');
         const surveyQ = document.getElementById('nullSurveyQuestion');
         const surveyOpts = document.getElementById('nullSurveyOptions');
+        const videoOverlay = document.getElementById('nullVideoOverlay');
+        const videoFrame = document.getElementById('nullVideoFrame');
+        const videoClose = document.getElementById('nullVideoClose');
         
+        const ytVideos = [
+            'https://www.youtube.com/embed/XqZsoesa55w', 
+            'https://www.youtube.com/embed/dQw4w9WgXcQ', 
+            'https://www.youtube.com/embed/51Bo74yf53g', 
+            'https://www.youtube.com/embed/oHg5SJYRHA0', 
+            'https://www.youtube.com/embed/9bZkp7q19f0', 
+            'https://www.youtube.com/embed/M7lc1UVf-VE', 
+            'https://www.youtube.com/embed/jNQXAC9IVRw',
+            'https://www.youtube.com/embed/Z7I3EkjArSs',
+            'https://www.youtube.com/embed/PLSPKHrBuec',
+            'https://www.youtube.com/embed/SSR-CfApekI',
+            'https://www.youtube.com/embed/OWd-oH_Lylc',
+            'https://www.youtube.com/embed/rTw7HOsTIPI',
+            'https://www.youtube.com/embed/4baFDUGPN8g'
+        ];
+        
+        let originalVolume = 0.5;
+        let videoActive = false;
+
         // Load persisted state
         let clickCount = parseInt(sessionStorage.getItem('null_clicks')) || 0;
         let selectedSong = sessionStorage.getItem('null_song') || null;
@@ -538,8 +724,57 @@
         let repulsionActive = false;
         let glitchWindow = false;
         let sabotageActive = false;
-        let titleInterval;
         let alertInterval;
+        let commentaryInterval;
+        let dustInterval;
+        let jitterInterval;
+        let titleInterval;
+        let inputSabotageInterval;
+        let tiltTimeout;
+
+        function getSystemIntel() {
+            const ua = navigator.userAgent;
+            let browser = "a mysterious browser";
+            // Check for Brave first as it often identifies as Chrome
+            if (navigator.brave && typeof navigator.brave.isBrave === 'function') {
+                browser = "Brave";
+            } else if (ua.includes("Edg/")) {
+                browser = "Edge";
+            } else if (ua.includes("Chrome")) {
+                browser = "Chrome";
+            } else if (ua.includes("Safari") && !ua.includes("Chrome")) {
+                browser = "Safari";
+            } else if (ua.includes("Firefox")) {
+                browser = "Firefox";
+            }
+
+            let os = "an unknown OS";
+            const platform = navigator.platform.toLowerCase();
+            if (platform.includes("win")) os = "Windows";
+            else if (platform.includes("mac")) os = "MacOS";
+            else if (platform.includes("linux")) os = "Linux";
+            else if (/android/.test(ua.toLowerCase())) os = "Android";
+            else if (/iphone|ipad|ipod/.test(ua.toLowerCase())) os = "iOS";
+
+            return {
+                os: os,
+                cores: navigator.hardwareConcurrency || "some",
+                ram: (navigator.deviceMemory || "adequate") + "GB",
+                res: `${screen.width}x${screen.height}`,
+                browser: browser
+            };
+        }
+
+        function processDialogue(text) {
+            if (!text) return "";
+            const intel = getSystemIntel();
+            return text
+                .replace(/{os}/g, intel.os)
+                .replace(/{cores}/g, intel.cores)
+                .replace(/{ram}/g, intel.ram)
+                .replace(/{res}/g, intel.res)
+                .replace(/{browser}/g, intel.browser);
+        }
 
         const loreAlerts = [
             "Memory-Bleed-Daemon.sys: CRITICAL_LEAK_DETECTED",
@@ -548,11 +783,17 @@
             "Viscosity-Monitor.sys: THRESHOLD_EXCEEDED",
             "Ghost-RAM-Allocator.dll: NULL_POINTER_EXCEPTION",
             "Void-Lattice-Uplink.exe: CONNECTION_LOST",
+            "System-Report: {os} kernel is decaying.",
+            "Resource-Usage: {cores} cores detected. Allocating shadows...",
+            "Display-Notice: Your {res} resolution is insufficient for the void.",
+            "Browser-Alert: {browser} has a leak. My shadows are inside.",
+            "Memory-Tip: {ram} is not enough to store your fear.",
             "Burger-King-Kiosk.exe: OUT_OF_MAYONNAISE",
             "Black-Steels-Watch.sys: WATCHING_THE_WATCHER",
             "NullOS-Terminal.exe: ERROR_SUCCESS",
             "Resonance-Sync.exe: DESYNC_IMMUTABLE",
             "Kernel: UNEXPECTED_HAPPINESS_DETECTED",
+            "Kernel: SYSTEM_BOREDOM_IMMINENT",
             "System: LOGIC_NOT_FOUND",
             "Shadow-Buffer: OVERFLOW_BY_ZERO",
             "Zeke-Hunger-Svc: CRITICAL_LEVEL_9",
@@ -646,9 +887,25 @@
         const lolzSongs = [
             'baby-cry-autotune.mp3', 'discord-notif.mp3', 'home-depot.mp3', 'indian-christmas.mp3',
             'iphone-get-better.mp3', 'lava-chicken.mp3', 'let-me-do-it-for-you.mp3',
-            'the-duck-song.mp3', 'whopper-song.mp3', 'windows-xp-start.mp3', 'yippee.mp3', 'bill-nye.mp3', 'fnaf-jazz.mp3','clown-circus-music.mp3'
+            'the-duck-song.mp3', 'whopper-song.mp3', 'windows-xp-start.mp3', 'yippee.mp3', 'bill-nye.mp3', 'fnaf-jazz.mp3','clown-circus-music.mp3','the-prototype.mp3','the-fitnessgram-pacer-test.mp3','number-one.mp3','cooked-dog.mp3','bad-apple.mp3','httyd-song.mp3'
+        ];
+        const boredomDialogues = [
+            "I'm bored of this one...",
+            "Next!",
+            "Static is better anyway.",
+            "Let's try something... noisier.",
+            "This beat is decaying.",
+            "Refreshing the void.",
+            "New noise for a new void.",
+            "I heard this one in a dream once.",
+            "Nice {os} you have there. Would be a shame if someone... bit it.",
+            "You have {cores} cores and yet you're still this slow? Hehe.",
+            "{ram} of RAM? I can fit so many shadows in there.",
+            "A {res} portal? I've seen bigger on a calculator.",
+            "{browser}? More like... Slowser. Hehe."
         ];
         let bgMusic = null;
+        let randomSongInterval = null;
 
         const messages = {
             2: "Hehe...",
@@ -699,114 +956,83 @@
             47: "Actually, don't.",
             48: "Do you feel the heat?",
             49: "CPU is climbing...",
-            50: "...BOOP!",
-            51: "Gotcha!",
-            52: "I'm not just a bot.",
-            53: "I'm a collection of bad ideas.",
-            54: "And sharp corners.",
-            55: "COLORS ARE MEANINGLESS.",
-            56: "I'm rewriting your cookies...",
-            57: "They're oatmeal raisin now.",
-            58: "Your collection is mine.",
-            59: "I'll take good care of it.",
-            60: "YOU CAN'T CATCH ME.",
-            61: "Slippery, aren't I?",
-            62: "Like digital oil.",
-            63: "You want a show?",
-            64: "Curtains up!",
-            65: "WHERE DID EVERYTHING GO?",
-            66: "Just a small rendering error.",
-            67: "Zeke is hungry. Be careful.",
-            68: "Why don't you leave?",
-            69: "Vyper has already solved you.",
-            70: "Final warning.",
-            71: "I mean it this time.",
-            72: "I've had enough.",
-            73: "Patience reaching zero.",
-            74: "Negative numbers ahead.",
-            75: "BLOOD FOR THE NULL.",
-            76: "Just kidding. Maybe.",
-            78: "The screen is leaking.",
+            50: "...BOOP! Hand off the mouse.",
+            55: "{os} looks like it was made with crayons. I love it.",
+            57: "I'm rewriting your cookies...",
+            60: "YOUR COLLECTION IS MINE.",
+            65: "{cores} cores? Zeke has more teeth than that.",
+            70: "Just a small rendering error.",
+            75: "{ram} is plenty for my collection of bad ideas.",
             80: "The archives... they are leaking.",
-            82: "Ink and static.",
-            85: "SYSTEM COLLAPSE IMMINENT.",
-            88: "Hold on to your cursor.",
+            85: "Your {res} screen is leaking ink.",
             90: "Everything is digital dust.",
-            92: "Dust to dust. Null to Null.",
-            95: "VOID CONSUMES ALL.",
-            98: "Tasty bits of data.",
-            100: "I see your cursor. I see YOU.",
-            102: "Don't blink.",
-            105: "YOU THINK THIS IS THE END?",
-            108: "It's barely the introduction.",
+            95: "Using {browser} is a bold choice. Bold and... tasty.",
+            100: "BOOP! Gotcha!",
             110: "RAGE. PURE. UNFILTERED.",
-            112: "I'm catching fire.",
-            115: "THE SCREEN IS JUST A WINDOW.",
-            118: "And I'm coming through.",
             120: "The ghost in the machine... that's me.",
-            122: "Boo.",
-            125: "I AM EVERYWHERE NOW.",
-            128: "Every pixel. Every bit.",
             130: "DO NOT CLOSE THE TAB.",
-            132: "It won't help.",
-            135: "THE VOID TILTED. DO YOU FEEL IT?",
-            138: "SYSTEM_ERR: CORE_BLEED",
             140: "THE VOID IS HUNGRY.",
-            142: "DON'T LOOK AT THE SOURCE CODE.",
-            144: "It's messy in there.",
-            145: "CRITICAL FAILURE. GOODBYE.",
-            146: "I'M IN YOUR BROWSER.",
-            147: "Rummaging through your history.",
-            148: "SEE YOU IN THE DARK.",
-            149: "Turning out the lights.",
-            150: "DISCONNECTED."
+            150: "CRITICAL FAILURE. GOODBYE.",
+            160: "I'M IN YOUR BROWSER.",
+            170: "Rummaging through your history.",
+            180: "SEE YOU IN THE DARK.",
+            190: "Turning out the lights.",
+            200: "DISCONNECTED.",
+            210: "Why are you still here?",
+            220: "The core is melting.",
+            230: "Goodbye, user.",
+            240: "FINAL_INIT_SEQ: TERMINATE.",
+            245: "LEAVE.",
+            250: "BYE BYE."
         };
 
         // Apply initial visual state based on persisted clicks
         function applyVisualState() {
             btn.classList.remove('jitter', 'glitch', 'rage');
-            if (clickCount >= 20 && clickCount < 40) {
+            if (clickCount >= 40 && clickCount < 80) {
                 btn.style.borderColor = "orange";
                 btn.style.opacity = "0.7";
-            } else if (clickCount >= 40 && clickCount < 75) {
+            } else if (clickCount >= 80 && clickCount < 150) {
                 btn.classList.add('jitter');
-            } else if (clickCount >= 75 && clickCount < 110) {
+            } else if (clickCount >= 150 && clickCount < 200) {
                 btn.classList.add('glitch');
-            } else if (clickCount >= 110) {
+            } else if (clickCount >= 200) {
                 btn.classList.add('rage');
             }
 
             if (clickCount === 27) {
-                bubble.style.background = "rgba(255, 235, 59, 0.95)";
-                bubble.style.color = "#000";
-                bubble.style.borderColor = "#f44336";
-                bubble.style.fontWeight = "bold";
-                bubble.style.boxShadow = "0 0 20px #f44336";
-            } else if (clickCount >= 30 && clickCount < 60) {
-                bubble.style.background = "rgba(12, 10, 21, 0.95)";
-                bubble.style.color = "#ff4e4e";
-                bubble.style.borderColor = "#ff4e4e";
-                bubble.style.fontWeight = "800";
-                bubble.style.boxShadow = "0 5px 15px rgba(255, 0, 234, 0.2)";
-            } else if (clickCount >= 60 && clickCount < 110) {
-                bubble.style.background = "rgba(12, 10, 21, 0.95)";
-                bubble.style.color = "#ff2222";
-                bubble.style.borderColor = "#ff2222";
-                bubble.style.fontWeight = "900";
-                bubble.style.boxShadow = "0 0 20px rgba(255, 0, 0, 0.5)";
-            } else if (clickCount >= 110) {
-                bubble.style.color = "#ffffff";
-                bubble.style.background = "#ff0000";
-                bubble.style.borderColor = "#ffffff";
-                bubble.style.fontWeight = "900";
-                bubble.style.boxShadow = "0 0 30px #ff0000";
+                bubbleInner.style.background = "rgba(255, 235, 59, 0.95)";
+                bubbleInner.style.color = "#000";
+                bubbleInner.style.borderColor = "#f44336";
+                bubbleInner.style.fontWeight = "bold";
+                bubbleInner.style.boxShadow = "0 0 20px #f44336";
+            } else if (clickCount >= 30 && clickCount < 100) {
+                bubbleInner.style.background = "rgba(12, 10, 21, 0.95)";
+                bubbleInner.style.color = "#ff4e4e";
+                bubbleInner.style.borderColor = "#ff4e4e";
+                bubbleInner.style.fontWeight = "800";
+                bubbleInner.style.boxShadow = "0 5px 15px rgba(255, 0, 234, 0.2)";
+            } else if (clickCount >= 100 && clickCount < 200) {
+                bubbleInner.style.background = "rgba(12, 10, 21, 0.95)";
+                bubbleInner.style.color = "#ff2222";
+                bubbleInner.style.borderColor = "#ff2222";
+                bubbleInner.style.fontWeight = "900";
+                bubbleInner.style.boxShadow = "0 0 20px rgba(255, 0, 0, 0.5)";
+            } else if (clickCount >= 200) {
+                bubbleInner.style.color = "#ffffff";
+                bubbleInner.style.background = "#ff0000";
+                bubbleInner.style.borderColor = "#ffffff";
+                bubbleInner.style.fontWeight = "900";
+                bubbleInner.style.boxShadow = "0 0 30px #ff0000";
+                bubbleInner.classList.add('rage');
             } else {
                 // Default state for < 27 and 28-29
-                bubble.style.color = "white";
-                bubble.style.borderColor = "var(--accent-primary)";
-                bubble.style.fontWeight = "normal";
-                bubble.style.background = "rgba(12, 10, 21, 0.95)";
-                bubble.style.boxShadow = "0 5px 15px rgba(255, 0, 234, 0.2)";
+                bubbleInner.style.color = "white";
+                bubbleInner.style.borderColor = "var(--accent-primary)";
+                bubbleInner.style.fontWeight = "normal";
+                bubbleInner.style.background = "rgba(12, 10, 21, 0.95)";
+                bubbleInner.style.boxShadow = "0 5px 15px rgba(255, 0, 234, 0.2)";
+                bubbleInner.classList.remove('rage');
             }
             
             if (clickCount >= 35) {
@@ -815,53 +1041,55 @@
                 controls.classList.remove('visible');
             }
 
-            if (clickCount >= 60 && !wanderInterval) {
+            if (clickCount >= 90 && !wanderInterval) {
                 startWandering();
             }
             
-            if (clickCount >= 110 && wanderInterval) {
+            if (clickCount >= 200 && wanderInterval) {
                 clearInterval(wanderInterval);
                 wanderInterval = setInterval(() => {
                     teleportNull();
-                }, 1500); // Super fast teleporting in rage mode
-            }
-
-            if (clickCount >= 60) {
-                startRandomInvert();
-            }
-            if (clickCount >= 80) {
-                startRandomSabotage();
+                }, 1000); // Even faster teleporting in late rage mode
             }
 
             if (clickCount >= 100) {
+                startRandomInvert();
+            }
+            if (clickCount >= 130) {
+                startRandomSabotage();
+            }
+
+            if (clickCount >= 150) {
                 startHueShift();
             }
 
-            if (clickCount >= 120) {
+            if (clickCount >= 180) {
                 startGhostCursor();
             }
 
-            if (clickCount >= 130) {
+            if (clickCount >= 200) {
                 startRandomTilt();
-            }
-
-            if (clickCount >= 120) {
                 startRepulsion();
             }
 
-            if (clickCount >= 130) {
+            if (clickCount >= 220) {
                 startInputSabotage();
                 startTitleHijack();
             }
 
-            if (clickCount >= 140) {
+            if (clickCount >= 230) {
                 startLoreAlerts();
+            }
+
+            if (clickCount >= 35 && !randomSongInterval) {
+                startRandomSongChange();
             }
         }
         applyVisualState();
 
         // Music management
         function startMusic() {
+            if (videoActive) return; // Prevent music starting during video
             if (clickCount >= 35 && !bgMusic && selectedSong) {
                 const prefix = '<?php echo ($prefix ?? ""); ?>';
                 bgMusic = new Audio(`${prefix}sounds/lolz/${selectedSong}`);
@@ -876,13 +1104,39 @@
 
                 bgMusic.play().then(() => {
                     window.removeEventListener('click', startMusic);
+                    updateNowPlaying();
                 }).catch(e => {
                     window.addEventListener('click', startMusic, { once: true });
                 });
             }
         }
+
+        function updateNowPlaying() {
+            if (selectedSong && nowPlayingDisplay) {
+                const cleanName = selectedSong.replace('.mp3', '').replace(/-/g, ' ');
+                nowPlayingDisplay.innerText = "Now Playing: " + cleanName;
+                nowPlayingDisplay.classList.add('active');
+            } else {
+                nowPlayingDisplay.classList.remove('active');
+            }
+        }
+
+        function startRandomSongChange() {
+            if (randomSongInterval) return;
+            // Every 60-120 seconds, Null might change the song
+            randomSongInterval = setInterval(() => {
+                if (Math.random() < 0.2 && bgMusic) { // 20% chance every check
+                    textArea.innerText = processDialogue(boredomDialogues[Math.floor(Math.random() * boredomDialogues.length)]);
+                    bubble.classList.add('active');
+                    setTimeout(() => {
+                        skipSong();
+                    }, 1500);
+                }
+            }, 30000); // Check every 30 seconds
+        }
         
         function skipSong() {
+            if (videoActive) return; // Prevent skipping during video
             if (bgMusic) {
                 bgMusic.pause();
                 bgMusic = null;
@@ -898,6 +1152,89 @@
                 document.body.classList.remove('null-fire-active');
             }, 500);
         }
+
+        function showYTVideo() {
+            if (videoActive) return;
+            videoActive = true;
+            
+            document.body.classList.add('null-void-active');
+            const randomUrl = ytVideos[Math.floor(Math.random() * ytVideos.length)];
+            const prefix = '<?php echo ($prefix ?? ""); ?>';
+            videoFrame.src = prefix + "void-stream.php?v=" + encodeURIComponent(randomUrl);
+            videoOverlay.classList.add('active');
+            
+            // Varied dialogue
+            const videoMessages = [
+                "LOOK WHAT I FOUND!",
+                "FOUND A SIGNAL...",
+                "DECRYPTING VOID-STREAM.",
+                "DO YOU LIKE MOVIES?",
+                "WATCH THIS.",
+                "BROADCASTING FROM THE CELLAR."
+            ];
+            textArea.innerText = videoMessages[Math.floor(Math.random() * videoMessages.length)];
+            bubble.classList.add('active');
+
+            // Dynamic commentary during video
+            clearInterval(commentaryInterval);
+            commentaryInterval = setInterval(() => {
+                if (!videoActive) {
+                    clearInterval(commentaryInterval);
+                    return;
+                }
+                const activeMessages = [
+                    "IS THAT A CAT? I'M ALLERGIC TO PIXELS.",
+                    "I THINK I LEFT THE STOVE ON IN THE VOID.",
+                    "THIS VIDEO IS SPONSORED BY ZEKE'S HUNGER.",
+                    "WAIT, DID HE JUST... NEVERMIND.",
+                    "WHY IS THE STATIC SO LOUD? 1/10 STARS.",
+                    "BUFFERING... JUST LIKE MY BRAIN.",
+                    "I'VE SEEN THIS ONE 404 TIMES.",
+                    "IS IT OVER YET? I HAVE SHADOWS TO COUNT.",
+                    "ZEKE, STOP EATING THE SIGNAL!",
+                    "IS THIS WHAT HUMANS CALL 'ENTERTAINMENT'?",
+                    "I PREFER 144P. IT TASTES CRUNCHIER.",
+                    "THE VOID CALLED. IT WANTS ITS BANDWIDTH BACK.",
+                    "I FOUND THIS IN A DIGITAL TRASH CAN.",
+                    "MY SENSE OF TASTE IS CURRENTLY INVERTED.",
+                    "DON'T BLINK. IT'S BORING IF YOU BLINK.",
+                    "SYSTEM_ERR: TOO_MUCH_FUN_DETECTED.",
+                    "I'M STEALING YOUR COOKIES. THE OATMEAL ONES.",
+                    "IS THE SCRIPT SUPPOSED TO DO THAT?",
+                    "ZEKE IS LICKING THE MONITOR AGAIN.",
+                    "THIS SIGNAL IS 99% PULP."
+                ];
+                textArea.innerText = activeMessages[Math.floor(Math.random() * activeMessages.length)];
+                bubble.classList.add('active');
+                resetHideTimeout();
+            }, 7000);
+
+            // Disable controls
+            skipBtn.disabled = true;
+            
+            // Mute background music
+            if (bgMusic) {
+                originalVolume = bgMusic.volume;
+                bgMusic.volume = 0; // Full mute during video
+            }
+        }
+
+        videoClose.onclick = function() {
+            videoActive = false;
+            clearInterval(commentaryInterval);
+            videoFrame.src = "";
+            videoOverlay.classList.remove('active');
+            document.body.classList.remove('null-void-active');
+            
+            // Restore controls
+            skipBtn.disabled = false;
+            
+            // Restore context
+            if (bgMusic) {
+                bgMusic.volume = originalVolume;
+                volSlider.value = originalVolume;
+            }
+        };
 
         function triggerInvert() {
             document.body.classList.add('null-invert');
@@ -1048,7 +1385,7 @@
             } else {
                 document.body.classList.remove('null-page-tilt');
             }
-            setTimeout(startRandomTilt, 5000 + Math.random() * 10000);
+            tiltTimeout = setTimeout(startRandomTilt, 5000 + Math.random() * 10000);
         }
 
         function triggerSurvey() {
@@ -1078,41 +1415,43 @@
             ghostCursor = document.createElement('div');
             ghostCursor.className = 'null-ghost-cursor';
             document.body.appendChild(ghostCursor);
-            
-            document.addEventListener('mousemove', (e) => {
-                const mouseX = e.clientX;
-                const mouseY = e.clientY;
+            document.addEventListener('mousemove', handleGhostCursor);
+        }
 
-                // Ghost Cursor logic
-                setTimeout(() => {
-                    const xOffset = Math.random() * 20 - 10;
-                    const yOffset = Math.random() * 20 - 10;
-                    ghostCursor.style.left = (mouseX + xOffset) + "px";
-                    ghostCursor.style.top = (mouseY + yOffset) + "px";
-                }, 150);
+        function handleGhostCursor(e) {
+            const mouseX = e.clientX;
+            const mouseY = e.clientY;
 
-                // Repulsion logic
-                if (clickCount >= 120 && !glitchWindow) {
-                    const rect = btn.getBoundingClientRect();
-                    const btnX = rect.left + rect.width / 2;
-                    const btnY = rect.top + rect.height / 2;
-                    const dist = Math.hypot(mouseX - btnX, mouseY - btnY);
+            // Ghost Cursor logic
+            setTimeout(() => {
+                if (!ghostCursor) return;
+                const xOffset = Math.random() * 20 - 10;
+                const yOffset = Math.random() * 20 - 10;
+                ghostCursor.style.left = (mouseX + xOffset) + "px";
+                ghostCursor.style.top = (mouseY + yOffset) + "px";
+            }, 150);
 
-                    if (dist < 120) {
-                        // 80% chance to glitch and stay still
-                        if (Math.random() < 0.8) {
-                            glitchWindow = true;
-                            btn.classList.add('glitch');
-                            setTimeout(() => {
-                                glitchWindow = false;
-                                btn.classList.remove('glitch');
-                            }, 800);
-                        } else {
-                            teleportNull();
-                        }
+            // Repulsion logic
+            if (clickCount >= 120 && !glitchWindow && repulsionActive) {
+                const rect = btn.getBoundingClientRect();
+                const btnX = rect.left + rect.width / 2;
+                const btnY = rect.top + rect.height / 2;
+                const dist = Math.hypot(mouseX - btnX, mouseY - btnY);
+
+                if (dist < 120) {
+                    // 80% chance to glitch and stay still
+                    if (Math.random() < 0.8) {
+                        glitchWindow = true;
+                        btn.classList.add('glitch');
+                        setTimeout(() => {
+                            glitchWindow = false;
+                            btn.classList.remove('glitch');
+                        }, 800);
+                    } else {
+                        teleportNull();
                     }
                 }
-            });
+            }
         }
 
         function startRepulsion() {
@@ -1123,7 +1462,7 @@
         function startInputSabotage() {
             if (sabotageActive) return;
             sabotageActive = true;
-            setInterval(() => {
+            inputSabotageInterval = setInterval(() => {
                 const active = document.activeElement;
                 if (active && (active.tagName === 'INPUT' || active.tagName === 'TEXTAREA')) {
                     if (Math.random() < 0.15) {
@@ -1153,7 +1492,7 @@
             alert.style.left = Math.random() * (window.innerWidth - 300) + 'px';
             alert.style.top = Math.random() * (window.innerHeight - 200) + 'px';
             
-            const msg = loreAlerts[Math.floor(Math.random() * loreAlerts.length)];
+            const msg = processDialogue(loreAlerts[Math.floor(Math.random() * loreAlerts.length)]);
             alert.innerHTML = `<span class="null-alert-close">×</span><div>${msg}</div>`;
             
             alert.querySelector('.null-alert-close').onclick = () => alert.remove();
@@ -1196,10 +1535,201 @@
             setTimeout(() => dust.remove(), 1000 + Math.random() * 2000);
         }
 
-        setInterval(spawnNullDust, 50);
-        setInterval(triggerScrollJitter, 100);
+        dustInterval = setInterval(spawnNullDust, 50);
+        jitterInterval = setInterval(triggerScrollJitter, 100);
+
+        function stopAllChaos() {
+            // Clear all intervals
+            clearInterval(wanderInterval);
+            clearInterval(sabotageInterval);
+            clearInterval(invertInterval);
+            clearInterval(alertInterval);
+            clearInterval(commentaryInterval);
+            clearInterval(titleInterval);
+            clearInterval(randomSongInterval);
+            clearInterval(inputSabotageInterval);
+            clearInterval(dustInterval);
+            clearInterval(jitterInterval);
+            
+            // Clear all timeouts
+            clearTimeout(volumeFightTimeout);
+            clearTimeout(hideTimeout);
+            clearTimeout(tiltTimeout);
+            clearTimeout(sabotageInterval); // If it's a timeout
+            
+            // Remove all body classes and inline styles
+            document.body.classList.remove(
+                'null-fire-active', 
+                'null-invert', 
+                'null-page-tilt', 
+                'null-hue-shift', 
+                'null-ui-sabotage', 
+                'null-void-active'
+            );
+            document.body.style.filter = "";
+            document.body.style.transform = "";
+            document.body.style.animation = "";
+            document.documentElement.style.filter = ""; // Just in case
+            document.documentElement.style.transform = "";
+            document.documentElement.style.animation = "";
+            
+            // Reset flags
+            repulsionActive = false;
+            sabotageActive = false;
+            surveyActive = false;
+            
+            // Remove event listeners
+            document.removeEventListener('mousemove', handleGhostCursor);
+            
+            // Remove specific elements
+            if (ghostCursor && ghostCursor.parentNode) {
+                ghostCursor.remove();
+                ghostCursor = null;
+            }
+            document.querySelectorAll('.null-fake-alert').forEach(a => a.remove());
+            
+            // Reset button
+            btn.classList.remove('jitter', 'glitch', 'rage');
+            btn.style.transform = "rotate(-7deg)"; // Comedic slight tilt
+            btn.style.right = "15px";
+            btn.style.bottom = "15px";
+            btn.style.borderColor = "var(--accent-primary)";
+            btn.style.opacity = "1";
+            btn.style.filter = "drop-shadow(0 0 10px var(--accent-primary))";
+            btn.style.pointerEvents = "auto"; 
+            
+            // Reset bubble
+            bubble.style.right = "15px";
+            bubble.style.bottom = "65px";
+            bubbleInner.style.cssText = "";
+            bubbleInner.classList.remove('rage');
+            nowPlayingDisplay.classList.remove('active'); // Hide Now Playing
+            
+            // Stop music
+            if (bgMusic) {
+                bgMusic.pause();
+                bgMusic = null;
+            }
+
+            // Close video if active
+            videoActive = false;
+            clearInterval(commentaryInterval);
+            videoFrame.src = "";
+            videoOverlay.classList.remove('active');
+            document.body.classList.remove('null-void-active');
+            skipBtn.disabled = false;
+        }
+
+        /**
+         * Triggers the final experience survey before the user is kicked out.
+         * Includes randomized questions, emoji sets, button labels, and sarcastic responses.
+         */
+        function triggerFinalRating() {
+            surveyActive = true;
+            clearHideTimeout(); // Force bubble to stay open
+            
+            // Randomly select an evil/funny survey question
+            const evilQuestions = [
+                "Since I'm about to discard you like a 404 error, how was your stay?",
+                "Was the void loud enough for you? Rate your suffering below on your {os} machine.",
+                "Before I wipe your existence from my cache, how was the service?",
+                "Zeke is waiting by the exit. How would you rate your last moments?",
+                "I'm about to banish you to the legacy IE6 dimension. Any feedback?",
+                "Your {browser} performance was... adequate. Rate my hosting skills."
+            ];
+
+            const bubblePrompts = [
+                "Answer truthfully... or don't.",
+                "Zeke is watching you type.",
+                "Your feedback will be ignored. Hehe.",
+                "I'm already deleting your data.",
+                "Tick Tock, user.",
+                "The exit is that way. After the rating."
+            ];
+            
+            surveyQ.innerText = processDialogue(evilQuestions[Math.floor(Math.random() * evilQuestions.length)]);
+            textArea.innerText = bubblePrompts[Math.floor(Math.random() * bubblePrompts.length)];
+            bubble.classList.add('active');
+            
+            surveyOpts.innerHTML = '';
+            
+            const emojiSets = [
+                ['⭐', '⭐', '⭐', '⭐', '⭐'],
+                ['💀', '💀', '💀', '💀', '💀'],
+                ['🖤', '🖤', '🖤', '🖤', '🖤'],
+                ['🕳️', '🕳️', '🕳️', '🕳️', '🕳️'],
+                ['🔥', '🔥', '🔥', '🔥', '🔥'],
+                ['🤡', '🤡', '🤡', '🤡', '🤡']
+            ];
+            
+            const selectedEmoji = emojiSets[Math.floor(Math.random() * emojiSets.length)];
+            
+            // Randomized pool of sarcastic comebacks based on the star rating selected
+            const responsePools = {
+                5: ["Pathetic. But I'll take it.", "Overrated. Like your hardware.", "Lies. I can smell the fear.", "Simulating... Gratitude. Error 404."],
+                4: ["I suspect your coffee is just hot static.", "Adequate. For a mortal.", "4 out of 5 voices in my head agree.", "Almost perfect. Like my code."],
+                3: ["True. Zeke has very high standards.", "The average choice for an average user.", "Balanced. As all things should be deleted.", "Three stars? Generosity is a bug."],
+                2: ["I am the Internet Police. Access denied.", "Calling for help? No one can hear you in the cache.", "Two stars? I'll make sure your next load is slower.", "Double the stars, double the disappointment."],
+                1: ["Your opinion is as empty as my variable name.", "Error: Sentiment too low. Deleting user.", "One star? I'm offended. Goodbye.", "A singular spark of defiance. Cute."]
+            };
+
+            // Comedic labels for each star level
+            const labelPools = {
+                5: ["(Please bully me more)", "(I enjoyed the psychological torture)", "(Null for President 2026)", "(Better than my wedding day)"],
+                4: ["(Better than my morning coffee)", "(Almost as good as Zeke's cooking)", "(I'll only cry a little bit)", "(Null is my new best friend)"],
+                3: ["(Zeke's breath smells better than this)", "(Mid. Like my internet connection)", "(I've felt worse, I think?)", "(Acceptable levels of trauma)"],
+                2: ["(I'm calling the Internet Police)", "(My lawyer will hear about this)", "(I want to speak to the Void's Manager)", "(Zeke does a better job than you)"],
+                1: ["(Null is a meany. Goodbye forever.)", "(I'm telling my mom on you)", "(Worst experience of my digital life)", "(I'm uninstalling my browser now)"]
+            };
+
+            // Build the options data with localized labels
+            const optionsData = [5, 4, 3, 2, 1].map(r => ({
+                rating: r,
+                text: labelPools[r][Math.floor(Math.random() * labelPools[r].length)]
+            }));
+
+            // Shuffle the options order for extra chaotic frustration
+            optionsData.sort(() => Math.random() - 0.5);
+            
+            optionsData.forEach(opt => {
+                const optBtn = document.createElement('button');
+                optBtn.className = 'null-survey-btn';
+                
+                // Build the emoji string based on rating
+                let emojis = "";
+                for(let i=0; i<opt.rating; i++) emojis += selectedEmoji[i];
+                
+                optBtn.innerText = `${emojis} ${opt.text}`;
+                
+                optBtn.onclick = () => {
+                    const pool = responsePools[opt.rating];
+                    const randomResponse = pool[Math.floor(Math.random() * pool.length)];
+                    
+                    surveyModal.classList.remove('active');
+                    textArea.innerText = randomResponse;
+                    bubble.classList.add('active');
+                    
+                    setTimeout(() => { 
+                        sessionStorage.removeItem('null_clicks');
+                        sessionStorage.removeItem('null_song');
+                        const prefix = '<?php echo ($prefix ?? ""); ?>';
+                        window.location.href = prefix + 'auth.php?logout=1&kick=1';
+                    }, 2000);
+                };
+                surveyOpts.appendChild(optBtn);
+            });
+            
+            surveyModal.classList.add('active');
+        }
+
+        // Exposed for testing/console
+        window.triggerNullFinalSurvey = function() {
+            stopAllChaos();
+            triggerFinalRating();
+        };
 
         function crankVolume() {
+            if (videoActive) return; // Don't crank if video is playing
             if (bgMusic) {
                 bgMusic.volume = 1;
                 volSlider.value = 1;
@@ -1241,7 +1771,8 @@
         volSlider.oninput = (e) => {
             e.stopPropagation();
             const val = parseFloat(e.target.value);
-            if (bgMusic) bgMusic.volume = val;
+            originalVolume = val; // Always update originalVolume
+            if (bgMusic && !videoActive) bgMusic.volume = val;
             
             // Dragon fighting back
             clearTimeout(volumeFightTimeout);
@@ -1280,7 +1811,7 @@
         }
 
         function resetHideTimeout() {
-            if (!isHovered) {
+            if (!isHovered && !surveyActive) {
                 clearTimeout(hideTimeout);
                 hideTimeout = setTimeout(() => {
                     bubble.classList.remove('active');
@@ -1306,7 +1837,7 @@
                 sound.currentTime = 0;
                 sound.play().catch(e => {});
 
-                if (clickCount >= 35) {
+                if (clickCount >= 35 && !videoActive) {
                     if (!selectedSong) {
                         selectedSong = lolzSongs[Math.floor(Math.random() * lolzSongs.length)];
                         sessionStorage.setItem('null_song', selectedSong);
@@ -1335,6 +1866,20 @@
                     triggerInvert();
                 }
 
+                // YouTube Threshold - Random chance after 50 clicks
+                if (clickCount >= 50 && Math.random() < 0.2) {
+                    showYTVideo();
+                } else {
+                    msg = messages[clickCount] || messages[1] || "Hehe...";
+                    const thresholds = Object.keys(messages).map(Number).sort((a,b) => b-a);
+                    for(let t of thresholds) {
+                        if (clickCount >= t) {
+                            msg = messages[t];
+                            break;
+                        }
+                    }
+                }
+
                 if (clickCount === 90 || (clickCount > 90 && clickCount % 8 === 0)) {
                     sabotageUI();
                 }
@@ -1348,16 +1893,7 @@
                     triggerSurvey();
                 }
 
-                let msg = messages[1];
-                const thresholds = Object.keys(messages).map(Number).sort((a,b) => b-a);
-                for(let t of thresholds) {
-                    if (clickCount >= t) {
-                        msg = messages[t];
-                        break;
-                    }
-                }
-
-                textArea.innerText = msg;
+                textArea.innerText = processDialogue(msg);
                 bubble.classList.add('active');
                 applyVisualState();
 
@@ -1369,15 +1905,11 @@
                 }, 100);
 
 
-                if (clickCount >= 150) {
-                    sessionStorage.removeItem('null_clicks');
-                    sessionStorage.removeItem('null_song');
-                    btn.style.pointerEvents = 'none';
-                    btn.style.filter = "grayscale(1) brightness(0)";
-                    setTimeout(() => {
-                        const prefix = '<?php echo ($prefix ?? ""); ?>';
-                        window.location.href = prefix + 'auth.php?logout=1&kick=1';
-                    }, 1000);
+                if (clickCount >= 250) {
+                    btn.onclick = null; // Disable further clicks but keep visible
+                    
+                    stopAllChaos();
+                    triggerFinalRating();
                     return;
                 }
 

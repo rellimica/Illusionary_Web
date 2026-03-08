@@ -5,6 +5,10 @@
 require_once 'init.php';
 
 // --- PROTECTION ---
+if (isset($_POST['partner_id']) && $_POST['partner_id'] === 'NULL') {
+    $_POST['partner_id'] = '882';
+}
+
 guard($_POST, ['action' => 'required']);
 if ($_POST['action'] === 'propose_trade') {
     guard($_POST, ['partner_id' => 'id|required', 'your_offer' => 'json|required', 'their_offer' => 'json|required']);
@@ -17,34 +21,7 @@ if ($_POST['action'] === 'get_inventories' || $_POST['action'] === 'get_trade_de
 }
 
 // --- HELPERS (Optimized with Cache) ---
-function getDiscordUser($id, $bot_token) {
-    if (!$id) return ['username' => 'Unknown', 'avatar' => ''];
-    
-    // Attempt cache lookup first
-    $cache_path = __DIR__ . '/../users_cache.json';
-    if (file_exists($cache_path)) {
-        $cache = json_decode(file_get_contents($cache_path), true);
-        if (isset($cache[$id])) {
-            return [
-                'username' => $cache[$id]['username'] ?? 'Unknown',
-                'avatar' => $cache[$id]['avatar'] ?? "https://www.gravatar.com/avatar/000000000000?d=mp"
-            ];
-        }
-    }
-
-    $url = "https://discord.com/api/v10/users/$id";
-    $options = ['http' => ['header' => "Authorization: Bot $bot_token\r\n", 'method' => 'GET', 'ignore_errors' => true]];
-    $context = stream_context_create($options);
-    $result = @file_get_contents($url, false, $context);
-    if ($result) {
-        $data = json_decode($result, true);
-        return [
-            'username' => $data['username'] ?? 'Unknown',
-            'avatar' => isset($data['avatar']) ? "https://cdn.discordapp.com/avatars/$id/{$data['avatar']}.png" : "https://www.gravatar.com/avatar/000000000000?d=mp"
-        ];
-    }
-    return ['username' => 'Unknown', 'avatar' => ''];
-}
+// function getDiscordUser is inherited from config.php via init.php
 
 function validateTurnstile($token, $secret, $remoteip = null) {
     if (empty($token) || empty($secret)) {
@@ -78,6 +55,11 @@ if (isset($_POST['action'])) {
         $partner_id = $_POST['partner_id'];
         $your_offer = json_decode($_POST['your_offer'], true);
         $their_offer = json_decode($_POST['their_offer'], true);
+
+        // --- EASTER EGG: BLOCK NULL TRADES ---
+        if ($partner_id === 'NULL' || $partner_id === '882') {
+            errorResponse('Null does not trade with mere mortals. He only watches.', 403);
+        }
 
         if (empty($your_offer) && empty($their_offer)) {
             errorResponse('Trade cannot be empty!', 400);

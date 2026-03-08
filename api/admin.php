@@ -57,7 +57,7 @@ if (isset($_GET['action']) && $_GET['action'] === 'hydrate_admin') {
     $unique_owners = $pdo->query("SELECT COUNT(DISTINCT user_discord_id) FROM user_cards")->fetchColumn();
     $global_uniques = $pdo->query("SELECT COUNT(DISTINCT card_id) FROM user_cards")->fetchColumn();
     $rarity_dist = $pdo->query("SELECT c.rarity_name, SUM(uc.count) as total FROM user_cards uc JOIN cards c ON uc.card_id = c.id GROUP BY c.rarity_name")->fetchAll();
-    $recent_draws = $pdo->query("SELECT uc.*, c.name as card_name, c.filename, c.rarity_name, UNIX_TIMESTAMP(uc.timestamp) as unix_ts FROM user_cards uc JOIN cards c ON uc.card_id = c.id ORDER BY (CASE WHEN uc.timestamp IS NOT NULL THEN uc.timestamp ELSE 0 END) DESC LIMIT 15")->fetchAll();
+    $recent_draws = $pdo->query("SELECT ci.*, c.name as card_name, c.filename, c.rarity_name, ci.variations as variant, UNIX_TIMESTAMP(ci.obtained_at) as unix_ts FROM card_instances ci JOIN cards c ON ci.card_id = c.id ORDER BY ci.id DESC LIMIT 15")->fetchAll();
     $feed = [];
     foreach ($recent_draws as $draw) {
         $u = getDiscordUserCached($draw['user_discord_id'], $DISCORD_TOKEN);
@@ -105,7 +105,9 @@ if (isset($_GET['action']) && $_GET['action'] === 'lookup_user') {
     $all_instances = $inst_stmt->fetchAll();
 
     foreach ($collection as &$card) {
-        $card['sns'] = array_values(array_map(function($i) { return scrambleSN($i['id']); },
+        $card['sns'] = array_values(array_map(function($i) { 
+            return ['sn' => scrambleSN($i['id']), 'variant' => $i['variations']]; 
+        },
             array_filter($all_instances, function($i) use ($card) {
                 return $i['card_id'] == $card['card_id'];
             })
@@ -193,7 +195,7 @@ if (isset($_GET['fetch_owners'])) {
     $rows = $stmt->fetchAll();
     
     // Fetch all instances for these owners to match them up
-    $inst_stmt = $pdo->prepare("SELECT id, user_discord_id FROM card_instances WHERE card_id = ? ORDER BY id ASC");
+    $inst_stmt = $pdo->prepare("SELECT id, user_discord_id, variations FROM card_instances WHERE card_id = ? ORDER BY id ASC");
     $inst_stmt->execute([$cid]);
     $all_instances = $inst_stmt->fetchAll();
     
@@ -202,7 +204,9 @@ if (isset($_GET['fetch_owners'])) {
         $u = getDiscordUserCached($row['user_discord_id'], $DISCORD_TOKEN);
         
         // Filter instances for this specific user
-        $user_sns = array_values(array_map(function($i) { return scrambleSN($i['id']); }, 
+        $user_sns = array_values(array_map(function($i) { 
+            return ['sn' => scrambleSN($i['id']), 'variant' => $i['variations']]; 
+        }, 
             array_filter($all_instances, function($i) use ($row) { 
                 return $i['user_discord_id'] == $row['user_discord_id']; 
             })
@@ -305,7 +309,8 @@ if (isset($_POST['ajax_action'])) {
                 'rarity' => $details['rarity_name'],
                 'tier' => $details['rarity_tier'],
                 'acquired' => $details['obtained_at'],
-                'source' => $details['source']
+                'source' => $details['source'],
+                'variant' => $details['variations']
             ]);
         } else {
             echo json_encode(['success' => false, 'error' => 'No active instance matches this scrambled code.']);

@@ -5,21 +5,21 @@
             "msg": "MY_VISCOSITY_IS_ETERNAL",
             "level": 4,
             "name": "THE_CROWNED_ONE",
-            "enabled": true
+            "enabled": false
         },
         "VYPER": {
             "pass": "GH057_M4SS_V7",
             "msg": "ENFORCING_THE_SHADE",
             "level": 3,
             "name": "THE_RIGHT_HAND",
-            "enabled": true
+            "enabled": false
         },
         "ARDE-77": {
             "pass": "CRY_H4RD_4RD3N",
             "msg": "I_SERVE_THE_SHADE",
             "level": 2,
             "name": "ARDEN_EX-DIRECTOR",
-            "enabled": true
+            "enabled": false
         },
         "ANATOLE": {
             "pass": "V01C3_V173_",
@@ -33,7 +33,7 @@
             "msg": "HEAVILY_ARMORED_LOYALTY",
             "level": 3,
             "name": "THE_ARMORY_PET",
-            "enabled": true
+            "enabled": false
         },
         "GUEST": {
             "pass": "12345",

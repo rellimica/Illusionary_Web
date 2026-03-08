@@ -91,6 +91,7 @@ $user_id = $my_id;
 $is_admin = isAdmin($user_id);
 
 $partner_id = $_GET['partner'] ?? null;
+if ($partner_id === 'NULL') $partner_id = '882';
 $trade_view_id = $_GET['trade_id'] ?? null;
 $partner_data = null;
 $partner_cards = [];
@@ -434,6 +435,8 @@ if ($partner_id || $trade_view_id) {
             transition: all 0.2s;
             cursor: pointer;
             user-select: none;
+            position: relative;
+            overflow: hidden;
         }
         .sn-pill:hover {
             border-color: var(--accent-secondary);
@@ -557,6 +560,8 @@ if ($partner_id || $trade_view_id) {
             border-radius: 12px;
             text-align: center;
             transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
         }
         .summary-card:hover { transform: translateY(-5px); border-color: var(--accent-secondary); background: rgba(0, 229, 255, 0.05); }
         .summary-card img { width: 100%; border-radius: 8px; margin-bottom: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
@@ -1214,12 +1219,14 @@ if ($partner_id || $trade_view_id) {
                 ids.forEach(iid => {
                     const inst = meta.sns.find(s => (typeof s === 'object' ? s.id : s) == iid);
                     const sn = typeof inst === 'object' ? inst.sn : inst;
+                    const variant = (inst && typeof inst === 'object') ? inst.variant : null;
+                    const vClass = variant ? `variant-${variant}` : '';
                     
                     const div = document.createElement('div');
-                    div.className = 'staged-card';
+                    div.className = `staged-card ${vClass}`;
                     div.onclick = () => removeFromTrade(side, id, iid);
                     div.innerHTML = `
-                        <img src="${imagesPath}${meta.filename}" loading="lazy">
+                        <img src="${imagesPath}${meta.filename}" class="${vClass}" loading="lazy">
                         <div class="count-badge" style="font-size:0.55rem; padding: 2px 4px;">#${sn || '?'}</div>
                     `;
                     div.title = meta.name.replace(/_/g, ' ') + ` (SN #${sn || '?'})`;

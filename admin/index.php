@@ -100,7 +100,11 @@ require_once 'header.php';
                                 <div class="draw-username">${draw.username}</div>
                                 <div class="draw-user-id">${draw.user_discord_id}</div>
                                 <div class="draw-name">${draw.card_name.replace(/_/g, ' ')}</div>
-                                <div class="draw-time">${draw.rarity_name} • <span class="local-time" data-ts="${draw.unix_ts}">...</span></div>
+                                <div class="draw-time">
+                                    ${draw.rarity_name}
+                                    ${draw.variant ? `• <span class="sn-chip" style="padding: 1px 6px; border-radius: 4px; font-weight: 800; font-size: 9px; vertical-align: middle;">${draw.variant.toUpperCase()}</span>` : ''} 
+                                    • <span class="local-time" data-ts="${draw.unix_ts}">...</span>
+                                </div>
                             </div>
                         </div>
                     </div>

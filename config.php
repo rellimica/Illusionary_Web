@@ -24,6 +24,15 @@ if (!function_exists('getDiscordUser')) {
     function getDiscordUser($id, $bot_token) {
         if (!$id) return ['username' => 'Unknown', 'avatar' => ''];
 
+        $sid = (string)$id;
+        // --- EASTER EGG: NULL OVERRIDE ---
+        if ($sid === '882' || $sid === 'NULL') {
+            return [
+                'username' => 'Null',
+                'avatar'   => '/happynull.png'
+            ];
+        }
+
         // Check local cache first
         $cache_path = __DIR__ . '/users_cache.json';
         if (file_exists($cache_path)) {
@@ -68,10 +77,10 @@ $READ_ONLY_ADMIN_IDS = [
 ];
 
 // Reveal / Countdown Settings
-$ENABLE_REVEAL_COUNTDOWN = true;          // Master toggle for the entire countdown feature
+$ENABLE_REVEAL_COUNTDOWN = false;          // Master toggle for the entire countdown feature
 $REVEAL_START_TIME    = "2026-02-11T14:45:00-05:00"; // When the "Transmission" started (for % calculation)
-$REVEAL_TARGET_TIME   = "2026-02-16T12:00:00-05:28"; // Format: YYYY-MM-DDTHH:MM:SS-Offset
-$REVEAL_EMERGENCY_MSG = "Welcome to the Illusionary Dashboard."; // centered message
+$REVEAL_TARGET_TIME   = "2026-03-08T12:00:00-05:00"; // Format: YYYY-MM-DDTHH:MM:SS-Offset
+$REVEAL_EMERGENCY_MSG = "Testing..."; // centered message
 
 // Trading System Toggle
 // Set to false to disable the creation of new trades.
@@ -79,7 +88,7 @@ $TRADES_ENABLED = true;
 
 // --- GLOBAL NOTICE BANNER ---
 $GLOBAL_BANNER_ENABLED = false; // Set to true to show the banner
-$GLOBAL_BANNER_TEXT    = "The Pawnshop is now open for business.";
+$GLOBAL_BANNER_TEXT    = "I like trains.";
 $GLOBAL_BANNER_TYPE    = "info"; // info, warning, critical,danger
 
 // Reveal Timestamp Calculation
@@ -137,7 +146,7 @@ if (isset($_SESSION['user_authenticated']) && $_SESSION['user_authenticated'] ==
 
 
 // --- PAWNSHOP CONFIGURATION ---
-$PAWNSHOP_ROTATION_OFFSET = 0; // Increment this to manually force a rotation of daily cards.
+$PAWNSHOP_ROTATION_OFFSET = 4; // Increment this to manually force a rotation of daily cards.
 $CARD_RARITY_VALUES = [
     'common'    => 1,
     'uncommon'  => 1,
@@ -146,6 +155,28 @@ $CARD_RARITY_VALUES = [
     'legendary' => 4,
     'unique'    => 5,
     'relic'     => 6
+];
+
+$VARIATION_BONUSES = [
+    // Tier 1: Filter/Style Variants (+10%)
+    'static'     => 0.10,
+    'legacy'     => 0.10,
+    'phase'      => 0.10,
+    'inverted'   => 0.10,
+    'toxic'      => 0.15,
+    'blueprint'  => 0.15,
+
+    // Tier 2: Animated/Premium Variants (+30%)
+    'gold'       => 0.30,
+    'shimmer'    => 0.30,
+    'pulse'      => 0.30,
+    'ghost'      => 0.35,
+
+    // Tier 3: Rare/Corrupted/Holo Variants (+60-100%)
+    'glitch'     => 0.60,
+    'holo'       => 0.75,
+    'corrupted'  => 0.85,
+    'blood-moon' => 1.00
 ];
 
 // Helper to check if a user is an admin

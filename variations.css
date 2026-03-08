@@ -1,293 +1,693 @@
-/* --- ILLUSIONARY CARD VARIATIONS --- 
-   Consolidated styles for card visual effects across desktop and mobile.
+/* --- ILLUSIONARY CARD VARIATIONS ---
+   Premium visual effects for card collection.
+   
+   Selector Pattern:
+   - Filters/shadows → img.variant-X (detail), .variant-X img (grid), .variant-X.sn-chip, .variant-X.m-detail-sn-pill
+   - Overlays (::before/::after) → .variant-X:: (grid), :has(img.variant-X):: (detail)
 */
 
-/* 1. Base Variation Filters - Imagery & Stamps */
-.variant-gold img,
-.variant-gold .card-stamp,
-.variant-gold.modal-card-img,
-.variant-gold.modal-stamp-overlay,
-.variant-gold.detail-visual,
-.variant-gold.m-detail-img,
-.variant-gold.m-detail-visual,
-img.variant-gold,
-.card-stamp.variant-gold {
-    filter: sepia(1) saturate(7) hue-rotate(-15deg) brightness(1.1) contrast(1.1) !important;
+:root {
+    --gold-glow: 0 0 15px rgba(255, 215, 0, 0.4);
+    --holo-glow: 0 0 20px rgba(0, 255, 255, 0.3);
+    --corrupted-glow: 0 0 15px rgba(255, 0, 255, 0.4);
+    --toxic-glow: 0 0 15px rgba(50, 255, 50, 0.5);
+    --blood-glow: 0 0 15px rgba(255, 0, 0, 0.4);
+    --phase-glow: 0 0 18px rgba(120, 80, 255, 0.4);
+    --ghost-glow: 0 0 20px rgba(255, 255, 255, 0.25);
+    --pulse-glow: 0 0 12px rgba(0, 229, 255, 0.4);
+    --blueprint-glow: 0 0 10px rgba(78, 124, 254, 0.3);
 }
 
-.variant-inverted img,
-.variant-inverted .card-stamp,
-.variant-inverted.modal-card-img,
-.variant-inverted.modal-stamp-overlay,
-.variant-inverted.detail-visual,
-.variant-inverted.m-detail-img,
-.variant-inverted.m-detail-visual,
-img.variant-inverted,
-.card-stamp.variant-inverted {
-    filter: invert(1) !important;
-}
-
-.variant-corrupted img,
-.variant-corrupted .card-stamp,
-.variant-corrupted.modal-card-img,
-.variant-corrupted.modal-stamp-overlay,
-.variant-corrupted.detail-visual,
-.variant-corrupted.m-detail-img,
-.variant-corrupted.m-detail-visual,
-img.variant-corrupted,
-.card-stamp.variant-corrupted {
-    filter: invert(1) hue-rotate(180deg) !important;
-}
-
-.variant-static img,
-.variant-static .card-stamp,
-.variant-static.modal-card-img,
-.variant-static.modal-stamp-overlay,
-.variant-static.detail-visual,
-.variant-static.m-detail-img,
-.variant-static.m-detail-visual,
-img.variant-static,
-.card-stamp.variant-static {
-    filter: grayscale(1) brightness(1.2) !important;
-}
-
-.variant-legacy img,
-.variant-legacy .card-stamp,
-.variant-legacy.modal-card-img,
-.variant-legacy.modal-stamp-overlay,
-.variant-legacy.detail-visual,
-.variant-legacy.m-detail-img,
-.variant-legacy.m-detail-visual,
-img.variant-legacy,
-.card-stamp.variant-legacy {
-    filter: sepia(0.8) contrast(1.1) !important;
-}
-
-.variant-phase img,
-.variant-phase .card-stamp,
-.variant-phase.modal-card-img,
-.variant-phase.modal-stamp-overlay,
-.variant-phase.detail-visual,
-.variant-phase.m-detail-img,
-.variant-phase.m-detail-visual,
-img.variant-phase,
-.card-stamp.variant-phase {
-    filter: hue-rotate(120deg) !important;
-}
-
-.variant-ghost img,
-.variant-ghost .card-stamp,
-.variant-ghost.modal-card-img,
-.variant-ghost.modal-stamp-overlay,
-.variant-ghost.detail-visual,
-.variant-ghost.m-detail-img,
-.variant-ghost.m-detail-visual,
-img.variant-ghost,
-.card-stamp.variant-ghost {
-    opacity: 0.6;
-    filter: brightness(1.5) !important;
-}
-
-/* 2. Animated Variants */
-.variant-shimmer {
+/* Universal containment: position all variant elements for pseudo-element overlays (not img) */
+[class*="variant-"]:not(img) {
     position: relative;
+}
+
+/* Clip pseudo-element overlays — exclude img and staged-cards */
+[class*="variant-"]:not(img):not(.staged-card):not(.tw-staged-card) {
     overflow: hidden;
 }
 
-.variant-shimmer::after {
+/* =============================================
+   1. GOLD — Rich Metallic Foil
+   ============================================= */
+
+.variant-gold img,
+img.variant-gold,
+.variant-gold.sn-chip,
+.variant-gold.m-detail-sn-pill {
+    filter: sepia(1) saturate(4) hue-rotate(-10deg) brightness(1.15) contrast(1.15) !important;
+    box-shadow: var(--gold-glow);
+}
+
+
+/* =============================================
+   2. SHIMMER — Pearlescent Sheen
+   ============================================= */
+
+.variant-shimmer img,
+img.variant-shimmer,
+.variant-shimmer.sn-chip,
+.variant-shimmer.m-detail-sn-pill {
+    filter: brightness(1.15) saturate(1.15) hue-rotate(-10deg) !important;
+    box-shadow: 0 0 18px rgba(255, 180, 240, 0.3), 0 0 6px rgba(200, 200, 255, 0.2);
+}
+
+/* Static pearlescent tint — image only */
+.detail-visual:has(img.variant-shimmer)::after,
+.m-detail-visual:has(img.variant-shimmer)::after {
     content: "";
     position: absolute;
-    top: -100%;
-    left: -100%;
-    width: 300%;
-    height: 300%;
-    background: linear-gradient(45deg, transparent 45%, rgba(255, 255, 255, 0.6) 50%, transparent 55%);
-    animation: shimmer-sweep 2s infinite linear;
+    inset: 0;
+    background: linear-gradient(135deg,
+            rgba(255, 150, 220, 0.08) 0%,
+            rgba(255, 255, 255, 0.1) 50%,
+            rgba(160, 200, 255, 0.08) 100%);
+    mix-blend-mode: color-dodge;
     pointer-events: none;
     z-index: 2;
+    border-radius: inherit;
 }
 
-.variant-glitch {
-    animation: glitch-jitter 0.2s infinite;
+/* =============================================
+   3. STATIC — Broadcast Signal Loss
+   ============================================= */
+
+.variant-static img,
+img.variant-static,
+.variant-static.sn-chip,
+.variant-static.m-detail-sn-pill {
+    filter: grayscale(1) brightness(1.1) contrast(1.3) !important;
 }
 
-.variant-glitch:hover {
-    filter: drop-shadow(2px 0 red) drop-shadow(-2px 0 blue) !important;
+/* Flickering scanlines */
+.variant-static::before,
+.sn-chip.variant-static::before,
+.m-detail-sn-pill.variant-static::before,
+.detail-visual:has(img.variant-static)::before,
+.m-detail-visual:has(img.variant-static)::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(0deg,
+            transparent,
+            transparent 2px,
+            rgba(0, 0, 0, 0.15) 2px,
+            rgba(0, 0, 0, 0.15) 4px);
+    animation: static-flicker 0.15s infinite steps(2);
+    pointer-events: none;
+    z-index: 2;
+    border-radius: inherit;
 }
 
-.variant-pulse {
+/* Noise grain overlay */
+.variant-static::after,
+.sn-chip.variant-static::after,
+.m-detail-sn-pill.variant-static::after,
+.detail-visual:has(img.variant-static)::after,
+.m-detail-visual:has(img.variant-static)::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    opacity: 0.12;
+    mix-blend-mode: overlay;
+    pointer-events: none;
+    z-index: 3;
+    border-radius: inherit;
+    animation: static-grain 0.5s infinite steps(3);
+}
+
+.variant-static.user-card-item,
+.detail-visual:has(img.variant-static),
+.m-detail-visual:has(img.variant-static) {
+    position: relative;
+}
+
+/* =============================================
+   4. LEGACY — Aged Parchment
+   ============================================= */
+
+.variant-legacy img,
+img.variant-legacy,
+.variant-legacy.sn-chip,
+.variant-legacy.m-detail-sn-pill {
+    filter: sepia(0.85) contrast(1.05) brightness(0.9) saturate(0.7) !important;
+}
+
+/* Deep vignette + paper grain */
+.variant-legacy::after,
+.sn-chip.variant-legacy::after,
+.m-detail-sn-pill.variant-legacy::after,
+.detail-visual:has(img.variant-legacy)::after,
+.m-detail-visual:has(img.variant-legacy)::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(ellipse at center, transparent 40%, rgba(0, 0, 0, 0.5) 100%),
+        url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.5' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    background-blend-mode: normal, overlay;
+    opacity: 0.6;
+    pointer-events: none;
+    border-radius: inherit;
+    z-index: 1;
+}
+
+.variant-legacy.user-card-item,
+.detail-visual:has(img.variant-legacy),
+.m-detail-visual:has(img.variant-legacy) {
+    position: relative;
+}
+
+/* =============================================
+   5. INVERTED — Photographic Negative
+   ============================================= */
+
+.variant-inverted img,
+img.variant-inverted,
+.variant-inverted.sn-chip,
+.variant-inverted.m-detail-sn-pill {
+    filter: invert(1) hue-rotate(180deg) contrast(1.05) brightness(1.05) !important;
+}
+
+/* Subtle cyan/magenta film tint */
+.variant-inverted::after,
+.sn-chip.variant-inverted::after,
+.m-detail-sn-pill.variant-inverted::after,
+.detail-visual:has(img.variant-inverted)::after,
+.m-detail-visual:has(img.variant-inverted)::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(0, 255, 255, 0.06), rgba(255, 0, 255, 0.06));
+    mix-blend-mode: color;
+    pointer-events: none;
+    z-index: 1;
+    border-radius: inherit;
+}
+
+.variant-inverted.user-card-item,
+.detail-visual:has(img.variant-inverted),
+.m-detail-visual:has(img.variant-inverted) {
+    position: relative;
+}
+
+/* =============================================
+   6. PHASE — Between Dimensions
+   ============================================= */
+
+.variant-phase img,
+img.variant-phase,
+.variant-phase.sn-chip,
+.variant-phase.m-detail-sn-pill {
+    filter: hue-rotate(220deg) saturate(1.6) brightness(1.15) !important;
+    box-shadow: var(--phase-glow);
+    animation: phase-fade 4s infinite ease-in-out;
+}
+
+.variant-phase.user-card-item,
+.detail-visual:has(img.variant-phase),
+.m-detail-visual:has(img.variant-phase) {
+    position: relative;
+}
+
+/* Ethereal outer aura */
+.variant-phase::after,
+.sn-chip.variant-phase::after,
+.m-detail-sn-pill.variant-phase::after,
+.detail-visual:has(img.variant-phase)::after,
+.m-detail-visual:has(img.variant-phase)::after {
+    content: "";
+    position: absolute;
+    inset: -4px;
+    background: linear-gradient(135deg, rgba(100, 60, 255, 0.15), rgba(0, 200, 255, 0.1));
+    border-radius: inherit;
+    filter: blur(8px);
+    animation: phase-aura 4s infinite ease-in-out;
+    pointer-events: none;
+    z-index: -1;
+}
+
+/* =============================================
+   7. GHOST — Spectral Apparition
+   ============================================= */
+
+.variant-ghost img,
+img.variant-ghost,
+.variant-ghost.sn-chip,
+.variant-ghost.m-detail-sn-pill {
+    opacity: 0.45;
+    filter: brightness(1.6) contrast(0.75) saturate(0.3) !important;
+    box-shadow: var(--ghost-glow);
+    animation: ghost-pulse 3s infinite ease-in-out;
+}
+
+.variant-ghost.user-card-item,
+.detail-visual:has(img.variant-ghost),
+.m-detail-visual:has(img.variant-ghost) {
+    position: relative;
+}
+
+/* Spectral mist */
+.variant-ghost::after,
+.sn-chip.variant-ghost::after,
+.m-detail-sn-pill.variant-ghost::after,
+.detail-visual:has(img.variant-ghost)::after,
+.m-detail-visual:has(img.variant-ghost)::after {
+    content: "";
+    position: absolute;
+    inset: -8px;
+    background: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.08) 0%, transparent 70%);
+    border-radius: inherit;
+    filter: blur(12px);
+    animation: ghost-mist 4s infinite ease-in-out;
+    pointer-events: none;
+    z-index: -1;
+}
+
+/* =============================================
+   8. PULSE — Expanding Energy Rings
+   ============================================= */
+
+.variant-pulse img,
+img.variant-pulse,
+.variant-pulse.sn-chip,
+.variant-pulse.m-detail-sn-pill {
+    filter: brightness(1.05) contrast(1.1) !important;
     animation: pulse-glow 2s infinite ease-in-out;
 }
 
-.variant-holo img,
-.variant-holo .card-stamp,
-.variant-holo.modal-card-img,
-.variant-holo.modal-stamp-overlay,
-.variant-holo.detail-visual,
-.variant-holo.m-detail-img,
-.variant-holo.m-detail-visual,
-img.variant-holo,
-.card-stamp.variant-holo {
-    filter: contrast(1.15) saturate(1.1) !important;
-}
-
-.variant-holo.detail-visual,
-.variant-holo.m-detail-visual {
+.variant-pulse.user-card-item,
+.detail-visual:has(img.variant-pulse),
+.m-detail-visual:has(img.variant-pulse) {
     position: relative;
-    overflow: hidden;
 }
 
-.variant-holo.detail-visual::after,
-.variant-holo.m-detail-visual::after {
+/* Expanding ring */
+.variant-pulse::after,
+.sn-chip.variant-pulse::after,
+.m-detail-sn-pill.variant-pulse::after,
+.detail-visual:has(img.variant-pulse)::after,
+.m-detail-visual:has(img.variant-pulse)::after {
     content: "";
     position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: linear-gradient(to right,
-            hsla(0.0, 100%, 50%, 0.4) 0.0%,
-            hsla(7.2, 100%, 50%, 0.4) 2.04%,
-            hsla(14.4, 100%, 50%, 0.4) 4.08%,
-            hsla(21.6, 100%, 50%, 0.4) 6.12%,
-            hsla(28.8, 100%, 50%, 0.4) 8.16%,
-            hsla(36.0, 100%, 50%, 0.4) 10.2%,
-            hsla(43.2, 100%, 50%, 0.4) 12.24%,
-            hsla(50.4, 100%, 50%, 0.4) 14.29%,
-            hsla(57.6, 100%, 50%, 0.4) 16.33%,
-            hsla(64.8, 100%, 50%, 0.4) 18.37%,
-            hsla(72.0, 100%, 50%, 0.4) 20.41%,
-            hsla(79.2, 100%, 50%, 0.4) 22.45%,
-            hsla(86.4, 100%, 50%, 0.4) 24.49%,
-            hsla(93.6, 100%, 50%, 0.4) 26.53%,
-            hsla(100.8, 100%, 50%, 0.4) 28.57%,
-            hsla(108.0, 100%, 50%, 0.4) 30.61%,
-            hsla(115.2, 100%, 50%, 0.4) 32.65%,
-            hsla(122.4, 100%, 50%, 0.4) 34.69%,
-            hsla(129.6, 100%, 50%, 0.4) 36.73%,
-            hsla(136.8, 100%, 50%, 0.4) 38.78%,
-            hsla(144.0, 100%, 50%, 0.4) 40.82%,
-            hsla(151.2, 100%, 50%, 0.4) 42.86%,
-            hsla(158.4, 100%, 50%, 0.4) 44.9%,
-            hsla(165.6, 100%, 50%, 0.4) 46.94%,
-            hsla(172.8, 100%, 50%, 0.4) 48.98%,
-            hsla(180.0, 100%, 50%, 0.4) 51.02%,
-            hsla(187.2, 100%, 50%, 0.4) 53.06%,
-            hsla(194.4, 100%, 50%, 0.4) 55.1%,
-            hsla(201.6, 100%, 50%, 0.4) 57.14%,
-            hsla(208.8, 100%, 50%, 0.4) 59.18%,
-            hsla(216.0, 100%, 50%, 0.4) 61.22%,
-            hsla(223.2, 100%, 50%, 0.4) 63.27%,
-            hsla(230.4, 100%, 50%, 0.4) 65.31%,
-            hsla(237.6, 100%, 50%, 0.4) 67.35%,
-            hsla(244.8, 100%, 50%, 0.4) 69.39%,
-            hsla(252.0, 100%, 50%, 0.4) 71.43%,
-            hsla(259.2, 100%, 50%, 0.4) 73.47%,
-            hsla(266.4, 100%, 50%, 0.4) 75.51%,
-            hsla(273.6, 100%, 50%, 0.4) 77.55%,
-            hsla(280.8, 100%, 50%, 0.4) 79.59%,
-            hsla(288.0, 100%, 50%, 0.4) 81.63%,
-            hsla(295.2, 100%, 50%, 0.4) 83.67%,
-            hsla(302.4, 100%, 50%, 0.4) 85.71%,
-            hsla(309.6, 100%, 50%, 0.4) 87.76%,
-            hsla(316.8, 100%, 50%, 0.4) 89.8%,
-            hsla(324.0, 100%, 50%, 0.4) 91.84%,
-            hsla(331.2, 100%, 50%, 0.4) 93.88%,
-            hsla(338.4, 100%, 50%, 0.4) 95.92%,
-            hsla(345.6, 100%, 50%, 0.4) 97.96%,
-            hsla(352.8, 100%, 50%, 0.4) 100.0%);
-    background-size: 50% 100%;
+    inset: -2px;
+    border: 2px solid rgba(0, 229, 255, 0.4);
+    border-radius: inherit;
+    animation: pulse-ring 2s infinite ease-out;
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* =============================================
+   9. GLITCH — Data Corruption Artifact
+   ============================================= */
+
+.variant-glitch img,
+img.variant-glitch,
+.variant-glitch.sn-chip,
+.variant-glitch.m-detail-sn-pill {
+    animation: glitch-jitter 4s infinite ease-in-out;
+    filter: drop-shadow(2px 0 rgba(255, 0, 255, 0.3)) drop-shadow(-2px 0 rgba(0, 255, 255, 0.3)) !important;
+}
+
+.variant-glitch.user-card-item,
+.detail-visual:has(img.variant-glitch),
+.m-detail-visual:has(img.variant-glitch) {
+    position: relative;
+}
+
+/* Persistent scanline overlay */
+.variant-glitch::before,
+.sn-chip.variant-glitch::before,
+.m-detail-sn-pill.variant-glitch::before,
+.detail-visual:has(img.variant-glitch)::before,
+.m-detail-visual:has(img.variant-glitch)::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(0deg,
+            transparent,
+            transparent 1px,
+            rgba(255, 255, 255, 0.03) 1px,
+            rgba(255, 255, 255, 0.03) 2px);
+    pointer-events: none;
+    z-index: 3;
+    border-radius: inherit;
+}
+
+/* RGB aberration flash */
+.variant-glitch::after,
+.sn-chip.variant-glitch::after,
+.m-detail-sn-pill.variant-glitch::after,
+.detail-visual:has(img.variant-glitch)::after,
+.m-detail-visual:has(img.variant-glitch)::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg,
+            rgba(255, 0, 0, 0.04) 0%,
+            transparent 33%,
+            rgba(0, 255, 0, 0.04) 33%,
+            transparent 66%,
+            rgba(0, 0, 255, 0.04) 66%,
+            transparent 100%);
+    mix-blend-mode: screen;
+    pointer-events: none;
+    z-index: 2;
+    border-radius: inherit;
+    animation: glitch-flicker 0.3s infinite steps(3);
+}
+
+/* =============================================
+   10. HOLO — Prismatic Rainbow Foil
+   ============================================= */
+
+.variant-holo img,
+img.variant-holo,
+.variant-holo.sn-chip,
+.variant-holo.m-detail-sn-pill {
+    filter: contrast(1.1) saturate(1.2) brightness(1.05) !important;
+    box-shadow: var(--holo-glow);
+}
+
+/* Subtle static prismatic tint */
+.variant-holo::after,
+.sn-chip.variant-holo::after,
+.m-detail-sn-pill.variant-holo::after,
+.detail-visual:has(img.variant-holo)::after,
+.m-detail-visual:has(img.variant-holo)::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg,
+            rgba(255, 0, 80, 0.06) 0%,
+            rgba(255, 220, 0, 0.06) 20%,
+            rgba(0, 255, 100, 0.06) 40%,
+            rgba(0, 200, 255, 0.08) 60%,
+            rgba(80, 0, 255, 0.06) 80%,
+            rgba(255, 0, 180, 0.06) 100%);
     mix-blend-mode: color-dodge;
-    transform: rotate(25deg);
-    animation: holo-sweep 10s infinite linear;
+    pointer-events: none;
+    z-index: 2;
+    border-radius: inherit;
+}
+
+/* =============================================
+   11. CORRUPTED — Broken Data
+   ============================================= */
+
+.variant-corrupted img,
+img.variant-corrupted,
+.variant-corrupted.sn-chip,
+.variant-corrupted.m-detail-sn-pill {
+    filter: invert(1) hue-rotate(270deg) brightness(0.85) contrast(1.5) saturate(1.8) !important;
+    animation: corrupted-pulse 2.5s infinite ease-in-out;
+}
+
+.variant-corrupted.user-card-item,
+.detail-visual:has(img.variant-corrupted),
+.m-detail-visual:has(img.variant-corrupted) {
+    position: relative;
+}
+
+/* Magenta artifact overlay */
+.variant-corrupted::before,
+.sn-chip.variant-corrupted::before,
+.m-detail-sn-pill.variant-corrupted::before,
+.detail-visual:has(img.variant-corrupted)::before,
+.m-detail-visual:has(img.variant-corrupted)::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(90deg,
+            transparent 0px,
+            transparent 8px,
+            rgba(255, 0, 255, 0.06) 8px,
+            rgba(255, 0, 255, 0.06) 10px);
+    animation: corrupted-shift 0.8s infinite steps(4);
+    pointer-events: none;
+    z-index: 2;
+    border-radius: inherit;
+}
+
+/* =============================================
+   12. BLOOD MOON — Dark Crimson
+   ============================================= */
+
+.variant-blood-moon img,
+img.variant-blood-moon,
+.variant-blood-moon.sn-chip,
+.variant-blood-moon.m-detail-sn-pill {
+    filter: sepia(1) saturate(6) hue-rotate(-40deg) brightness(0.55) contrast(1.5) !important;
+    box-shadow: var(--blood-glow);
+}
+
+.variant-blood-moon.user-card-item,
+.detail-visual:has(img.variant-blood-moon),
+.m-detail-visual:has(img.variant-blood-moon) {
+    position: relative;
+}
+
+/* Pulsing blood-red vignette */
+.variant-blood-moon::after,
+.sn-chip.variant-blood-moon::after,
+.m-detail-sn-pill.variant-blood-moon::after,
+.detail-visual:has(img.variant-blood-moon)::after,
+.m-detail-visual:has(img.variant-blood-moon)::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at center, transparent 30%, rgba(120, 0, 0, 0.5) 100%);
+    animation: blood-pulse 3s infinite ease-in-out;
+    pointer-events: none;
+    z-index: 1;
+    border-radius: inherit;
+}
+
+/* =============================================
+   13. TOXIC — Radioactive Glow
+   ============================================= */
+
+.variant-toxic img,
+img.variant-toxic,
+.variant-toxic.sn-chip,
+.variant-toxic.m-detail-sn-pill {
+    filter: sepia(1) saturate(5) hue-rotate(75deg) brightness(1.05) contrast(1.15) !important;
+    box-shadow: var(--toxic-glow);
+    animation: toxic-fumes 3s infinite ease-in-out;
+}
+
+.variant-toxic.user-card-item,
+.detail-visual:has(img.variant-toxic),
+.m-detail-visual:has(img.variant-toxic) {
+    overflow: hidden;
+    position: relative;
+}
+
+/* Rising bubble particles */
+.variant-toxic::after,
+.sn-chip.variant-toxic::after,
+.m-detail-sn-pill.variant-toxic::after,
+.detail-visual:has(img.variant-toxic)::after,
+.m-detail-visual:has(img.variant-toxic)::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+        radial-gradient(circle 3px, rgba(0, 255, 80, 0.4) 100%, transparent),
+        radial-gradient(circle 2px, rgba(0, 255, 80, 0.3) 100%, transparent),
+        radial-gradient(circle 4px, rgba(0, 255, 80, 0.2) 100%, transparent),
+        radial-gradient(circle 2px, rgba(100, 255, 100, 0.35) 100%, transparent);
+    background-size: 40px 80px, 60px 70px, 50px 90px, 35px 60px;
+    background-position: 10% 100%, 40% 100%, 70% 100%, 90% 100%;
+    animation: toxic-bubbles 4s infinite linear;
+    pointer-events: none;
+    z-index: 2;
+    border-radius: inherit;
+}
+
+/* =============================================
+   14. BLUEPRINT — Technical Schematic
+   ============================================= */
+
+.variant-blueprint img,
+img.variant-blueprint,
+.variant-blueprint.sn-chip,
+.variant-blueprint.m-detail-sn-pill {
+    filter: grayscale(1) brightness(0.5) contrast(1.3) sepia(0.3) saturate(3) hue-rotate(180deg) !important;
+    box-shadow: var(--blueprint-glow);
+}
+
+.variant-blueprint.user-card-item,
+.detail-visual:has(img.variant-blueprint),
+.m-detail-visual:has(img.variant-blueprint) {
+    position: relative;
+}
+
+/* Tech grid overlay */
+.variant-blueprint::before,
+.sn-chip.variant-blueprint::before,
+.m-detail-sn-pill.variant-blueprint::before,
+.detail-visual:has(img.variant-blueprint)::before,
+.m-detail-visual:has(img.variant-blueprint)::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+        linear-gradient(rgba(78, 124, 254, 0.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(78, 124, 254, 0.08) 1px, transparent 1px);
+    background-size: 16px 16px;
+    pointer-events: none;
+    z-index: 1;
+    border-radius: inherit;
+}
+
+/* Dashed outline border */
+.variant-blueprint::after,
+.sn-chip.variant-blueprint::after,
+.m-detail-sn-pill.variant-blueprint::after,
+.detail-visual:has(img.variant-blueprint)::after,
+.m-detail-visual:has(img.variant-blueprint)::after {
+    content: "";
+    position: absolute;
+    inset: 3px;
+    border: 1px dashed rgba(78, 124, 254, 0.35);
+    border-radius: inherit;
     pointer-events: none;
     z-index: 2;
 }
 
-/* 3. Thematic Variants */
-.variant-blood-moon img,
-.variant-blood-moon.modal-card-img,
-.variant-blood-moon.modal-stamp-overlay,
-.variant-blood-moon.detail-visual,
-.variant-blood-moon.m-detail-img,
-.variant-blood-moon.m-detail-visual,
-img.variant-blood-moon,
-.card-stamp.variant-blood-moon {
-    filter: sepia(1) saturate(8) hue-rotate(-45deg) brightness(0.6) contrast(1.4) !important;
-}
+/* =============================================
+   CHIP / PILL THEMED BACKGROUNDS
+   ============================================= */
 
-/* 4. Special Chip/Pill Backgrounds */
 .sn-chip.variant-gold,
 .sn-pill.variant-gold,
 .summary-card.variant-gold,
 .m-detail-sn-pill.variant-gold {
-    background: rgba(255, 215, 0, 0.15);
-    border-color: rgba(255, 215, 0, 0.2);
-}
-
-.sn-chip.variant-holo,
-.sn-pill.variant-holo,
-.summary-card.variant-holo,
-.m-detail-sn-pill.variant-holo {
-    background: linear-gradient(90deg, rgba(255, 0, 128, 0.2), rgba(0, 255, 255, 0.2));
-    border-color: rgba(255, 255, 255, 0.3);
-    color: #fff;
-    text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
-}
-
-.sn-chip.variant-inverted,
-.sn-pill.variant-inverted,
-.summary-card.variant-inverted,
-.m-detail-sn-pill.variant-inverted {
-    background: rgba(255, 255, 255, 0.1);
-}
-
-.sn-chip.variant-corrupted,
-.sn-pill.variant-corrupted,
-.summary-card.variant-corrupted,
-.m-detail-sn-pill.variant-corrupted {
-    background: rgba(0, 0, 0, 0.6);
-    border-color: rgba(0, 0, 0, 0.2);
-}
-
-.sn-chip.variant-static,
-.sn-pill.variant-static,
-.summary-card.variant-static,
-.m-detail-sn-pill.variant-static {
-    background: rgba(255, 255, 255, 0.05);
-}
-
-.sn-chip.variant-legacy,
-.sn-pill.variant-legacy,
-.summary-card.variant-legacy,
-.m-detail-sn-pill.variant-legacy {
-    background: rgba(100, 80, 50, 0.15);
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.25), rgba(180, 150, 0, 0.15));
+    border-color: rgba(255, 215, 0, 0.5);
+    color: #ffd700;
+    text-shadow: 0 0 6px rgba(255, 215, 0, 0.3);
 }
 
 .sn-chip.variant-shimmer,
 .sn-pill.variant-shimmer,
 .summary-card.variant-shimmer,
 .m-detail-sn-pill.variant-shimmer {
-    border-color: rgba(255, 255, 255, 0.4);
-    box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+    background: linear-gradient(135deg, rgba(255, 200, 230, 0.15), rgba(200, 220, 255, 0.15));
+    border-color: rgba(255, 255, 255, 0.35);
+    color: #f0e6ff;
+    text-shadow: 0 0 6px rgba(255, 200, 255, 0.3);
 }
 
-.sn-chip.variant-toxic,
-.sn-pill.variant-toxic,
-.summary-card.variant-toxic,
-.m-detail-sn-pill.variant-toxic {
-    background: rgba(0, 255, 0, 0.1);
-    border-color: rgba(0, 255, 0, 0.2);
-    color: #4dfa7c;
+.sn-chip.variant-static,
+.sn-pill.variant-static,
+.summary-card.variant-static,
+.m-detail-sn-pill.variant-static {
+    background: rgba(40, 40, 40, 0.8);
+    border-color: rgba(150, 150, 150, 0.5);
+    color: #bbb;
+}
+
+.sn-chip.variant-legacy,
+.sn-pill.variant-legacy,
+.summary-card.variant-legacy,
+.m-detail-sn-pill.variant-legacy {
+    background: rgba(60, 45, 25, 0.8);
+    border-color: rgba(180, 140, 80, 0.4);
+    color: #c8a96e;
+}
+
+.sn-chip.variant-inverted,
+.sn-pill.variant-inverted,
+.summary-card.variant-inverted,
+.m-detail-sn-pill.variant-inverted {
+    background: rgba(240, 240, 240, 0.9);
+    border-color: rgba(0, 0, 0, 0.3);
+    color: #111;
+}
+
+.sn-chip.variant-phase,
+.sn-pill.variant-phase,
+.summary-card.variant-phase,
+.m-detail-sn-pill.variant-phase {
+    background: linear-gradient(135deg, rgba(80, 40, 200, 0.3), rgba(0, 160, 255, 0.2));
+    border-color: rgba(120, 80, 255, 0.5);
+    color: #b49cff;
+    text-shadow: 0 0 8px rgba(120, 80, 255, 0.4);
+}
+
+.sn-chip.variant-ghost,
+.sn-pill.variant-ghost,
+.summary-card.variant-ghost,
+.m-detail-sn-pill.variant-ghost {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.2);
+    color: rgba(255, 255, 255, 0.6);
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+}
+
+.sn-chip.variant-pulse,
+.sn-pill.variant-pulse,
+.summary-card.variant-pulse,
+.m-detail-sn-pill.variant-pulse {
+    background: rgba(0, 30, 40, 0.8);
+    border-color: rgba(0, 229, 255, 0.4);
+    color: #00e5ff;
+    text-shadow: 0 0 8px rgba(0, 229, 255, 0.4);
+}
+
+.sn-chip.variant-glitch,
+.sn-pill.variant-glitch,
+.summary-card.variant-glitch,
+.m-detail-sn-pill.variant-glitch {
+    background: rgba(20, 20, 20, 0.85);
+    border-color: rgba(0, 255, 255, 0.3);
+    color: #0ff;
+    text-shadow: 2px 0 #ff00ff, -2px 0 #00ffff;
+}
+
+.sn-chip.variant-holo,
+.sn-pill.variant-holo,
+.summary-card.variant-holo,
+.m-detail-sn-pill.variant-holo {
+    background: linear-gradient(90deg, rgba(255, 0, 128, 0.15), rgba(0, 255, 255, 0.15));
+    border-color: rgba(255, 255, 255, 0.4);
+    color: #fff;
+    text-shadow: 0 0 8px rgba(0, 255, 255, 0.6);
+}
+
+.sn-chip.variant-corrupted,
+.sn-pill.variant-corrupted,
+.summary-card.variant-corrupted,
+.m-detail-sn-pill.variant-corrupted {
+    background: rgba(40, 0, 40, 0.85);
+    border-color: rgba(255, 0, 255, 0.5);
+    color: #ff00ff;
+    text-shadow: 0 0 6px rgba(255, 0, 255, 0.5);
 }
 
 .sn-chip.variant-blood-moon,
 .sn-pill.variant-blood-moon,
 .summary-card.variant-blood-moon,
 .m-detail-sn-pill.variant-blood-moon {
-    background: rgba(255, 0, 0, 0.1);
-    border-color: rgba(255, 0, 0, 0.2);
-    color: #ff4e4e;
+    background: rgba(50, 0, 0, 0.85);
+    border-color: rgba(200, 0, 0, 0.5);
+    color: #ff3333;
+    text-shadow: 0 0 8px rgba(255, 0, 0, 0.4);
+}
+
+.sn-chip.variant-toxic,
+.sn-pill.variant-toxic,
+.summary-card.variant-toxic,
+.m-detail-sn-pill.variant-toxic {
+    background: rgba(0, 30, 0, 0.85);
+    border-color: rgba(0, 255, 0, 0.4);
+    color: #00ff00;
+    text-shadow: 0 0 8px rgba(0, 255, 0, 0.5);
 }
 
 .sn-chip.variant-blueprint,
@@ -295,54 +695,96 @@ img.variant-blood-moon,
 .summary-card.variant-blueprint,
 .m-detail-sn-pill.variant-blueprint {
     background: #000c24;
-    border-color: #4e7cfe;
+    border-color: rgba(78, 124, 254, 0.5);
     color: #4e7cfe;
+    text-shadow: 0 0 6px rgba(78, 124, 254, 0.3);
 }
 
-/* --- KEYFRAMES --- */
-@keyframes shimmer-sweep {
+/* =============================================
+   KEYFRAMES
+   ============================================= */
+
+
+
+@keyframes static-flicker {
     0% {
-        transform: translate(-20%, -20%);
+        opacity: 0.4;
     }
 
     100% {
-        transform: translate(20%, 20%);
+        opacity: 0.6;
     }
 }
 
-@keyframes holo-sweep {
+@keyframes static-grain {
     0% {
-        background-position: 0% 0%;
+        transform: translate(0, 0);
     }
 
-    100% {
-        background-position: 100% 0%;
-    }
-}
-
-@keyframes glitch-jitter {
-    0% {
-        transform: translate(0);
-    }
-
-    20% {
+    33% {
         transform: translate(-2px, 1px);
     }
 
-    40% {
-        transform: translate(-2px, -1px);
-    }
-
-    60% {
-        transform: translate(2px, 1px);
-    }
-
-    80% {
-        transform: translate(2px, -1px);
+    66% {
+        transform: translate(1px, -1px);
     }
 
     100% {
-        transform: translate(0);
+        transform: translate(0, 0);
+    }
+}
+
+@keyframes phase-fade {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.7;
+    }
+}
+
+@keyframes phase-aura {
+
+    0%,
+    100% {
+        opacity: 0.4;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 0.8;
+        transform: scale(1.02);
+    }
+}
+
+@keyframes ghost-pulse {
+
+    0%,
+    100% {
+        opacity: 0.45;
+        box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+    }
+
+    50% {
+        opacity: 0.55;
+        box-shadow: 0 0 30px rgba(255, 255, 255, 0.35);
+    }
+}
+
+@keyframes ghost-mist {
+
+    0%,
+    100% {
+        opacity: 0.3;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 0.6;
+        transform: scale(1.05);
     }
 }
 
@@ -350,10 +792,131 @@ img.variant-blood-moon,
 
     0%,
     100% {
-        box-shadow: 0 0 5px rgba(0, 229, 255, 0.2);
+        box-shadow: 0 0 5px rgba(0, 229, 255, 0.3);
     }
 
     50% {
-        box-shadow: 0 0 20px rgba(0, 229, 255, 0.6);
+        box-shadow: 0 0 25px rgba(0, 229, 255, 0.7), 0 0 50px rgba(0, 229, 255, 0.2);
+    }
+}
+
+@keyframes pulse-ring {
+    0% {
+        transform: scale(1);
+        opacity: 0.6;
+    }
+
+    100% {
+        transform: scale(1.15);
+        opacity: 0;
+    }
+}
+
+@keyframes glitch-jitter {
+
+    0%,
+    90%,
+    100% {
+        transform: translate(0);
+    }
+
+    92% {
+        transform: translate(-2px, 1px);
+    }
+
+    94% {
+        transform: translate(2px, -1px);
+    }
+
+    96% {
+        transform: translate(-1px, -1px);
+    }
+
+    98% {
+        transform: translate(1px, 2px);
+    }
+}
+
+@keyframes glitch-flicker {
+    0% {
+        opacity: 0.3;
+    }
+
+    50% {
+        opacity: 0.6;
+    }
+
+    100% {
+        opacity: 0.2;
+    }
+}
+
+
+
+@keyframes corrupted-pulse {
+
+    0%,
+    100% {
+        box-shadow: 0 0 8px rgba(255, 0, 255, 0.2);
+    }
+
+    50% {
+        box-shadow: 0 0 30px rgba(255, 0, 255, 0.6), inset 0 0 20px rgba(255, 0, 255, 0.1);
+    }
+}
+
+@keyframes corrupted-shift {
+    0% {
+        background-position: 0 0;
+    }
+
+    25% {
+        background-position: 4px 0;
+    }
+
+    50% {
+        background-position: -2px 0;
+    }
+
+    75% {
+        background-position: 6px 0;
+    }
+
+    100% {
+        background-position: 0 0;
+    }
+}
+
+@keyframes blood-pulse {
+
+    0%,
+    100% {
+        opacity: 0.6;
+    }
+
+    50% {
+        opacity: 0.9;
+    }
+}
+
+@keyframes toxic-fumes {
+
+    0%,
+    100% {
+        box-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
+    }
+
+    50% {
+        box-shadow: 0 0 35px rgba(0, 255, 0, 0.6), 0 0 60px rgba(0, 255, 0, 0.15);
+    }
+}
+
+@keyframes toxic-bubbles {
+    0% {
+        background-position: 10% 100%, 40% 100%, 70% 100%, 90% 100%;
+    }
+
+    100% {
+        background-position: 10% -20%, 40% -40%, 70% -10%, 90% -30%;
     }
 }

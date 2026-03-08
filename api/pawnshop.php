@@ -2,7 +2,6 @@
 /**
  * PAWNSHOP API
  * Handles the logic for trading card instances for Mana.
- * CURRENT STATUS: TEST MODE (No database mutation)
  */
 require_once 'init.php';
 
@@ -190,7 +189,7 @@ if (isset($_GET['action']) && $_GET['action'] === 'get_guide') {
         ],
         "section4" => [
             "title" => "Echoes of Inscription (Bonuses)",
-            "text" => "Null values the weight of words. Inscribed cards carry a heavy bonus (+25% per card). He also prizes patterns: the 'Full House' (3 of a kind, Rare+, +100% Bonus), 'High Order' (3 same rarity, +25% Bonus), and 'The Spectrum' (3 different rarities, +10% Bonus)."
+            "text" => "Null values the weight of words. Inscribed cards carry a heavy bonus (+25% per card). Variation cards also resonate with him, granting unique bonuses based on their rarity (10% to 100%). Patterns like 'Full House' (3 of a kind, Rare+, +100% Bonus), 'High Order' (3 same rarity, +25% Bonus), and 'The Spectrum' (3 different rarities, +10% Bonus) further elevate the offer."
         ],
         "section5" => [
             "title" => "Fragments of the Archive (Dust)",
@@ -213,7 +212,7 @@ if (isset($_GET['action']) && $_GET['action'] === 'get_guide') {
  * calculateValuation() - Centralized, deterministic logic for card valuation.
  */
 function calculateValuation($instances, $my_id, $user_tokens, $haggle_count, $instance_ids, $demand) {
-    global $CARD_RARITY_VALUES;
+    global $CARD_RARITY_VALUES, $VARIATION_BONUSES;
     
     $base_mana = 0;
     $bonuses = [];
@@ -232,6 +231,15 @@ function calculateValuation($instances, $my_id, $user_tokens, $haggle_count, $in
     if ($inscription_count > 0) {
         $total_multiplier += ($inscription_count * 0.25);
         $bonuses[] = "Inscribed History (+" . ($inscription_count * 25) . "%)";
+    }
+
+    foreach ($instances as $inst) {
+        $var = $inst['variations'] ?? null;
+        if ($var && isset($VARIATION_BONUSES[$var])) {
+            $bonus = $VARIATION_BONUSES[$var];
+            $total_multiplier += $bonus;
+            $bonuses[] = "Variation: " . ucfirst($var) . " (+" . ($bonus * 100) . "%)";
+        }
     }
 
     $unique_names = array_unique($names);
@@ -318,7 +326,7 @@ if (isset($_GET['action']) && $_GET['action'] === 'get_valuation') {
         if (!$user || !(int)$user['pawshop_open']) errorResponse('The Backroom remains sealed.', 403);
 
         $placeholders = implode(',', array_fill(0, count($instance_ids), '?'));
-        $stmt = $pdo->prepare("SELECT ci.id, ci.message, c.id as card_id, c.name, c.rarity_name FROM card_instances ci JOIN cards c ON ci.card_id = c.id WHERE ci.id IN ($placeholders) AND ci.user_discord_id = ?");
+        $stmt = $pdo->prepare("SELECT ci.id, ci.message, ci.variations, c.id as card_id, c.name, c.rarity_name FROM card_instances ci JOIN cards c ON ci.card_id = c.id WHERE ci.id IN ($placeholders) AND ci.user_discord_id = ?");
         $stmt->execute(array_merge($instance_ids, [$my_id]));
         $instances = $stmt->fetchAll();
         if (count($instances) !== 3) errorResponse('Cards are missing from the table.', 400);
@@ -369,7 +377,7 @@ if (isset($_POST['action']) && $_POST['action'] === 'pawn_cards') {
         $haggle_count = (int)($_POST['haggle_count'] ?? 0);
 
         $placeholders = implode(',', array_fill(0, count($instance_ids), '?'));
-        $stmt = $pdo->prepare("SELECT ci.id, ci.card_id, ci.message, c.rarity_name, c.is_trade, c.name FROM card_instances ci JOIN cards c ON ci.card_id = c.id WHERE ci.id IN ($placeholders) AND ci.user_discord_id = ?");
+        $stmt = $pdo->prepare("SELECT ci.id, ci.card_id, ci.message, ci.variations, c.rarity_name, c.is_trade, c.name FROM card_instances ci JOIN cards c ON ci.card_id = c.id WHERE ci.id IN ($placeholders) AND ci.user_discord_id = ?");
         $stmt->execute(array_merge($instance_ids, [$my_id]));
         $instances = $stmt->fetchAll();
 

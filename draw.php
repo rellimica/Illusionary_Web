@@ -216,6 +216,28 @@ $IMAGES_PATH = 'images/images/';
             margin-bottom: 1rem;
             font-weight: 600;
         }
+
+        .variant-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 0.8rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(5px);
+            opacity: 0;
+            transform: scale(0.8);
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .variant-badge.active {
+            opacity: 1;
+            transform: scale(1);
+        }
     </style>
 </head>
 <body>
@@ -252,6 +274,7 @@ $IMAGES_PATH = 'images/images/';
         </button>
 
         <div class="result-meta" id="resultBlock">
+            <div id="variantBadge" class="variant-badge"></div>
             <div class="rarity-text" id="rarityLabel"></div>
             <div class="name-text" id="nameLabel"></div>
         </div>
@@ -349,7 +372,26 @@ $IMAGES_PATH = 'images/images/';
                     }
 
                     // FINAL LANDING
-                    document.getElementById('cardImg').src = img.src;
+                    // Reset variants
+                    const cardFront = document.querySelector('.card-front');
+                    const cardImg = document.getElementById('cardImg');
+                    const vBadge = document.getElementById('variantBadge');
+                    
+                    cardFront.className = 'card-face card-front';
+                    cardImg.className = '';
+                    vBadge.className = 'variant-badge';
+                    vBadge.innerText = '';
+
+                    cardImg.src = img.src;
+                    
+                    if (data.card.variant) {
+                        const vClass = `variant-${data.card.variant}`;
+                        cardFront.classList.add(vClass);
+                        cardImg.classList.add(vClass);
+                        vBadge.classList.add(vClass);
+                        vBadge.innerText = data.card.variant;
+                    }
+
                     document.getElementById('nameLabel').innerText = data.card.name;
                     document.getElementById('rarityLabel').innerText = data.card.rarity;
                     document.getElementById('rarityLabel').style.color = getRarityColor(data.card.rarity);
@@ -366,6 +408,7 @@ $IMAGES_PATH = 'images/images/';
                     
                     setTimeout(() => {
                         result.classList.add('active');
+                        if (data.card.variant) vBadge.classList.add('active');
                         
                         // Universal Confetti
                         const rarity = forgeData.card.rarity;

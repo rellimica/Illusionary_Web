@@ -101,7 +101,7 @@ require_once 'header.php';
                                     <div class="mini-card-name">${c.name.replace(/_/g, ' ')}</div>
                                     <div class="mini-card-count">Owned: ${c.count}</div>
                                     <div class="mini-card-sns" style="font-size: 0.55rem; color: var(--text-muted); padding-top: 4px; display: flex; flex-wrap: wrap; gap: 3px;">
-                                        ${c.sns && c.sns.length > 0 ? compressSNS(c.sns).map(sn => `<span style="background: rgba(0,229,255,0.1); color: var(--accent-secondary); padding: 1px 4px; border-radius: 3px; font-weight: 800;">${sn}</span>`).join('') : ''}
+                                        ${c.sns && c.sns.length > 0 ? compressSNS(c.sns).map(g => `<span class="sn-chip" style="padding: 1px 6px; border-radius: 4px; font-weight: 800; font-size: 9px; margin-bottom: 2px;">${g.label}</span>`).join('') : ''}
                                     </div>
                                 </div>
                                 <div class="mini-card-actions">
@@ -207,26 +207,33 @@ require_once 'header.php';
     }
 
     /**
-     * compressSNS() - Turns [1,2,3,5,10,11] into ["#1-3", "#5", "#10-11"]
+     * compressSNS() - Groups consecutive SNs of the same variant.
      */
     function compressSNS(sns) {
         if (!sns || sns.length === 0) return [];
-        sns = sns.map(Number).sort((a, b) => a - b);
-        let ranges = [];
-        let start = sns[0];
-        let end = sns[0];
-        for (let i = 1; i <= sns.length; i++) {
-            if (i < sns.length && sns[i] === end + 1) {
-                end = sns[i];
+        // sns: [{sn: 123, variant: 'gold'}, ...]
+        sns.sort((a, b) => a.sn - b.sn);
+        
+        let groups = [];
+        let currentGroup = null;
+
+        for (let inst of sns) {
+            if (!currentGroup) {
+                currentGroup = { start: inst.sn, end: inst.sn, variant: inst.variant };
+            } else if (inst.sn === currentGroup.end + 1 && inst.variant === currentGroup.variant) {
+                currentGroup.end = inst.sn;
             } else {
-                ranges.push(start === end ? `#${start}` : `#${start}-${end}`);
-                if (i < sns.length) {
-                    start = sns[i];
-                    end = sns[i];
-                }
+                groups.push(currentGroup);
+                currentGroup = { start: inst.sn, end: inst.sn, variant: inst.variant };
             }
         }
-        return ranges;
+        if (currentGroup) groups.push(currentGroup);
+
+        return groups.map(g => {
+            let label = g.start === g.end ? `#${g.start}` : `#${g.start}-${g.end}`;
+            if (g.variant) label += ` (${g.variant})`;
+            return { label, variant: g.variant };
+        });
     }
 </script>
 

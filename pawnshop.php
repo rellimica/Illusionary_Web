@@ -986,7 +986,8 @@ $my_id = $_SESSION['user_data']['id'];
                 if (selectedCards.length >= MAX_SELECTION && !isSelected) div.style.opacity = '0.3';
                 
                 div.onclick = () => toggleInstance(inst, cardId);
-                div.innerHTML = `<span class="sn-val">#${inst.sn}</span> <span class="variant-label">${inst.variant || 'Standard'}</span>`;
+                const vClass = inst.variant ? `variant-${inst.variant}` : '';
+                div.innerHTML = `<span class="sn-val ${vClass}">#${inst.sn}</span> <span class="variant-label">${inst.variant || 'Standard'}</span>`;
                 grid.appendChild(div);
             });
             modal.style.display = 'flex';
@@ -1002,13 +1003,14 @@ $my_id = $_SESSION['user_data']['id'];
                 selectedCards.splice(index, 1);
                 haggleCount = 0; // Reset haggling on change
             } else if (selectedCards.length < MAX_SELECTION) {
-                selectedCards.push({
-                    id: instIdStr,
-                    sn: inst.sn,
-                    image: IMAGES_PATH + cardCategories[cardId].filename,
-                    cardId: cardId,
-                    rarity: cardCategories[cardId].rarity_name.toLowerCase()
-                });
+                    selectedCards.push({
+                        id: instIdStr,
+                        sn: inst.sn,
+                        image: IMAGES_PATH + cardCategories[cardId].filename,
+                        cardId: cardId,
+                        rarity: cardCategories[cardId].rarity_name.toLowerCase(),
+                        variant: inst.variant || null
+                    });
                 haggleCount = 0; // Reset haggling on change
             }
             
@@ -1025,10 +1027,11 @@ $my_id = $_SESSION['user_data']['id'];
 
                 if (selectedCards[i]) {
                     slot.classList.add('filled');
+                    const vClass = selectedCards[i].variant ? `variant-${selectedCards[i].variant}` : '';
                     slot.innerHTML = `
-                        <div class="counter-card">
+                        <div class="counter-card ${vClass}">
                             <button class="remove-btn" onclick="removeAt(${i})">&times;</button>
-                            <img src="${selectedCards[i].image}" loading="lazy">
+                            <img src="${selectedCards[i].image}" class="${vClass}" loading="lazy">
                         </div>
                     `;
                 } else {

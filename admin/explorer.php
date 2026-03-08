@@ -115,6 +115,15 @@ require_once 'header.php';
                                 </div>
                             </div>
 
+                            <div style="margin-bottom: 20px;">
+                                <div style="font-size: 0.6rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;">Variation</div>
+                                <div class="sn-tag-container" style="display: inline-flex; padding: 0;">
+                                    <span class="sn-chip" style="margin: 0; padding: 4px 12px; font-size: 0.75rem;">
+                                        ${res.variant ? res.variant.toUpperCase() : 'STANDARD'}
+                                    </span>
+                                </div>
+                            </div>
+
                             <div style="background: rgba(0,0,0,0.3); padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.03);">
                                 <div style="display: flex; justify-content: space-between; align-items: center;">
                                     <div style="font-size: 0.6rem; color: var(--text-muted); text-transform: uppercase;">Acquired On</div>
@@ -350,11 +359,14 @@ require_once 'header.php';
                             const limit = 20;
                             const shown = o.sns.slice(0, limit);
                             const more = o.sns.length - limit;
-                            return shown.map(sn => `
-                                <span style="font-size: 10px; background: linear-gradient(135deg, #1a1a2e, #16213e); border: 1px solid rgba(0, 229, 255, 0.3); color: var(--accent-secondary); font-weight: 900; padding: 2px 8px; border-radius: 4px; font-family: 'Outfit'; box-shadow: 0 2px 4px rgba(0,0,0,0.3);">
-                                    #${sn}
-                                </span>
-                            `).join('') + (more > 0 ? `<span style="font-size: 9px; color: var(--text-muted); align-self: center; margin-left: 5px;">+${more} more</span>` : '');
+                            return shown.map(inst => {
+                                const snVal = typeof inst === 'object' ? inst.sn : inst;
+                                return `
+                                    <span class="sn-chip" style="margin: 0;">
+                                        #${snVal}
+                                    </span>
+                                `;
+                            }).join('') + (more > 0 ? `<span style="font-size: 9px; color: var(--text-muted); align-self: center; margin-left: 5px;">+${more} more</span>` : '');
                         })()}
                     </div>
                 </div>

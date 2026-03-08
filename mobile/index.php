@@ -157,7 +157,7 @@ $total_pages = ceil($filtered_possible / $limit);
     <div class="m-detail-modal" id="detailModal">
         <div class="m-detail-inner">
             <button class="m-detail-close" onclick="closeDetail()">&times;</button>
-            <div class="m-detail-visual" id="detailVisualWrap">
+            <div class="m-detail-visual" id="detailVisualWrap" style="position: relative;">
                 <img src="" id="detailImg" class="m-detail-img" alt="">
             </div>
             <div id="detailRarity" class="m-detail-rarity">RARITY</div>
@@ -249,6 +249,12 @@ $total_pages = ceil($filtered_possible / $limit);
 
                             div.appendChild(img);
 
+                            // Physical Stamp Integration (Mobile Grid)
+                            if (card.sns && card.sns.length > 0) {
+                                const snVal = card.sns[0].sn;
+                                div.innerHTML += `<div class="m-card-stamp">#${snVal}</div>`;
+                            }
+
                             if (card.count > 1) {
                                 div.innerHTML += `<div class="m-card-count">x${card.count}</div>`;
                             }
@@ -319,15 +325,12 @@ $total_pages = ceil($filtered_possible / $limit);
 
         function applyModalVariant(variant) {
             const detailImg = document.getElementById('detailImg');
-            const visualWrap = document.getElementById('detailVisualWrap');
-            
-            [detailImg, visualWrap].forEach(el => {
-                if (!el) return;
-                Array.from(el.classList).forEach(c => {
-                    if (c.startsWith('variant-')) el.classList.remove(c);
-                });
-                if (variant) el.classList.add(`variant-${variant}`);
+            if (!detailImg) return;
+
+            Array.from(detailImg.classList).forEach(c => {
+                if (c.startsWith('variant-')) detailImg.classList.remove(c);
             });
+            if (variant) detailImg.classList.add(`variant-${variant}`);
         }
 
         function updateInstanceView(index) {

@@ -681,7 +681,8 @@ $my_id = $_SESSION['user_data']['id'];
                     toggleInstance(inst, cardId);
                     openSnPicker(cardId);
                 };
-                div.innerHTML = `<span class="m-sn-name">#${inst.sn}</span> <span class="m-variant-name">${inst.variant || 'Standard'}</span>`;
+                const vClass = inst.variant ? `variant-${inst.variant}` : '';
+                div.innerHTML = `<span class="m-sn-name ${vClass}">#${inst.sn}</span> <span class="m-variant-name">${inst.variant || 'Standard'}</span>`;
                 grid.appendChild(div);
             });
             modal.style.display = 'flex';
@@ -699,7 +700,8 @@ $my_id = $_SESSION['user_data']['id'];
                 selectedCards.push({
                     id: idStr,
                     image: IMAGES_PATH + cardCategories[cardId].filename,
-                    cardId: cardId
+                    cardId: cardId,
+                    variant: inst.variant || null
                 });
                 haggleCount = 0;
             }
@@ -713,7 +715,8 @@ $my_id = $_SESSION['user_data']['id'];
                 slot.innerHTML = '';
                 if (selectedCards[i]) {
                     slot.classList.add('filled');
-                    slot.innerHTML = `<button class="remove-btn" onclick="removeAt(${i})">×</button><img src="${selectedCards[i].image}" loading="lazy">`;
+                    const vClass = selectedCards[i].variant ? `variant-${selectedCards[i].variant}` : '';
+                    slot.innerHTML = `<button class="remove-btn" onclick="removeAt(${i})">×</button><img src="${selectedCards[i].image}" class="${vClass}" loading="lazy">`;
                 } else {
                     slot.classList.remove('filled');
                 }

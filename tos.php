@@ -308,6 +308,10 @@ try {
                         <h2>6. Limitation of Liability</h2>
                         <p>Illusionary is provided "as is" without warranties. We are not liable for any service interruptions, loss of virtual assets, or data inconsistencies that may occur during the ongoing development of the platform.</p>
                     </div>
+                    <div class="tos-section">
+                        <h2>7. Gambling</h2>
+                        <p>Illusionary is not a gambling platform. We do not endorse or promote gambling. We are not liable for any gambling related losses. Including but not limited to the loss of real money, mental health, or any other personal loss.</p>
+                    </div>
                 </div>
 
                 <div class="accept-box">

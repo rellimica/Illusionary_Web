@@ -39,6 +39,11 @@ Options -Indexes
     Order allow,deny
     Deny from all
 </Files>
+# Block access to .agent directory
+<FilesMatch "^\.agent">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
 
 # Mobile device detection — serve /mobile/ versions transparently
 <IfModule mod_rewrite.c>

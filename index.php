@@ -1,4 +1,7 @@
 <?php
+if (isset($_GET['user_id']) && $_GET['user_id'] === 'NULL') {
+    $_GET['user_id'] = '882';
+}
 
 /**
  * SECURE SYSTEM WARNING: 
@@ -230,8 +233,7 @@ $total_pages = ceil($filtered_possible / $limit);
         <div class="detail-content">
             <span class="close-detail" onclick="closeDetail()">&times;</span>
             <div class="detail-visual" id="detailVisualWrap">
-                <div id="modalCardStamp" class="modal-stamp-overlay">#000</div>
-                <img src="" id="detailImg" alt="">
+                <img src="" id="detailImg" alt="Card Preview">
             </div>
             <div class="detail-info">
                 <div class="detail-rarity" id="detailRarity">RARITY</div>
@@ -369,16 +371,12 @@ $total_pages = ceil($filtered_possible / $limit);
 
         function applyModalVariant(variant) {
             const detailImg = document.getElementById('detailImg');
-            const modalStamp = document.getElementById('modalCardStamp');
-            const visualWrap = document.getElementById('detailVisualWrap');
-            
-            [detailImg, modalStamp, visualWrap].forEach(el => {
-                if (!el) return;
-                Array.from(el.classList).forEach(c => {
-                    if (c.startsWith('variant-')) el.classList.remove(c);
-                });
-                if (variant) el.classList.add(`variant-${variant}`);
+            if (!detailImg) return;
+
+            Array.from(detailImg.classList).forEach(c => {
+                if (c.startsWith('variant-')) detailImg.classList.remove(c);
             });
+            if (variant) detailImg.classList.add(`variant-${variant}`);
         }
 
         let currentModalSNS = [];
@@ -396,20 +394,18 @@ $total_pages = ceil($filtered_possible / $limit);
             document.getElementById('detailImg').src = img;
             document.getElementById('detailCount').innerText = count;
             document.getElementById('detailDate').innerText = dateStr;
-            document.getElementById('detailVisualWrap').style.filter = "none";
+            // Reset any inline styles on the wrapper
+            document.getElementById('detailVisualWrap').removeAttribute('style');
 
             document.getElementById('detailModal').style.display = 'flex';
 
             // Consolidated Registry Logic
             const registry = document.getElementById('instanceRegistry');
             const grid = document.getElementById('snRegistryGrid');
-            const modalStamp = document.getElementById('modalCardStamp');
             const msgBox = document.getElementById('instanceMessage');
 
             if (sns && sns.length > 0) {
                 const firstInst = sns[0];
-                const firstSN = typeof firstInst === 'object' ? firstInst.sn : firstInst;
-                modalStamp.innerText = `#${firstSN}`;
                 
                 // Clear and Apply Variant
                 const v = firstInst ? firstInst.variant : null;
@@ -429,7 +425,6 @@ $total_pages = ceil($filtered_possible / $limit);
             } else {
                 registry.style.display = 'none';
                 msgBox.style.display = 'none';
-                modalStamp.innerText = '';
                 applyModalVariant(null);
             }
         }
@@ -438,9 +433,7 @@ $total_pages = ceil($filtered_possible / $limit);
          * Switch visible SN instance via consolidated registry
          */
         function selectInstance(sn, el, index) {
-            const modalStamp = document.getElementById('modalCardStamp');
             const detailImg = document.getElementById('detailImg');
-            modalStamp.innerText = `#${sn}`;
             
             // Sync Visuals
             const inst = currentModalSNS[index];
@@ -512,7 +505,7 @@ $total_pages = ceil($filtered_possible / $limit);
             });
 
             if (userId) {
-                if (/^\d+$/.test(userId)) {
+                if (/^\d+$/.test(userId) || userId.toUpperCase() === 'NULL') {
                     window.location.href = `index.php?user_id=${userId}`;
                 } else {
                     Swal.fire({

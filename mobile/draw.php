@@ -29,6 +29,29 @@ $IMAGES_PATH = '/images/images/';
     <link rel="stylesheet" href="/variations.css">
     <?php require_once __DIR__ . '/../theme-config.php'; injectTheme($THEME); ?>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Outfit:wght@700;800&display=swap" rel="stylesheet">
+    <style>
+        .m-variant-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 0.8rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(5px);
+            opacity: 0;
+            transform: scale(0.8);
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .m-variant-badge.active {
+            opacity: 1;
+            transform: scale(1);
+        }
+    </style>
 </head>
 <body>
     <div class="glass-bg"></div>
@@ -65,6 +88,7 @@ $IMAGES_PATH = '/images/images/';
         </button>
 
         <div class="m-result-meta" id="resultBlock">
+            <div id="variantBadge" class="m-variant-badge"></div>
             <div class="m-rarity-text" id="rarityLabel"></div>
             <div class="m-name-text" id="nameLabel"></div>
         </div>
@@ -149,7 +173,26 @@ $IMAGES_PATH = '/images/images/';
                         await new Promise(r => setTimeout(r, 1000));
                     }
 
-                    document.getElementById('cardImg').src = img.src;
+                    // Reset variants
+                    const cardFront = document.querySelector('.m-card-front');
+                    const cardImg = document.getElementById('cardImg');
+                    const vBadge = document.getElementById('variantBadge');
+                    
+                    cardFront.className = 'm-card-face m-card-front';
+                    cardImg.className = '';
+                    vBadge.className = 'm-variant-badge';
+                    vBadge.innerText = '';
+
+                    cardImg.src = img.src;
+                    
+                    if (data.card.variant) {
+                        const vClass = `variant-${data.card.variant}`;
+                        cardFront.classList.add(vClass);
+                        cardImg.classList.add(vClass);
+                        vBadge.classList.add(vClass);
+                        vBadge.innerText = data.card.variant;
+                    }
+
                     document.getElementById('nameLabel').innerText = data.card.name;
                     document.getElementById('rarityLabel').innerText = data.card.rarity;
                     document.getElementById('rarityLabel').style.color = getRarityColor(data.card.rarity);
@@ -165,6 +208,7 @@ $IMAGES_PATH = '/images/images/';
                     
                     setTimeout(() => {
                         result.classList.add('active');
+                        if (data.card.variant) vBadge.classList.add('active');
                         
                         const rarity = forgeData.card.rarity;
                         const isHigh = ['Legendary', 'Unique', 'Epic'].includes(rarity);
