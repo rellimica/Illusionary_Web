@@ -478,7 +478,7 @@ $total_pages = ceil($filtered_possible / $limit);
             if (document.getElementById('instanceMessage')) {
                 document.getElementById('instanceMessage').style.display = 'none';
             }
-            document.getElementById('modalCardStamp').innerText = '';
+
             
             document.getElementById('detailModal').style.display = 'flex';
         }

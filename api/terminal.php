@@ -160,14 +160,15 @@ if ($action === 'login') {
             sendResponse(['output' => $lines]);
             break;
         case 'SCAN':
-            $lines = ["┌── SYSTEM_USER_SECURITY_SCAN ──────┐", "│ ID      USER      PRIVILEGE   STATE   │", "├───────────────────────────────────┤"];
+            $lines = ["┌── SYSTEM_USER_SECURITY_SCAN ──────────────┐", "│ ID        PRIVILEGE      STATE          │", "├───────────────────────────────────────────┤"];
             foreach ($userData as $uID => $data) {
                 $status = $data['enabled'] ? "ACTIVE " : "REVOKED";
-                $lines[] = "│ " . str_pad($uID, 8) . str_pad($data['name'], 10) . str_pad($data['level'], 12) . $status . " │";
+                $priv = "LEVEL " . ($data['level'] ?? 0);
+                $lines[] = "│ " . str_pad($uID, 10) . str_pad($priv, 15) . str_pad($status, 14) . "│";
             }
-            $lines[] = "├───────────────────────────────────┤";
-            $lines[] = "│ TOTAL_ENTRIES: " . str_pad(count($userData), 19) . " │";
-            $lines[] = "└───────────────────────────────────┘";
+            $lines[] = "├───────────────────────────────────────────┤";
+            $lines[] = "│ TOTAL_ENTRIES: " . str_pad(count($userData), 27) . "│";
+            $lines[] = "└───────────────────────────────────────────┘";
             sendResponse(['output' => $lines]);
             break;
         case 'READ':

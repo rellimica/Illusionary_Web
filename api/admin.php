@@ -69,17 +69,52 @@ if (isset($_GET['action']) && $_GET['action'] === 'hydrate_admin') {
         $u = getDiscordUserCached($player['user_discord_id'], $DISCORD_TOKEN);
         $leaderboard[] = array_merge($player, ['username' => $u['username'], 'avatar' => $u['avatar']]);
     }
-    $lucky_collectors = $pdo->query("SELECT uc.user_discord_id, SUM(uc.count) as total_cards, AVG(c.rarity_tier) as luck_score FROM user_cards uc JOIN cards c ON uc.card_id = c.id GROUP BY uc.user_discord_id HAVING total_cards >= 3 ORDER BY luck_score ASC LIMIT 10")->fetchAll();
-    $luckiest = [];
-    foreach ($lucky_collectors as $player) {
+    $wealthy_collectors = $pdo->query("
+        SELECT 
+            ci.user_discord_id, 
+            SUM(
+                (CASE 
+                    WHEN LOWER(c.rarity_name) = 'common' THEN 1
+                    WHEN LOWER(c.rarity_name) = 'uncommon' THEN 1
+                    WHEN LOWER(c.rarity_name) = 'rare' THEN 2
+                    WHEN LOWER(c.rarity_name) = 'epic' THEN 3
+                    WHEN LOWER(c.rarity_name) = 'legendary' THEN 4
+                    WHEN LOWER(c.rarity_name) = 'unique' THEN 5
+                    WHEN LOWER(c.rarity_name) = 'relic' THEN 6
+                    ELSE 1
+                END) * 
+                (1 + CASE 
+                    WHEN ci.variations IN ('static', 'legacy', 'phase', 'inverted') THEN 0.1
+                    WHEN ci.variations IN ('toxic', 'blueprint') THEN 0.15
+                    WHEN ci.variations IN ('gold', 'shimmer', 'pulse') THEN 0.3
+                    WHEN ci.variations = 'ghost' THEN 0.35
+                    WHEN ci.variations = 'glitch' THEN 0.6
+                    WHEN ci.variations = 'holo' THEN 0.75
+                    WHEN ci.variations = 'corrupted' THEN 0.85
+                    WHEN ci.variations = 'blood-moon' THEN 1.0
+                    ELSE 0
+                END) + 
+                (CASE WHEN ci.message IS NOT NULL AND ci.message != '' THEN 0.5 ELSE 0 END)
+            ) as wealth_score,
+            COUNT(*) as total_cards
+        FROM card_instances ci
+        JOIN cards c ON ci.card_id = c.id
+        WHERE c.is_hidden = 0
+        GROUP BY ci.user_discord_id
+        ORDER BY wealth_score DESC
+        LIMIT 10
+    ")->fetchAll();
+    
+    $wealthiest = [];
+    foreach ($wealthy_collectors as $player) {
         $u = getDiscordUserCached($player['user_discord_id'], $DISCORD_TOKEN);
-        $luckiest[] = array_merge($player, ['username' => $u['username'], 'avatar' => $u['avatar']]);
+        $wealthiest[] = array_merge($player, ['username' => $u['username'], 'avatar' => $u['avatar']]);
     }
     $card_breakdown = $pdo->query("SELECT c.*, COALESCE(SUM(uc.count), 0) as current_supply, COUNT(DISTINCT uc.user_discord_id) as owner_count FROM cards c LEFT JOIN user_cards uc ON c.id = uc.card_id GROUP BY c.id ORDER BY c.card_order ASC")->fetchAll();
 
     echo json_encode([
         'stats' => ['total_cards' => $total_cards, 'total_supply' => $total_supply, 'unique_owners' => $unique_owners, 'global_uniques' => $global_uniques],
-        'rarity_dist' => $rarity_dist, 'feed' => $feed, 'leaderboard' => $leaderboard, 'luckiest' => $luckiest, 'cards' => $card_breakdown
+        'rarity_dist' => $rarity_dist, 'feed' => $feed, 'leaderboard' => $leaderboard, 'wealthiest' => $wealthiest, 'cards' => $card_breakdown
     ]);
     exit;
 }
@@ -317,4 +352,109 @@ if (isset($_POST['ajax_action'])) {
         }
         exit;
     }
+}
+
+// ============================================================
+// E. NOTIFICATION MANAGEMENT
+// ============================================================
+
+// E.1 Send Notification (single user or broadcast)
+if (isset($_POST['ajax_action']) && $_POST['ajax_action'] === 'send_notification') {
+    guard($_POST, ['notif_type' => 'required', 'notif_title' => 'required', 'notif_message' => 'required']);
+
+    $type    = $_POST['notif_type'];
+    $title   = $_POST['notif_title'];
+    $message = $_POST['notif_message'];
+    $link    = !empty($_POST['notif_link']) ? $_POST['notif_link'] : null;
+    $broadcast = ($_POST['broadcast'] ?? '0') === '1';
+    $target_id = $_POST['target_user_id'] ?? '';
+
+    if (!$broadcast && empty($target_id)) {
+        errorResponse('Provide a target Discord ID or enable broadcast.', 400);
+    }
+
+    $sent = 0;
+    $urgent = ($_POST['urgent'] ?? '0') === '1' ? 1 : 0;
+    
+    if ($broadcast) {
+        // Send to every registered user
+        $users = $pdo->query("SELECT discord_id FROM users")->fetchAll();
+        foreach ($users as $u) {
+            createNotification($pdo, $u['discord_id'], $type, $title, $message, $link, $urgent);
+            $sent++;
+        }
+    } else {
+        createNotification($pdo, $target_id, $type, $title, $message, $link, $urgent);
+        $sent = 1;
+    }
+
+    echo json_encode(['success' => true, 'sent' => $sent]);
+    exit;
+}
+
+// E.2 Get Recent Notifications (global feed, admin-only)
+if (isset($_GET['action']) && $_GET['action'] === 'get_recent_notifications') {
+    $stmt = $pdo->query("
+        SELECT *, UNIX_TIMESTAMP(created_at) as time_sec 
+        FROM notifications 
+        ORDER BY created_at DESC 
+        LIMIT 30
+    ");
+    $items = $stmt->fetchAll();
+
+    // Enrich with usernames
+    foreach ($items as &$n) {
+        $u = getDiscordUserCached($n['user_id'], $DISCORD_TOKEN);
+        $n['username'] = $u['username'];
+        $n['avatar']   = $u['avatar'];
+    }
+
+    echo json_encode(['success' => true, 'notifications' => $items]);
+    exit;
+}
+
+// E.3 Get User Notifications (per-user lookup)
+if (isset($_GET['action']) && $_GET['action'] === 'get_user_notifications') {
+    guard($_GET, ['uid' => 'required']);
+    $uid = $_GET['uid'];
+
+    $stmt = $pdo->prepare("
+        SELECT *, UNIX_TIMESTAMP(created_at) as time_sec 
+        FROM notifications 
+        WHERE user_id = ? 
+        ORDER BY created_at DESC 
+        LIMIT 50
+    ");
+    $stmt->execute([$uid]);
+    $items = $stmt->fetchAll();
+
+    $u = getDiscordUserCached($uid, $DISCORD_TOKEN);
+
+    echo json_encode([
+        'success' => true,
+        'user' => ['username' => $u['username'], 'avatar' => $u['avatar'], 'discord_id' => $uid],
+        'notifications' => $items
+    ]);
+    exit;
+}
+
+// E.4 Admin Delete Notification
+if (isset($_POST['ajax_action']) && $_POST['ajax_action'] === 'admin_delete_notification') {
+    $nid = $_POST['notification_id'] ?? null;
+    $target_uid = $_POST['target_user_id'] ?? null;
+
+    if ($nid === 'all' && $target_uid) {
+        // Clear all notifications for a specific user
+        $stmt = $pdo->prepare("DELETE FROM notifications WHERE user_id = ?");
+        $stmt->execute([$target_uid]);
+    } elseif ($nid && $nid !== 'all') {
+        // Delete a single notification by ID
+        $stmt = $pdo->prepare("DELETE FROM notifications WHERE id = ?");
+        $stmt->execute([$nid]);
+    } else {
+        errorResponse('Provide a notification_id or target_user_id.', 400);
+    }
+
+    echo json_encode(['success' => true]);
+    exit;
 }

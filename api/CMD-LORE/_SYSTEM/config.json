@@ -12,7 +12,7 @@
             "msg": "ENFORCING_THE_SHADE",
             "level": 3,
             "name": "THE_RIGHT_HAND",
-            "enabled": false
+            "enabled": true
         },
         "ARDE-77": {
             "pass": "CRY_H4RD_4RD3N",

@@ -270,15 +270,11 @@ $banner_type    = $GLOBAL_BANNER_TYPE ?? 'info';
         </svg>
         About
     </a>
-    <a href="tos.php" class="m-tab <?php echo $current_page === 'tos.php' ? 'active' : ''; ?>">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-            <polyline points="14 2 14 8 20 8"></polyline>
-            <line x1="16" y1="13" x2="8" y2="13"></line>
-            <line x1="16" y1="17" x2="8" y2="17"></line>
-            <polyline points="10 9 9 9 8 9"></polyline>
+    <a href="leaderboards.php" class="m-tab <?php echo $current_page === 'leaderboards.php' ? 'active' : ''; ?>">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.56 5.82 22 7 14.14l-5-4.87 6.91-1.01L12 2z"></path>
         </svg>
-        Terms
+        Leaderboards
     </a>
     <a href="/auth.php?logout=1" class="m-tab tab-logout" onclick="sessionStorage.removeItem('null_clicks'); sessionStorage.removeItem('null_song');">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
@@ -427,34 +423,46 @@ $banner_type    = $GLOBAL_BANNER_TYPE ?? 'info';
         }
     }
 
+    function getNotifIcon(type) {
+        const icons = {
+            trade_request: '📢', trade_accepted: '✅', trade_declined: '⛔', trade_cancelled: '❌',
+            pawn_complete: '🏪', rare_draw: '🔥', variation_unlock: '✨',
+            admin_gift: '🎁', welcome: '🌟', system: '📣', milestone: '🏆'
+        };
+        return icons[type] || 'ℹ️';
+    }
+
     async function hydrateNotifications() {
         const list = document.getElementById('mNotifList');
-        list.innerHTML = '<div class="m-notif-empty"><div class="skeleton" style="height:18px;width:70%;margin:0 auto 10px;"></div><div class="skeleton" style="height:40px;width:90%;margin:0 auto;"></div></div>';
+        list.innerHTML = '<div class="m-notif-empty"><div class="skeleton" style="height:18px;width:70%;margin:0 auto 10px;"></div><div class="skeleton" style="height:50px;width:90%;margin:0 auto 8px;"></div><div class="skeleton" style="height:50px;width:90%;margin:0 auto;"></div></div>';
         try {
             const prefix = '<?php echo $prefix; ?>';
             const fd = new FormData();
             fd.append('action', 'get_recent');
             const d = await secureFetch(`${prefix}api/notifications.php`, { method: 'POST', body: fd });
             if (d.notifications.length === 0) {
-                list.innerHTML = '<div class="m-notif-empty">No notifications available</div>';
+                list.innerHTML = '<div class="m-notif-empty" style="display:flex;flex-direction:column;align-items:center;"><div style="font-size:2rem;margin-bottom:10px;opacity:0.3;filter:grayscale(1)">📭</div>No notifications available</div>';
                 return;
             }
             list.innerHTML = d.notifications.map(n => `
-                <div class="m-notif-item-wrap">
+                <div class="m-notif-item-wrap" id="m-notif-${n.id}">
                     <a href="${n.link || 'javascript:void(0)'}" class="m-notif-item ${n.is_read == 0 ? 'unread' : ''}" onclick="markAsRead(${n.id})">
                         <div class="m-notif-item-icon">
-                            ${n.type === 'trade_request' ? '📢' : (n.type.includes('accepted') ? '✅' : (n.type.includes('declined') ? '❌' : 'ℹ️'))}
+                            ${getNotifIcon(n.type)}
                         </div>
                         <div class="m-notif-item-body">
                             <div class="m-notif-item-title">${n.title}</div>
                             <div class="m-notif-item-msg">${n.message}</div>
-                            <div class="m-notif-item-time">${formatTimeAgo(n.time_sec)}</div>
+                            <div class="m-notif-item-time">
+                                <span style="background:rgba(255,255,255,0.05);padding:1px 6px;border-radius:3px;margin-right:6px;font-size:0.5rem;">${n.type.replace(/_/g, ' ')}</span>
+                                ${formatTimeAgo(n.time_sec)}
+                            </div>
                         </div>
                     </a>
                     <button class="m-notif-delete" onclick="event.stopPropagation(); deleteNotification(${n.id})">✕</button>
                 </div>
             `).join('');
-        } catch (e) { list.innerHTML = `<div class="m-notif-empty" style="color:#ff4e4e">Failed to load notifications: ${e.message}</div>`; }
+        } catch (e) { list.innerHTML = `<div class="m-notif-empty" style="color:#ff4e4e">Failed to load: ${e.message}</div>`; }
     }
 
     async function markAsRead(id) {
@@ -470,13 +478,20 @@ $banner_type    = $GLOBAL_BANNER_TYPE ?? 'info';
 
     async function deleteNotification(id) {
         try {
+            const el = document.getElementById(`m-notif-${id}`);
+            if (el) {
+                el.style.transition = 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
+                el.style.opacity = '0';
+                el.style.transform = 'translateX(30px)';
+                setTimeout(() => { el.style.maxHeight = '0'; el.style.padding = '0'; el.style.overflow = 'hidden'; }, 200);
+                setTimeout(() => el.remove(), 400);
+            }
             const prefix = '<?php echo $prefix; ?>';
             const fd = new FormData();
             fd.append('action', 'delete');
             fd.append('notification_id', id);
             await secureFetch(`${prefix}api/notifications.php`, { method: 'POST', body: fd });
             updateNotifBadge();
-            hydrateNotifications();
         } catch (e) { console.error(e); }
     }
 

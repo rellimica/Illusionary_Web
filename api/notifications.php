@@ -38,6 +38,18 @@ if ($_POST['action'] === 'get_unread_count') {
     exit;
 }
 
+if ($_POST['action'] === 'get_urgent_unread') {
+    checkScope('read');
+    $uid = $_POST['target_id'] ?? $my_id;
+    
+    $stmt = $pdo->prepare("SELECT * FROM notifications WHERE user_id = ? AND is_read = 0 AND urgent = 1 ORDER BY created_at DESC LIMIT 1");
+    $stmt->execute([$uid]);
+    $urgent_notif = $stmt->fetch();
+    
+    echo json_encode(['success' => true, 'urgent' => $urgent_notif]);
+    exit;
+}
+
 if ($_POST['action'] === 'mark_read') {
     checkScope('write');
     $nid = $_POST['notification_id'] ?? null;

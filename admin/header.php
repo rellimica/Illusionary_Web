@@ -47,5 +47,5 @@ $current_page = basename($_SERVER['PHP_SELF']);
             <a href="index.php" class="tab-btn <?php echo $current_page == 'index.php' ? 'active' : ''; ?>">Overview</a>
             <a href="explorer.php" class="tab-btn <?php echo $current_page == 'explorer.php' ? 'active' : ''; ?>">Explorer</a>
             <a href="users.php" class="tab-btn <?php echo $current_page == 'users.php' ? 'active' : ''; ?>">Users</a>
-            <a href="system.php" class="tab-btn <?php echo $current_page == 'system.php' ? 'active' : ''; ?>">System</a>
+            <a href="system.php" class="tab-btn <?php echo $current_page == 'system.php' ? 'active' : ''; ?>">System & Notifs</a>
         </nav>

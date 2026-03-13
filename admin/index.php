@@ -43,27 +43,6 @@ require_once 'header.php';
     </div>
 </div>
 
-<!-- LEADERBOARDS ROW -->
-<section class="leaderboards-row">
-    <section class="stat-card leader-section">
-        <h2 class="section-title">Top 10 Collectors</h2>
-        <div class="leader-list" id="leaderboardList">
-            <?php for($i=0; $i<5; $i++): ?><div class="leader-item skeleton" style="height: 60px; border: none; margin-bottom: 10px;"></div><?php endfor; ?>
-        </div>
-    </section>
-
-    <section class="stat-card leader-section">
-        <h2 class="section-title">
-            Luckiest Discoverers
-            <span class="info-trigger">?
-                <span class="tooltip-box">Calculated based on the average rarity tier of all discovered cards (min. 3 cards). A higher index indicates a higher frequency of Legendary and Epic pulls.</span>
-            </span>
-        </h2>
-        <div class="leader-list" id="luckList">
-            <?php for($i=0; $i<5; $i++): ?><div class="leader-item skeleton" style="height: 60px; border: none; margin-bottom: 10px;"></div><?php endfor; ?>
-        </div>
-    </section>
-</section>
 
 <script>
     let rarityChart = null;
@@ -111,29 +90,6 @@ require_once 'header.php';
                 </div>
             `).join('');
 
-            // 4. Leaderboard
-            document.getElementById('leaderboardList').innerHTML = data.leaderboard.map((p, i) => `
-                <div class="leader-item rank-${i+1}">
-                    <div class="leader-rank">#${i+1}</div>
-                    <img src="${p.avatar}" class="tiny-avatar">
-                    <div class="user-info-stack">
-                        <div class="leader-id">${p.username}</div>
-                        <div class="leader-count">${parseInt(p.total_cards).toLocaleString()} <span class="muted">(${p.unique_cards} unique)</span></div>
-                    </div>
-                </div>
-            `).join('');
-
-            // 5. Luckiest
-            document.getElementById('luckList').innerHTML = data.luckiest.map((p, i) => `
-                <div class="leader-item luck-item rank-${i+1}">
-                    <div class="leader-rank">#${i+1}</div>
-                    <img src="${p.avatar}" class="tiny-avatar">
-                    <div class="user-info-stack">
-                        <div class="leader-id">${p.username}</div>
-                        <div class="leader-count">${(Math.round(100 / (p.luck_score || 1) * 10) / 10)} <span class="muted">index</span></div>
-                    </div>
-                </div>
-            `).join('');
 
             updateLocalTimes();
 

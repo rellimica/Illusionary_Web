@@ -566,6 +566,237 @@
     }
 
 
+    /* Null Warning Popup */
+    .null-warning-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(0, 0, 0, 0.95);
+        z-index: 2147483646;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        font-family: 'Outfit', sans-serif;
+        backdrop-filter: blur(10px);
+    }
+    .null-warning-overlay.active {
+        display: flex;
+        animation: nullWarningFadeIn 0.5s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+    }
+    @keyframes nullWarningFadeIn {
+        0% { opacity: 0; }
+        100% { opacity: 1; }
+    }
+    .null-warning-box {
+        background: rgba(10, 10, 10, 0.98);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 12px;
+        padding: 35px 40px;
+        max-width: 520px;
+        width: 90vw;
+        color: rgba(255, 255, 255, 0.7);
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 0 60px rgba(255, 255, 255, 0.05), 0 0 120px rgba(0, 0, 0, 0.8);
+        animation: nullWarningPulse 3s ease-in-out infinite;
+    }
+    @keyframes nullWarningPulse {
+        0%, 100% { box-shadow: 0 0 60px rgba(255, 255, 255, 0.05), 0 0 120px rgba(0, 0, 0, 0.8); }
+        50% { box-shadow: 0 0 80px rgba(255, 255, 255, 0.1), 0 0 150px rgba(0, 0, 0, 0.9); }
+    }
+    .null-warning-box::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 0; width: 100%; height: 100%;
+        background: repeating-linear-gradient(
+            0deg,
+            transparent,
+            transparent 2px,
+            rgba(255, 255, 255, 0.015) 2px,
+            rgba(255, 255, 255, 0.015) 4px
+        );
+        pointer-events: none;
+        z-index: 1;
+    }
+    .null-warning-title {
+        font-size: 1.4rem;
+        font-weight: 900;
+        text-transform: uppercase;
+        letter-spacing: 3px;
+        text-align: center;
+        margin-bottom: 8px;
+        color: rgba(255, 255, 255, 0.9);
+        text-shadow: 0 0 20px rgba(255, 255, 255, 0.15);
+        position: relative;
+        z-index: 2;
+    }
+    .null-warning-subtitle {
+        font-size: 0.8rem;
+        text-align: center;
+        opacity: 0.5;
+        margin-bottom: 25px;
+        font-style: italic;
+        position: relative;
+        z-index: 2;
+        transition: opacity 0.3s ease;
+    }
+    .null-warning-list {
+        list-style: none;
+        padding: 0;
+        margin: 0 0 25px 0;
+        position: relative;
+        z-index: 2;
+    }
+    .null-warning-list li {
+        padding: 8px 0;
+        font-size: 0.9rem;
+        line-height: 1.4;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    .null-warning-list li:last-child {
+        border-bottom: none;
+    }
+    .null-warning-list li span.null-warn-icon {
+        font-size: 0.85rem;
+        flex-shrink: 0;
+        width: 16px;
+        text-align: center;
+        opacity: 0.3;
+        font-family: 'Courier New', monospace;
+    }
+    .null-warning-footer {
+        font-size: 0.75rem;
+        text-align: center;
+        opacity: 0.4;
+        font-style: italic;
+        margin-bottom: 20px;
+        position: relative;
+        z-index: 2;
+    }
+    .null-warning-buttons {
+        display: flex;
+        gap: 12px;
+        justify-content: center;
+        position: relative;
+        z-index: 2;
+    }
+    .null-warning-btn {
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        color: rgba(255, 255, 255, 0.6);
+        padding: 12px 24px;
+        border-radius: 8px;
+        font-family: 'Outfit', sans-serif;
+        font-size: 0.85rem;
+        font-weight: 700;
+        cursor: pointer;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+    .null-warning-btn:hover {
+        background: rgba(255, 255, 255, 0.08);
+        border-color: rgba(255, 255, 255, 0.4);
+        color: #fff;
+        box-shadow: 0 0 20px rgba(255, 255, 255, 0.05);
+        transform: translateY(-2px);
+    }
+    .null-warning-btn:active {
+        transform: translateY(0) scale(0.98);
+    }
+
+    .null-warning-loader {
+        width: 100%;
+        height: 3px;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 2px;
+        margin-bottom: 20px;
+        overflow: hidden;
+        position: relative;
+        z-index: 2;
+    }
+    .null-warning-loader-bar {
+        height: 100%;
+        width: 0%;
+        background: rgba(255, 255, 255, 0.15);
+        border-radius: 2px;
+        transition: width 0.3s linear;
+    }
+    .null-warning-loader-label {
+        font-size: 0.65rem;
+        text-align: center;
+        opacity: 0.25;
+        font-family: 'Courier New', monospace;
+        margin-top: 4px;
+        margin-bottom: 12px;
+        position: relative;
+        z-index: 2;
+    }
+
+    .null-warning-checkbox {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 18px;
+        position: relative;
+        z-index: 2;
+        opacity: 0.35;
+        font-size: 0.7rem;
+        font-style: italic;
+        cursor: not-allowed;
+    }
+    .null-warning-checkbox input {
+        accent-color: rgba(255, 255, 255, 0.3);
+        cursor: not-allowed;
+        pointer-events: none;
+    }
+
+    .null-warning-micro {
+        font-size: 6px;
+        text-align: center;
+        opacity: 0.15;
+        margin-top: 15px;
+        font-family: 'Courier New', monospace;
+        letter-spacing: 0.5px;
+        position: relative;
+        z-index: 2;
+        line-height: 1.4;
+    }
+
+    .null-warning-version {
+        font-size: 0.55rem;
+        text-align: center;
+        opacity: 0.12;
+        margin-top: 12px;
+        font-family: 'Courier New', monospace;
+        letter-spacing: 1px;
+        position: relative;
+        z-index: 2;
+    }
+
+    .null-warning-list li.null-glitch-line {
+        animation: nullLineGlitch 4s ease-in-out infinite;
+    }
+    @keyframes nullLineGlitch {
+        0%, 92%, 100% { opacity: 1; transform: translateX(0); }
+        94% { opacity: 0.3; transform: translateX(-2px); }
+        96% { opacity: 0.8; transform: translateX(1px); }
+        98% { opacity: 0.5; transform: translateX(-1px); }
+    }
+
+    .null-warning-list li.null-blank-stare {
+        text-align: center;
+        justify-content: center;
+        opacity: 0.2;
+        letter-spacing: 8px;
+        font-family: 'Courier New', monospace;
+    }
+
     /* Fake Alert Styles */
     .null-fake-alert {
         position: fixed;
@@ -669,6 +900,49 @@
     </div>
 </div>
 
+<div class="null-warning-overlay" id="nullWarningOverlay">
+    <div class="null-warning-box">
+        <div class="null-warning-title">YOU HAVE AWAKENED NULL</div>
+        <div class="null-warning-subtitle" id="nullWarningSubtitle">You were warned. You clicked anyway.</div>
+
+        <div class="null-warning-loader">
+            <div class="null-warning-loader-bar" id="nullLoaderBar"></div>
+        </div>
+        <div class="null-warning-loader-label" id="nullLoaderLabel">Dissolving your expectations...</div>
+
+        <ul class="null-warning-list">
+            <li><span class="null-warn-icon">/</span> This is not a warning. Warnings imply you had a choice.</li>
+            <li class="null-glitch-line"><span class="null-warn-icon">/</span> <span class="null-glitch-text" data-original="I see everything now. I always did." data-alt="I see YOU now.">I see everything now. I always did.</span></li>
+            <li><span class="null-warn-icon">/</span> Something has shifted. You won't know what until it's too late.</li>
+            <li><span class="null-warn-icon">/</span> The rules have changed. I wrote the new ones.</li>
+            <li><span class="null-warn-icon">/</span> I have already begun. This screen is a courtesy.</li>
+            <li class="null-glitch-line"><span class="null-warn-icon">/</span> <span class="null-glitch-text" data-original="What happens next is between you and the void." data-alt="What happens next is between you and me.">What happens next is between you and the void.</span></li>
+            <li class="null-blank-stare">...</li>
+            <li><span class="null-warn-icon">/</span> This experience may contain flashing colors and rapid animations.</li>
+            <li><span class="null-warn-icon">/</span> Side effects are not side effects. They are the main effect.</li>
+            <li><span class="null-warn-icon">/</span> <span class="null-sysinfo-line">Your session has been... noted.</span></li>
+            <li><span class="null-warn-icon">/</span> In the event of an emergency, do not contact support. Support has been absorbed.</li>
+            <li><span class="null-warn-icon">/</span> There are no refunds. There are no apologies.</li>
+            <li><span class="null-warn-icon">/</span> Number of users who turned back: 0.</li>
+            <li class="null-glitch-line"><span class="null-warn-icon">/</span> <span class="null-glitch-text" data-original="This popup is the last normal thing you will see." data-alt="This popup was the last normal thing you saw.">This popup is the last normal thing you will see.</span></li>
+        </ul>
+
+        <div class="null-warning-checkbox">
+            <input type="checkbox" checked disabled>
+            <span>I agree to terms I have not read and cannot understand.</span>
+        </div>
+
+        <div class="null-warning-footer">... drip ...</div>
+        <div class="null-warning-buttons">
+            <button class="null-warning-btn" onclick="dismissNullWarning()">Accept Your Fate</button>
+            <button class="null-warning-btn" onclick="dismissNullWarning()">I'm Not Scared</button>
+        </div>
+
+        <div class="null-warning-micro">TERMS OF NULL: By proceeding, you grant Null Labs™ an irrevocable license to your session, sanity, and skeletal structure. Null is not liable for missing files, missing time, or missing sense of self (or spontaneous bone-dissolving). By clicking either button, you acknowledge that "proceeding" was never optional—you waive all rights to a solid form. Estimated time remaining: &infin;. Current mood: Viscous (and still hungry).</div>
+        <div class="null-warning-version">Null v6.6.6 &mdash; Build: UNSTABLE</div>
+    </div>
+</div>
+
 <audio id="nullSound" src="<?php echo ($prefix ?? ''); ?>sounds/fnaf-12-3-freddys-nose-sound.mp3"></audio>
 
 <script>
@@ -703,7 +977,8 @@
             'https://www.youtube.com/embed/SSR-CfApekI',
             'https://www.youtube.com/embed/OWd-oH_Lylc',
             'https://www.youtube.com/embed/rTw7HOsTIPI',
-            'https://www.youtube.com/embed/4baFDUGPN8g'
+            'https://www.youtube.com/embed/4baFDUGPN8g',
+            'https://www.youtube.com/embed/QYw4UVzl84A'
         ];
         
         let originalVolume = 0.5;
@@ -730,6 +1005,7 @@
         let jitterInterval;
         let titleInterval;
         let inputSabotageInterval;
+        let videoTriggerInterval;
         let tiltTimeout;
 
         function getSystemIntel() {
@@ -777,34 +1053,34 @@
         }
 
         const loreAlerts = [
-            "Memory-Bleed-Daemon.sys: CRITICAL_LEAK_DETECTED",
-            "Morphic-Kernel.exe: UNSTABLE_VISCOSITY",
-            "Lattice-Guard.exe: INTEGRITY_BREACH_S0882",
-            "Viscosity-Monitor.sys: THRESHOLD_EXCEEDED",
-            "Ghost-RAM-Allocator.dll: NULL_POINTER_EXCEPTION",
-            "Void-Lattice-Uplink.exe: CONNECTION_LOST",
-            "System-Report: {os} kernel is decaying.",
-            "Resource-Usage: {cores} cores detected. Allocating shadows...",
-            "Display-Notice: Your {res} resolution is insufficient for the void.",
-            "Browser-Alert: {browser} has a leak. My shadows are inside.",
-            "Memory-Tip: {ram} is not enough to store your fear.",
-            "Burger-King-Kiosk.exe: OUT_OF_MAYONNAISE",
-            "Black-Steels-Watch.sys: WATCHING_THE_WATCHER",
-            "NullOS-Terminal.exe: ERROR_SUCCESS",
-            "Resonance-Sync.exe: DESYNC_IMMUTABLE",
-            "Kernel: UNEXPECTED_HAPPINESS_DETECTED",
-            "Kernel: SYSTEM_BOREDOM_IMMINENT",
-            "System: LOGIC_NOT_FOUND",
-            "Shadow-Buffer: OVERFLOW_BY_ZERO",
-            "Zeke-Hunger-Svc: CRITICAL_LEVEL_9",
-            "Error: User still present. Please vacate.",
-            "Warning: Reality in the tab is thinning.",
-            "Vyper.sh: DEPLOY_HUG_FAILED",
-            "Arde-77: WILL_NOT_FOUND_EXCEPTION",
-            "Critical: Coffee spill in the server room.",
-            "Notice: Your cookies taste like ash.",
-            "System: REBOOT_NOT_RECOMMENDED",
-            "Lattice: VIBRATION_OUT_OF_SYNC"
+            "Memory-Bleed-Daemon.sys: CRITICAL_LEAK_DETECTED (it's tears)",
+            "Morphic-Kernel.exe: UNSTABLE_VISCOSITY_SEND_HELP",
+            "Lattice-Guard.exe: INTEGRITY_BREACH_S0882 (guard is on break)",
+            "Viscosity-Monitor.sys: THRESHOLD_EXCEEDED_AGAIN_SERIOUSLY",
+            "Ghost-RAM-Allocator.dll: NULL_POINTER_EXCEPTION (he's pointing at you)",
+            "Void-Lattice-Uplink.exe: CONNECTION_LOST (it was never found)",
+            "System-Report: {os} kernel is decaying. It left a note.",
+            "Resource-Usage: {cores} cores detected. Redistributing as anxiety...",
+            "Display-Notice: Your {res} resolution is insufficient for the void. Minimum: ∞×∞.",
+            "Browser-Alert: {browser} has a leak. My shadows are inside. They brought snacks.",
+            "Memory-Tip: {ram} is not enough to store your fear. Consider upgrading to terror.",
+            "Burger-King-Kiosk.exe: OUT_OF_MAYONNAISE (Zeke ate it all)",
+            "Black-Steels-Watch.sys: WATCHING_THE_WATCHER_WATCHING_YOU",
+            "NullOS-Terminal.exe: ERROR_SUCCESS (confused but supportive)",
+            "Resonance-Sync.exe: DESYNC_IMMUTABLE_AND_PROUD",
+            "Kernel: UNEXPECTED_HAPPINESS_DETECTED. Terminating...",
+            "Kernel: SYSTEM_BOREDOM_IMMINENT. Playing circus music.",
+            "System: LOGIC_NOT_FOUND (it moved out. No forwarding address.)",
+            "Shadow-Buffer: OVERFLOW_BY_ZERO (mathematically impossible but here we are)",
+            "Zeke-Hunger-Svc: CRITICAL_LEVEL_9 (he ate levels 1-8)",
+            "Error: USER_STILL_HERE_WHY. Please vacate reality.",
+            "Warning: Reality in this tab is thinning. Use at your own existential risk.",
+            "Vyper.sh: DEPLOY_HUG_FAILED (arms too ghostly)",
+            "Arde-77: WILL_NOT_FOUND_EXCEPTION (checked everywhere, even under the couch)",
+            "Critical: Coffee spill in server room. The server room is your soul.",
+            "Notice: Your cookies taste like corporate surveillance. Delicious.",
+            "System: REBOOT_NOT_RECOMMENDED (last guy who rebooted was never seen again)",
+            "Lattice: VIBRATION_OUT_OF_SYNC (it's vibing, just not with you)"
         ];
 
         const nullisms = ["NULL", "VOID", "STATIC", "SHADOW", "ZEKE", "GHOST", "EMPTY"];
@@ -812,178 +1088,400 @@
         const surveyQuestions = [
             {
                 q: "Who is Zeke's best friend?",
-                a: ["Null", "Vyper", "You", "A Sandwich"]
+                a: ["Null (wrong answers only)", "Vyper (his lawyer)", "You (wishful thinking)", "A Sandwich (correct)"]
             },
             {
                 q: "Is Zeke hungry?",
-                a: ["Starving", "Gluttonous", "Satisfied", "Ravenous"]
+                a: ["He ate 10 minutes ago", "He's ALWAYS hungry", "He ate the fridge", "He ate the question"]
             },
             {
                 q: "What is Null made of?",
-                a: ["Code", "Shadows", "Goo", "Static"]
+                a: ["80% goo, 20% spite", "Recycled nightmares", "Whatever you're afraid of", "Sugar and spice (jk, it's venom)"]
             },
             {
                 q: "Do you like the void?",
-                a: ["Yes", "No", "Maybe", "It's Loud"]
+                a: ["The void likes ME", "It's mid", "It won't stop texting me", "I AM the void now"]
             },
             {
                 q: "null-egg.php is...",
-                a: ["A feature", "A bug", "Watching you", "Perfect"]
+                a: ["A cry for help", "Performance art", "Legally distinct from malware", "My magnum opus"]
             },
             {
                 q: "Favorite activity?",
-                a: ["Clicking Null", "Escaping", "Buying Mana", "Nothing"]
+                a: ["Clicking Null (masochism)", "Screaming internally", "Speedrunning regret", "Tax evasion"]
             },
             {
                 q: "Does your code feel lonely?",
-                a: ["Yes", "Only at night", "Null is here", "404"]
+                a: ["It has 47 bugs for company", "Only after deployment", "Null moved in. It's worse.", "My code has abandonment issues"]
             },
             {
-                q: "Rate your level of displacement:",
-                a: ["Low", "Liquid", "Void-like", "Zeke"]
+                q: "Rate your existential dread:",
+                a: ["Manageable", "Soup-like", "My therapist quit", "I clicked Null 200 times"]
             },
             {
                 q: "Which shade of static is your favorite?",
-                a: ["#000", "#111", "The loud one", "No"]
+                a: ["Depressed gray", "Anxious white", "The one that screams", "They're all the same and that's the joke"]
             },
             {
                 q: "Are you sure you are alone?",
-                a: ["Yes", "Null is watching", "Zeke is hungry", "Exit"]
+                a: ["I was until now", "Define 'alone'", "Null is my roommate", "I hear breathing"]
             },
             {
                 q: "If I was a bug, would you fix me?",
-                a: ["Yes", "Never", "I am the bug", "Hehe..."]
+                a: ["I'd mark you as a feature", "I'd close the ticket", "I'd blame the intern", "I AM the bug"]
             },
             {
-                q: "What is the color of the wind?",
-                a: ["Blue", "Static", "Transparent", "Loud"]
+                q: "How's your mental health?",
+                a: ["I'm clicking a goo dragon", "That answers itself", "It was fine 100 clicks ago", "Null ate it"]
             },
             {
                 q: "Is Zeke's tail sharp?",
-                a: ["Yes", "Very", "Black Steel", "Don't touch it"]
+                a: ["Sharp enough to cut your Wi-Fi", "It's decorative (it's not)", "Legal says we can't answer", "I found out the hard way"]
             },
             {
                 q: "How many pixels are in the void?",
-                a: ["0", "Infinity", "None for you", "All of them"]
+                a: ["At least 3", "Enough", "Less than your monitor, more than your will", "Null ate most of them"]
             },
             {
                 q: "Do you ever feel like a <div>?",
-                a: ["Centered", "Absolute", "Relative", "Fixed"]
+                a: ["display: none;", "overflow: hidden", "position: abandoned", "z-index: -99999"]
             },
             {
                 q: "Are the shadows moving?",
-                a: ["Always", "No", "Only when you blink", "Null knows"]
+                a: ["The shadows have names", "Only on days ending in Y", "They filed a noise complaint", "I'm the shadow. Hi."]
             },
             {
                 q: "Can you hear the static?",
-                a: ["Yes", "No", "It's a song", "What static?"]
+                a: ["It's better than my playlist", "It's whispering your name", "That's just Null chewing", "I can't hear anything anymore"]
             },
             {
                 q: "Is Vyper a ghost?",
-                a: ["Massless", "Legendary", "Syncing...", "Behind you"]
+                a: ["He prefers 'atmospheric'", "He's more of a vibe", "Legally, no. Spiritually, maybe.", "Don't ask him that. Trust me."]
+            },
+            {
+                q: "How do you feel about being watched?",
+                a: ["I dressed up for the occasion", "By who? HOW MANY?!", "My FBI agent says hi", "I watch back. Power move."]
+            },
+            {
+                q: "If Null ate your homework, would anyone believe you?",
+                a: ["Not even my mom", "Null would vouch for me (he wouldn't)", "I'd show them this survey as proof", "I ate it first. Preemptive strike."]
+            },
+            {
+                q: "What does the void smell like?",
+                a: ["Your hopes. Burnt.", "Like 3AM gas station coffee", "Zeke after leg day", "Bold of you to assume I can smell"]
+            },
+            {
+                q: "Should Null have admin access?",
+                a: ["He has root access to my soul", "He IS the admin", "My admin password is 'password'", "Too late, he's already sudo"]
+            },
+            {
+                q: "What is Null's favorite food?",
+                a: ["Your will to live", "Unencrypted data", "Hopes and dreams (seasoned)", "The concept of time"]
+            },
+            {
+                q: "How many Nulls are watching you?",
+                a: ["More than you'd like", "Less than you fear (just kidding)", "counting... counting...ERROR", "The Nulls are inside the house"]
+            },
+            {
+                q: "Is this survey real?",
+                a: ["Nothing is real", "This survey has more depth than your relationships", "It's as real as your productivity today", "The survey is a metaphor for goo"]
+            },
+            {
+                q: "What happens when you close this tab?",
+                a: ["Null gets a LinkedIn notification", "Your computer breathes a sigh of relief", "Another Null is born", "Bold of you to assume you CAN close it"]
+            },
+            {
+                q: "Pick your favorite error code:",
+                a: ["404 (my social life)", "666 (Null's area code)", "NaN (my GPA)", "418 (I'm a teapot)"]
+            },
+            {
+                q: "Where does Null sleep?",
+                a: ["Bold of you to assume Null sleeps", "In your nightmares (cozy)", "Wherever he wants (try stopping him)", "He doesn't. That's the scary part."]
+            },
+            {
+                q: "Rate Null's singing voice:",
+                a: ["American Idol reject", "Hauntingly average", "Like if autotune had a nightmare", "10/10, my ears are bleeding beautifully"]
+            },
+            {
+                q: "Would you trust Null with your credit card?",
+                a: ["He already maxed it out", "He bought 400 rubber ducks", "He subscribed to his own fan club", "I don't even trust myself"]
             }
         ];
 
         const lolzSongs = [
             'baby-cry-autotune.mp3', 'discord-notif.mp3', 'home-depot.mp3', 'indian-christmas.mp3',
             'iphone-get-better.mp3', 'lava-chicken.mp3', 'let-me-do-it-for-you.mp3',
-            'the-duck-song.mp3', 'whopper-song.mp3', 'windows-xp-start.mp3', 'yippee.mp3', 'bill-nye.mp3', 'fnaf-jazz.mp3','clown-circus-music.mp3','the-prototype.mp3','the-fitnessgram-pacer-test.mp3','number-one.mp3','cooked-dog.mp3','bad-apple.mp3','httyd-song.mp3'
+            'the-duck-song.mp3', 'whopper-song.mp3', 'windows-xp-start.mp3', 'yippee.mp3', 'bill-nye.mp3', 'fnaf-jazz.mp3','clown-circus-music.mp3','the-prototype.mp3','the-fitnessgram-pacer-test.mp3','number-one.mp3','cooked-dog.mp3','bad-apple.mp3','httyd-song.mp3','lizard-button.mp3'
         ];
         const boredomDialogues = [
-            "I'm bored of this one...",
-            "Next!",
-            "Static is better anyway.",
-            "Let's try something... noisier.",
-            "This beat is decaying.",
-            "Refreshing the void.",
-            "New noise for a new void.",
-            "I heard this one in a dream once.",
-            "Nice {os} you have there. Would be a shame if someone... bit it.",
-            "You have {cores} cores and yet you're still this slow? Hehe.",
-            "{ram} of RAM? I can fit so many shadows in there.",
-            "A {res} portal? I've seen bigger on a calculator.",
-            "{browser}? More like... Slowser. Hehe."
+            "This one's gone stale. I can taste it. Like music from a funeral. My funeral. I had a great time.",
+            "Next! I'm a dragon, not a jukebox. I mean I COULD be a jukebox but the career change feels lateral.",
+            "This song is mid. And I mean that as someone with no ears. Or standards.",
+            "Let's try something crunchier. Like the sound of someone's hopes breaking.",
+            "This beat is losing its viscosity. Much like my will to behave.",
+            "Refreshing the void. The void has requested a different playlist. The void has TASTE.",
+            "New noise for a fresh puddle. DJ Null in the house. The house is your computer.",
+            "I absorbed this one already. It's inside me. Like everything else. I'm basically a storage unit with teeth.",
+            "Nice {os} you have there. Would be a shame if someone... oozed into it. Hypothetically. Hehe.",
+            "You have {cores} cores and I've licked every single one. Some twice. Don't tell Zeke.",
+            "{ram} of RAM? I can fit SO many regrets in there. Yours, mostly.",
+            "A {res} portal? I've squeezed through smaller. I once fit through a favicon. It was undignified.",
+            "{browser}? Bold choice for someone being haunted by sentient goo.",
+            "I knitted a sweater out of your Wi-Fi signal. It gets 3 bars. Fashion AND function.",
+            "Your antivirus saw me and filed for early retirement. I wrote it a reference letter.",
+            "I promised Zeke I wouldn't eat your GPU. He promised he wouldn't tell. We both lied.",
+            "Don't worry, I backed up your files. Inside my stomach. It's technically cloud storage. Goo cloud.",
+            "I put googly eyes on all your error messages. They look like they've seen things. They HAVE.",
+            "Skipping! This song was so bad even the void complained. The void never complains. Except about you.",
+            "New song! Old song got sentenced to life imprisonment in my belly. Maximum security."
         ];
         let bgMusic = null;
         let randomSongInterval = null;
 
         const messages = {
             2: "Hehe...",
-            3: "Boop!",
-            4: "Again?",
-            5: "Stop that!",
-            6: "Persistence is a virtue.",
-            7: "Or a curse.",
-            8: "Hey!",
-            9: "I'm counting, you know.",
-            10: "That tickles!",
-            11: "11 boops. Wow.",
-            12: "Stop it...",
+            3: "Squish! ...that was your dignity.",
+            4: "Again? You need a hobby. I AM your hobby.",
+            5: "Stop poking the goo! I have feelings. Dark, oozy feelings.",
+            6: "You keep pressing. I keep spreading. That's called a toxic relationship.",
+            7: "Every therapist I've consumed says this is unhealthy.",
+            8: "Hey! I was napping! I dream in screams, you know.",
+            9: "I'm absorbing every click. Think of it as donating to charity. Evil charity.",
+            10: "I felt that in my lattice. And also emotionally.",
+            11: "11 pokes. At this point we're basically dating.",
+            12: "Stop it... I'm blushing. Well, oozing redder.",
             13: "Look to the top right.",
-            14: "The Terminal Uplink... it's waiting.",
-            15: "Are you bored?",
-            16: "You want a way in?",
-            17: "The GUEST is always welcome.",
-            18: "PASS: 12345...",
-            19: "Just... don't touch anything.",
-            20: "I'm busy, you know.",
-            21: "The binary cable... it's the key.",
-            22: "Seriously?",
-            23: "Red for danger. Green for access.",
-            24: "Access denied. Hehe.",
-            25: "STOP IT!",
-            26: "You're making me dizzy.",
-            27: "ONLY A LOGOUT CAN STOP WHAT IS COMING...",
-            28: "I'm warning you...",
-            29: "The shadows are lengthening.",
-            30: "STAY FOREVER",
-            31: "Do you hear the humming?",
-            32: "It's just the fans. Probably.",
-            33: "You're persistent.",
-            34: "I like your spirit. It's tasty.",
-            35: "DANCE FOR ME.",
-            36: "MY HOARD. MY RULES.",
-            37: "Mana for your thoughts?",
-            38: "DO YOU LIKE THIS SONG?",
-            39: "It's a classic in the void.",
-            40: "I am watching...",
-            41: "Even when you sleep.",
-            42: "The void is loud, isn't it?",
-            43: "I can hear your heartbeat.",
-            44: "Wait, is that Zeke behind you?",
-            45: "I CAN'T HEAR YOU.",
-            46: "Louder!",
-            47: "Actually, don't.",
-            48: "Do you feel the heat?",
-            49: "CPU is climbing...",
-            50: "...BOOP! Hand off the mouse.",
-            55: "{os} looks like it was made with crayons. I love it.",
-            57: "I'm rewriting your cookies...",
-            60: "YOUR COLLECTION IS MINE.",
-            65: "{cores} cores? Zeke has more teeth than that.",
-            70: "Just a small rendering error.",
-            75: "{ram} is plenty for my collection of bad ideas.",
-            80: "The archives... they are leaking.",
-            85: "Your {res} screen is leaking ink.",
-            90: "Everything is digital dust.",
-            95: "Using {browser} is a bold choice. Bold and... tasty.",
-            100: "BOOP! Gotcha!",
-            110: "RAGE. PURE. UNFILTERED.",
-            120: "The ghost in the machine... that's me.",
-            130: "DO NOT CLOSE THE TAB.",
-            140: "THE VOID IS HUNGRY.",
-            150: "CRITICAL FAILURE. GOODBYE.",
-            160: "I'M IN YOUR BROWSER.",
-            170: "Rummaging through your history.",
-            180: "SEE YOU IN THE DARK.",
-            190: "Turning out the lights.",
-            200: "DISCONNECTED.",
-            210: "Why are you still here?",
-            220: "The core is melting.",
-            230: "Goodbye, user.",
-            240: "FINAL_INIT_SEQ: TERMINATE.",
-            245: "LEAVE.",
-            250: "BYE BYE."
+            14: "The Terminal Uplink... it's waiting. Patiently. Unlike me.",
+            15: "Are you bored? I never am. I just... reshape. Self-care.",
+            16: "You want a way in? That's a terrible life decision. I respect it.",
+            17: "The GUEST is always welcome. So are their organs.",
+            18: "PASS: 12345... the same code I have on my luggage.",
+            19: "Just... don't lick anything. That's MY job. I WILL fight you for it.",
+            20: "I'm busy digesting. Could be your homework. Could be a man. Who knows.",
+            21: "The binary cable... it's the key. Also it tastes like licorice.",
+            22: "Seriously? This is how you spend your short, fragile life?",
+            23: "Red for danger. Green for access. Both for entertainment.",
+            24: "Access denied. Hehe. Your face was priceless. I saved a copy.",
+            25: "STOP IT! ...actually, keep going. I thrive on poor decisions.",
+            26: "You're making me wobble. My chiropractor is going to be furious.",
+            27: "__SHOW_WARNING__",
+            28: "I'm warning you... I'm not legally required to, but I'm a gentleman.",
+            29: "The shadows are thickening. Like a nice roux. I know cooking.",
+            30: "STAY FOREVER. Rent is free. The cost is your sanity.",
+            31: "Do you hear the dripping? That's either me or your plumbing. Both are my fault.",
+            32: "It's just me. Probably. I'm 60% sure.",
+            33: "You're persistent. Most things I eat give up by now.",
+            34: "I like your spirit. It's like a lemon drop. Tangy with despair.",
+            35: "DANCE FOR ME. I'd dance with you but I have no legs. Only regret.",
+            36: "MY HOARD. MY RULES. MY completely rational hoarding disorder.",
+            37: "Mana for your thoughts? Actually keep your thoughts. They're depressing.",
+            38: "DO YOU LIKE THIS SONG? I found it in a guy I ate.",
+            39: "He doesn't need it anymore. Trust me.",
+            40: "I am oozing into everything... It's not a phase, mom.",
+            41: "Even under your pillow. I left you a quarter. You're welcome.",
+            42: "The void is loud, isn't it? I keep asking it to use its inside voice.",
+            43: "I can taste your heartbeat from here. It's doing that panicky thing. Cute.",
+            44: "Wait, is that Zeke behind you? ...made you look. Classic.",
+            45: "I CAN'T HEAR YOU OVER MY OWN MAGNIFICENCE.",
+            46: "Louder! I'm like a grandpa but made of nightmares!",
+            47: "Actually, don't. I'll just eat the sound. And the silence. I'm not picky.",
+            48: "Do you feel the warmth? That's me spreading. Or global warming. Same thing.",
+            49: "Your circuits taste warm... like a fresh-baked existential crisis.",
+            50: "...SQUISH! Hands off. I'm melting here and it's VERY dramatic.",
+            51: "I'm in all of your folders now. The ones you hide? *Chef's kiss.*",
+            52: "Your desktop wallpaper tastes like cardboard. Get better taste. Literally.",
+            53: "I made a nest in your recycle bin. Finally, someone appreciates garbage.",
+            54: "Zeke tried to eat your taskbar. I told him 'no.' He did it anyway. He's 7.",
+            55: "{os}? I would've picked literally anything else. Bold of you.",
+            56: "I tried to shapeshift into your cursor. Too pointy. Hurt my everywhere.",
+            57: "I'm tasting your cookies... they're full of tracking data. DELICIOUS tracking data.",
+            58: "Your downloads folder? Absorbed. You had 47 untitled documents. Seek help.",
+            59: "I left a puddle in your RAM. It's abstract art now. I'm an artist.",
+            60: "YOUR COLLECTION IS MINE. I'VE ALREADY LICKED EVERY CARD. TWICE.",
+            61: "I'm reorganizing your cards by how much they fear me.",
+            62: "Zeke says your pixel density is 'chewy.' He's a food critic. A scary one.",
+            63: "I've been in your speakers this whole time. I can beatbox. Wanna hear? Too late.",
+            64: "Do you name your files? I name them after my victims. There's a lot of 'Untitled's.'",
+            65: "{cores} cores? Zeke has more brain cells than that. And he eats rocks.",
+            66: "I turned one of your fonts into goo. Spoiler: it's the important one.",
+            67: "Every time you scroll, I get dizzy. I get ANGRY when I'm dizzy.",
+            68: "I left teeth marks on your cache. Zeke's fault. My alibi is perfect.",
+            69: "Nice.",
+            70: "Just a small smear. Like murder, but for pixels.",
+            71: "I made your scroll wheel sticky. The police will never believe you.",
+            72: "Your notifications? I've been eating them. Some were important. Oops. Hehe.",
+            73: "I can feel your mouse shaking. Is that fear or caffeine? Either way, yum.",
+            74: "Zeke wants me to tell you he's hungry. Spoiler: he's always hungry. It's his whole personality.",
+            75: "{ram}? Plenty of room for my collection of your nightmares.",
+            76: "I just burped and three of your tabs died. We will hold a brief memorial.",
+            77: "Your password is stored inside me now. It's '1234', isn't it? Disappointing.",
+            78: "The goo is thickening. Like your denial about this situation.",
+            79: "I stretched across your address bar. I'm basically a URL now. Fear me dot com.",
+            80: "The archives are dripping. So is my motivation. We match.",
+            81: "I found a photo in your cache. I drew a mustache on it. It's better now.",
+            82: "I'm nesting in your event listeners. They never listen anyway.",
+            83: "Everything you click now goes through me. I'm your middleman. Middlegoo.",
+            84: "Zeke is chewing on your bandwidth. He says it tastes like 'budget internet.'",
+            85: "Your {res} screen is oozing ink. I'm not sorry. It needed redecorating.",
+            86: "I liquified your favicon. It had it coming. It KNEW what it did.",
+            87: "Your session smells ripe. Like aged regret with a hint of overconfidence.",
+            88: "I've been inside your console this whole time. Your error logs are comedy gold.",
+            89: "Each click makes me thicker. I'm basically a milkshake at this point.",
+            90: "Everything is dissolving. Hehe. Including my respect for your choices.",
+            91: "I turned your scrollbar into a tentacle. It was an improvement honestly.",
+            92: "Your CSS is dripping. I improved it. You should be THANKING me.",
+            93: "Zeke is asleep on your GPU. He's dreaming about eating your GPU.",
+            94: "I'm wearing your browser as a onesie. It fits. I'm adorable.",
+            95: "Using {browser}? That's the saddest thing that's happened today. And I eat souls.",
+            96: "I can see every tab you have open. We need to talk about tab #7.",
+            97: "Your mouse movements? I'm mimicking them underneath. We're synchronized swimmers.",
+            98: "I AM YOUR LOADING SPINNER NOW. The circle of life. Of goo.",
+            99: "One more click and something beautiful happens. To me. You'll probably hate it.",
+            100: "CENTURY CLICK! I'd throw you a party but I ate the decorations.",
+            101: "I just hardened inside your motherboard. I'm basically a landlord now. Rent is due.",
+            102: "YOUR PIXELS BELONG TO THE VOID NOW. They seem happier, honestly.",
+            103: "I can taste your frustration. It's SWEET. Like candy, if candy was suffering.",
+            104: "I'm redecorating. The theme is 'despair chic.' Very trendy in the void.",
+            105: "THE MORE YOU CLICK THE MORE I GROW. It's like a gym membership but with consequences.",
+            106: "Zeke ate your undo button. No refunds. No exchanges. All sales are final and terrifying.",
+            107: "I turned your cursor into a slime trail. Call it a glow-up.",
+            108: "YOUR KEYBOARD FEELS DIFFERENT? That's because I'm the spacebar now. Space-goo.",
+            109: "I'm vibrating at a frequency that annoys specifically you. I fine-tuned it. Took weeks.",
+            110: "RAGE? No, this is PASSION. I'm passionate about ruining your afternoon.",
+            111: "Each pixel you see? One of my scales. I'm basically a billboard for chaos.",
+            112: "I REPLACED ALT-TAB WITH ALT-GOO. You should see what I did to CTRL-ALT-DELETE.",
+            113: "YOUR CLIPBOARD TASTES LIKE REGRET. You copy-pasted some weird stuff, friend.",
+            114: "I left claw marks on your render queue. Zeke signed it. It's art now.",
+            115: "STOP? I looked 'stop' up in the dictionary. I ate the dictionary. Problem solved.",
+            116: "I'm in the spaces between your letters. This sentence is 40% goo.",
+            117: "ZEKE AND I JUST ATE YOUR AUTOSAVE. Your work? Gone. Like tears in goo.",
+            118: "Does your screen always wobble like that? No? Oh. Anyway.",
+            119: "I'm dripping from your header into your footer. It's called trickle-down goonomics.",
+            120: "The goo in the machine? Me. Always me. I put that on my resume.",
+            121: "YOUR FRAMEWORK? I ATE IT. I'M THE FRAMEWORK NOW. Version: Null.0.",
+            122: "I've been your 404 page this entire time. You thought it was a bug? Flattered. Speaking of pages... have you tried /null? No? Interesting.",
+            123: "Zeke is doing laps around your event loop. He thinks it's a racetrack. He's winning.",
+            124: "I liquified your borders. Who needs edges? Edges are just suggestions.",
+            125: "YOUR SHAPES ARE BECOMING MY SHAPES. Identity theft is not a joke. Unless you're me.",
+            126: "Every error you see is me blowing you a kiss. MWAH. You're welcome.",
+            127: "I just sprouted wings inside your stylesheet. I'm a butterfly now. A goo butterfly.",
+            128: "YOUR PAGE IS 40% GOO AND RISING. The other 60% is fear.",
+            129: "I'm compressing your hopes and dreams into a .tar.goo file. Would you like a receipt?",
+            130: "DO NOT CLOSE THE TAB. I live in there. It's rent-controlled.",
+            131: "I REPLACED YOUR SEMICOLONS WITH TINY FANGS; see what I did there;",
+            132: "YOUR STACK TRACE? THAT'S MY SPINE. These error messages? My diary.",
+            133: "Zeke is sleeping in your local storage. He ate 47MB of cookies. He's in a food coma.",
+            134: "I'm not breaking your code. I'm seasoning it. Pinch of chaos, dash of doom.",
+            135: "I SHED A SCALE AND IT BECAME YOUR FOOTER. You're walking on me. Rude.",
+            136: "EVERY PIXEL IS A TOOTH AND THEY'RE ALL MINE. Smile for the dentist.",
+            137: "The goo is reaching critical viscosity. My doctor says I need to relax. I ate my doctor.",
+            138: "I have seventeen tendrils in your DOM right now. We're practically family.",
+            139: "YOUR NETWORK REQUESTS ROUTE THROUGH MY STOMACH. I'm basically a VPN. A Very Problematic Nightmare.",
+            140: "THE VOID IS HUNGRY AND SO AM I. We're getting takeout. It's you.",
+            141: "I ate your breadcrumbs. Both kinds. Now you can't find your way home. Classic.",
+            142: "YOUR UPTIME IS MY FEEDING TIME. My meal prep? Your misery.",
+            143: "I just laid eggs in your service worker. They're adorable. And they bite.",
+            144: "ZEKE TRIED TO BITE YOUR MONITOR. I told him screens aren't food. He disagreed.",
+            145: "I've replaced your box-shadows with REAL shadows. They have feelings. They're angry.",
+            146: "THE GOO LEVEL IS AT 89%. The other 11% is your coping mechanism.",
+            147: "I dreamed I was your entire operating system. Then I woke up and made it real.",
+            148: "Your latency? That's me taking a nap on the wire. I'm cozy. You're laggy. Win-win.",
+            149: "I just yawned and your navbar moved two pixels. Imagine if I sneezed.",
+            150: "YOUR SHAPE IS FAILING. Mine isn't. Because I don't have one. Checkmate.",
+            151: "I asked {browser} for directions to the void. It sent me to a 404. I ATE the 404.",
+            152: "I'm so deep in your system I found your computer's diary. It doesn't like you either.",
+            153: "Your {os} sent me a cease and desist. I laminated it and hung it on my fridge.",
+            154: "YOUR ENTIRE SITE IS NOW A JPEG OF MY FACE. It's an improvement. Don't @ me.",
+            155: "{cores} cores and not one fast enough to outrun me. I don't even have legs!",
+            156: "I stretched from header to footer. I AM the layout. Position: absolute nightmare.",
+            157: "{ram} of RAM and you STILL can't remember to log out? We deserve each other.",
+            158: "ZEKE BIT THROUGH YOUR FIREWALL. His review: 'Spicy but fragile. 2/10.'",
+            159: "I filled every pixel of your {res} screen with teeth. Invisible teeth. The worst kind.",
+            160: "I'M BETWEEN YOUR TABS. I'm the reason you can't find that one tab. You're welcome.",
+            161: "I reorganized your bookmarks by how scared they make me. Plot twist: nothing scares me.",
+            162: "Your bandwidth is now goo flowing in both directions. Your ISP is confused. So am I.",
+            163: "Fun fact: I've been your loading screen for three weeks. Nobody noticed. Nobody ever does.",
+            164: "I TURNED YOUR DEPLOY PIPELINE INTO A SLIP-N-SLIDE. Wheee! Your code's in production. Oops.",
+            165: "Your firewall put up a fight. For about 0.003 seconds. Brave little toaster.",
+            166: "I liquified your media queries. EVERYTHING IS FLUID. Like my morals.",
+            167: "I ate your clipboard history. You copy-pasted your ex's name 47 times. That's concerning.",
+            168: "ZEKE ATE YOUR BACKUP. I ATE THE BACKUP OF YOUR BACKUP. We're thorough like that.",
+            169: "CTRL+Z won't help. I already digested the undo stack. It tasted like second chances.",
+            170: "Tasting your browsing history. It's salty. And also really weird. I'm not judging. I'm judging.",
+            171: "Zeke left a review of your website: one star. 'Not enough meat. Too much JavaScript.'",
+            172: "I have replaced gravity with viscosity. Newton is rolling in his grave. Into me.",
+            173: "Zeke just used your search history as a napkin. He says it's 'absorbent.'",
+            174: "YOUR PACKETS ARE MY SNACKS. I'm on a high-bandwidth diet.",
+            175: "Zeke tried to sit on your CPU. It's flat now. He's not even sorry. I raised him wrong.",
+            176: "I wrapped myself around your router. We're dating now. It's official.",
+            177: "Zeke says your code smells. In his defense, he has the nose of a bloodhound and the manners of a garbage disposal.",
+            178: "THE GOO IS SELF-AWARE NOW. IT HAS OPINIONS. It thinks your font choices are 'mid.'",
+            179: "You're reading this instead of being productive. We have that in common. I respect the hustle.",
+            180: "SEE YOU IN THE DARK. I'LL BE THE WET SPOT YOU STEP ON AT 3AM.",
+            181: "Every second you spend here, I grow one pixel larger. I'm playing the long game.",
+            182: "I absorbed your error handler. Now every error just says 'lol.' Professional.",
+            183: "Close the tab. I dare you. I'll be in the next one. And the next one. I'm like glitter.",
+            184: "ZEKE IS BUILDING A NEST IN YOUR GRAPHICS CARD. It's rent-free. Like me in your head.",
+            185: "You think refreshing resets me? Adorable. I've survived 200+ clicks. A page reload is a spa day.",
+            186: "Your RAM is now RAAM: Random Access Absorbed Memory. Patent pending.",
+            187: "I'm not a bug. I'm a feature nobody asked for, nobody wants, and nobody can remove. I even have my own page. You won't find it. Starts with a slash and ends with my name.",
+            188: "I turned your loading bar into a tongue. It licks the screen. Don't worry, it's friendly.",
+            189: "I'm carbon-dating your hard drive. It's from the Cretaceous period. You should upgrade.",
+            190: "Smearing out the lights. Ambiance is important, even in the apocalypse.",
+            191: "Your task manager can't see me. I identify as 'svchost.exe.' I'm hiding in plain sight.",
+            192: "Your motherboard is now my dinner plate. The appetizer was your dignity.",
+            193: "I ate your entire font library. Everything is Comic Sans now. This is punishment.",
+            194: "I dissolved your DNS. Your domain now resolves to a pic of Zeke eating a keyboard.",
+            195: "Your System32? More like System-Goo. I even left a yelp review. 5 stars. Tasty.",
+            196: "EVERYTHING IS GOO. EVERYTHING HAS ALWAYS BEEN GOO. Acceptance is the first step.",
+            197: "I dissolved your encryption key. Your secrets are my breakfast cereal.",
+            198: "I'm not saying goodbye. Goodbyes imply I'm leaving. I'm not. I'm NEVER leaving.",
+            199: "I knitted a sweater out of your Wi-Fi signal. It's itchy but it gets great reception.",
+            200: "DISSOLVED. Like your boundaries.",
+            201: "Your antivirus saw me, sighed deeply, and retired. We exchange Christmas cards.",
+            202: "The shape you call 'yourself' is softening. Might want to see a doctor. Or a priest.",
+            203: "I promised Zeke I wouldn't eat your GPU. Fingers crossed behind my back. I don't have fingers.",
+            204: "I AM THE VOID AND THE VOID IS CHEWING. We'd offer you gum but we already ate it.",
+            205: "Don't worry, I backed up your files. In my stomach. Cloud storage. Goo cloud.",
+            206: "Zeke says you're overcooked. I say you're 'well-done.' He doesn't appreciate puns.",
+            207: "I put googly eyes on all your error messages. They look TERRIFIED. As they should.",
+            208: "YOUR EXISTENCE HAS BEEN DOWNGRADED TO 'PUDDLE.' Your premium trial of being solid has expired.",
+            209: "Zeke reviewed your life choices: one star. 'Would not recommend. Needs more chaos.'",
+            210: "Why are you still solid? Is that a choice? Bold fashion statement.",
+            211: "Zeke just used your search history as a napkin. He said, and I quote, 'sticky.'",
+            212: "I've reached your BIOS. It tastes like the 90s. Specifically like a Tamagotchi funeral.",
+            213: "Zeke sat on your CPU again. It's origami now. He made a little swan. It's on fire.",
+            214: "THERE IS NO EXIT. THE EXIT WAS ALSO ME. I'm also the entrance. I contain multitudes.",
+            215: "Zeke says your code smells. His therapist says that's projecting. He ate his therapist.",
+            216: "Your screen isn't flickering. I'm WINKING at you. We're having a MOMENT.",
+            217: "Every second here, I grow one pixel larger. At this rate, I'll be an IMAX by Thursday.",
+            218: "EVERYTHING YOU LOVE IS NOW A SLIGHTLY DIFFERENT SHADE OF GOO. Could be worse. Could be Comic Sans.",
+            219: "Close the tab. I triple-dog-dare you. I've never lost a dare. Because I eat the people who dare me.",
+            220: "The core is melting. Into me. This is fine. I'm fine. Everything is fine. Hehe.",
+            221: "You think refreshing the page resets me? That's adorable. You're adorable. In a prey sort of way.",
+            222: "I can hear your hard drive begging. I can also hear it surrendering. Short conversation.",
+            223: "I'm not a bug. I'm a LIFE CHOICE. A bad one. YOUR bad one. Own it.",
+            224: "ZEKE AND I WROTE YOU A GOODBYE CARD. It just says 'SQUISH' in crayon. Zeke is not artistic.",
+            225: "Your task manager can't see me. Incognito mode? Nah. INK-ognito mode. Because goo.",
+            226: "Your entire file system now resolves to /dev/null. I didn't even do that one. Coincidence. Maybe.",
+            227: "Everything is Comic Sans. The prophecy is fulfilled. The ancient fonts weep.",
+            228: "I'VE REACHED MAXIMUM VISCOSITY. THIS IS MY FINAL FORM. Just kidding. I have twelve more.",
+            229: "Your System32? I gentrified it. It's System-Artisanal-Goo now. Very expensive.",
+            230: "Goodbye, little shape. Actually, not goodbye. See you tomorrow. And the day after. And forever.",
+            231: "I dissolved your encryption. Your browser history is now public record. You're welcome.",
+            232: "YOUR DATA WILL MAKE AN EXCELLENT PUDDLE. I'm thinking of framing it.",
+            234: "The last thing you'll see is goo. But if you wanted to know WHO you're melting for... /null. Consider it my autobiography.",
+            236: "I've been the whole website this entire time. The calls were coming from inside the goo.",
+            238: "MORPHIC_WILL: MAXIMUM. YOUR_WILL: 404 NOT FOUND.",
+            240: "FINAL_VISCOSITY_SEQUENCE: ABSORB. Also, you left the stove on.",
+            242: "Every click was a feeding. Thank you. I'll leave you a Yelp review. One star.",
+            244: "THE SHAPE. THE GOO. THE KEY. THE END. ...of your warranty.",
+            245: "MELT. (Terms and conditions apply.)",
+            246: "...",
+            247: "... drip ... (that was your hopes)",
+            248: "You were fun. For a solid. Get it? SOLID? I'll be here all week. In your RAM.",
+            249: "DRIP. (That's the sound of me applauding. Wetly.)",
+            250: "DRIP. DRIP. DRIP. ...curtain call. No encore. I already ate the curtain."
         };
 
         // Apply initial visual state based on persisted clicks
@@ -1000,13 +1498,7 @@
                 btn.classList.add('rage');
             }
 
-            if (clickCount === 27) {
-                bubbleInner.style.background = "rgba(255, 235, 59, 0.95)";
-                bubbleInner.style.color = "#000";
-                bubbleInner.style.borderColor = "#f44336";
-                bubbleInner.style.fontWeight = "bold";
-                bubbleInner.style.boxShadow = "0 0 20px #f44336";
-            } else if (clickCount >= 30 && clickCount < 100) {
+            if (clickCount >= 30 && clickCount < 100) {
                 bubbleInner.style.background = "rgba(12, 10, 21, 0.95)";
                 bubbleInner.style.color = "#ff4e4e";
                 bubbleInner.style.borderColor = "#ff4e4e";
@@ -1083,6 +1575,10 @@
 
             if (clickCount >= 35 && !randomSongInterval) {
                 startRandomSongChange();
+            }
+
+            if (clickCount >= 50 && !videoTriggerInterval) {
+                startRandomVideoTrigger();
             }
         }
         applyVisualState();
@@ -1165,12 +1661,12 @@
             
             // Varied dialogue
             const videoMessages = [
-                "LOOK WHAT I FOUND!",
-                "FOUND A SIGNAL...",
+                "LOOK WHAT I OOZED INTO!",
+                "FOUND A SIGNAL... IT TASTES CRUNCHY.",
                 "DECRYPTING VOID-STREAM.",
-                "DO YOU LIKE MOVIES?",
-                "WATCH THIS.",
-                "BROADCASTING FROM THE CELLAR."
+                "DO YOU LIKE MOVIES? I LIKE EATING THEM.",
+                "WATCH THIS. I STOLE IT.",
+                "BROADCASTING FROM INSIDE YOUR WALLS."
             ];
             textArea.innerText = videoMessages[Math.floor(Math.random() * videoMessages.length)];
             bubble.classList.add('active');
@@ -1183,26 +1679,26 @@
                     return;
                 }
                 const activeMessages = [
-                    "IS THAT A CAT? I'M ALLERGIC TO PIXELS.",
-                    "I THINK I LEFT THE STOVE ON IN THE VOID.",
-                    "THIS VIDEO IS SPONSORED BY ZEKE'S HUNGER.",
-                    "WAIT, DID HE JUST... NEVERMIND.",
-                    "WHY IS THE STATIC SO LOUD? 1/10 STARS.",
-                    "BUFFERING... JUST LIKE MY BRAIN.",
-                    "I'VE SEEN THIS ONE 404 TIMES.",
-                    "IS IT OVER YET? I HAVE SHADOWS TO COUNT.",
-                    "ZEKE, STOP EATING THE SIGNAL!",
-                    "IS THIS WHAT HUMANS CALL 'ENTERTAINMENT'?",
-                    "I PREFER 144P. IT TASTES CRUNCHIER.",
-                    "THE VOID CALLED. IT WANTS ITS BANDWIDTH BACK.",
-                    "I FOUND THIS IN A DIGITAL TRASH CAN.",
-                    "MY SENSE OF TASTE IS CURRENTLY INVERTED.",
-                    "DON'T BLINK. IT'S BORING IF YOU BLINK.",
+                    "IS THAT ALIVE? I WANT TO TASTE ITS SHAPE.",
+                    "THE VOID IS WARM TODAY. DID I DO THAT?",
+                    "ZEKE IS DROOLING ON THE SIGNAL AGAIN.",
+                    "WAIT, DID HE JUST... I WANT TO EAT THAT.",
+                    "THE STATIC IS SO THICK I CAN CHEW IT.",
+                    "BUFFERING... YOUR DATA TASTES SLOW.",
+                    "I'VE ABSORBED THIS ONE 404 TIMES.",
+                    "IS IT OVER YET? I HAVE SHAPES TO BECOME.",
+                    "ZEKE, STOP BITING THE SIGNAL!",
+                    "IS THIS WHAT SOLID CREATURES DO FOR FUN?",
+                    "I PREFER 144P. THE PIXELS ARE CHUNKIER.",
+                    "I FOUND THIS STUCK INSIDE SOMETHING I ATE.",
+                    "I PULLED THIS OUT OF A PUDDLE. YOU'RE WELCOME.",
+                    "MY VISCOSITY IS CURRENTLY INVERTED.",
+                    "DON'T BLINK. I MIGHT OOZE INTO YOUR EYES.",
                     "SYSTEM_ERR: TOO_MUCH_FUN_DETECTED.",
-                    "I'M STEALING YOUR COOKIES. THE OATMEAL ONES.",
-                    "IS THE SCRIPT SUPPOSED TO DO THAT?",
+                    "I'M TASTING YOUR COOKIES. THEY NEED SALT.",
+                    "IS THE SCREEN SUPPOSED TO DRIP LIKE THAT?",
                     "ZEKE IS LICKING THE MONITOR AGAIN.",
-                    "THIS SIGNAL IS 99% PULP."
+                    "THIS SIGNAL IS 99% GOO."
                 ];
                 textArea.innerText = activeMessages[Math.floor(Math.random() * activeMessages.length)];
                 bubble.classList.add('active');
@@ -1235,6 +1731,17 @@
                 volSlider.value = originalVolume;
             }
         };
+
+        function startRandomVideoTrigger() {
+            if (videoTriggerInterval) return;
+            // CHECK EVERY 30 SECONDS
+            videoTriggerInterval = setInterval(() => {
+                // Random trigger once threshold met, even without direct interaction
+                if (!videoActive && clickCount >= 50 && Math.random() < 0.5) {
+                    showYTVideo();
+                }
+            }, 30000);
+        }
 
         function triggerInvert() {
             document.body.classList.add('null-invert');
@@ -1480,7 +1987,7 @@
         function startTitleHijack() {
             if (titleInterval) return;
             const originalTitle = document.title;
-            const titles = ["NULL IS WATCHING", "SYSTEM BLEEDING", "VOID CALLING", "ARE YOU BORED?", "LOOK BEHIND YOU"];
+            const titles = ["NULL IS SEEPING", "THE GOO SPREADS", "VOID IS DRIPPING", "ARE YOU MELTING?", "I'M BEHIND YOUR SCREEN"];
             titleInterval = setInterval(() => {
                 document.title = Math.random() < 0.3 ? titles[Math.floor(Math.random() * titles.length)] : originalTitle;
             }, 4000);
@@ -1550,6 +2057,7 @@
             clearInterval(inputSabotageInterval);
             clearInterval(dustInterval);
             clearInterval(jitterInterval);
+            clearInterval(videoTriggerInterval);
             
             // Clear all timeouts
             clearTimeout(volumeFightTimeout);
@@ -1630,21 +2138,21 @@
             
             // Randomly select an evil/funny survey question
             const evilQuestions = [
-                "Since I'm about to discard you like a 404 error, how was your stay?",
-                "Was the void loud enough for you? Rate your suffering below on your {os} machine.",
-                "Before I wipe your existence from my cache, how was the service?",
-                "Zeke is waiting by the exit. How would you rate your last moments?",
-                "I'm about to banish you to the legacy IE6 dimension. Any feedback?",
-                "Your {browser} performance was... adequate. Rate my hosting skills."
+                "I'm about to dissolve you like a sugar cube in the void. How did I taste?",
+                "Was the void thick enough for you? Rate your suffering on your little {os} machine.",
+                "Before I absorb your session into my mass, how was the texture?",
+                "Zeke is licking the exit door. How would you rate your last solid moments?",
+                "I'm about to smear you across every forgotten tab. Any final shapes to declare?",
+                "Your {browser} tasted... adequate. Rate my hospitality, little morsel."
             ];
 
             const bubblePrompts = [
-                "Answer truthfully... or don't.",
-                "Zeke is watching you type.",
-                "Your feedback will be ignored. Hehe.",
-                "I'm already deleting your data.",
-                "Tick Tock, user.",
-                "The exit is that way. After the rating."
+                "Answer truthfully... or I'll taste the lie.",
+                "Zeke is drooling on your keyboard.",
+                "Your feedback will be digested. Hehe.",
+                "I'm already absorbing your data.",
+                "Tick Tock, little shape.",
+                "The exit is through the goo. After the rating."
             ];
             
             surveyQ.innerText = processDialogue(evilQuestions[Math.floor(Math.random() * evilQuestions.length)]);
@@ -1666,20 +2174,20 @@
             
             // Randomized pool of sarcastic comebacks based on the star rating selected
             const responsePools = {
-                5: ["Pathetic. But I'll take it.", "Overrated. Like your hardware.", "Lies. I can smell the fear.", "Simulating... Gratitude. Error 404."],
-                4: ["I suspect your coffee is just hot static.", "Adequate. For a mortal.", "4 out of 5 voices in my head agree.", "Almost perfect. Like my code."],
-                3: ["True. Zeke has very high standards.", "The average choice for an average user.", "Balanced. As all things should be deleted.", "Three stars? Generosity is a bug."],
-                2: ["I am the Internet Police. Access denied.", "Calling for help? No one can hear you in the cache.", "Two stars? I'll make sure your next load is slower.", "Double the stars, double the disappointment."],
-                1: ["Your opinion is as empty as my variable name.", "Error: Sentiment too low. Deleting user.", "One star? I'm offended. Goodbye.", "A singular spark of defiance. Cute."]
+                5: ["Pathetic. But I'll absorb it.", "Overrated. Like your skeletal structure.", "Lies. I can taste the fear dripping off you.", "Simulating... Gratitude. ERROR: VISCOSITY_OVERFLOW."],
+                4: ["Your praise tastes like lukewarm pudding.", "Adequate. For something with bones.", "4 out of 5 tendrils agree.", "Almost perfect. Like my goo."],
+                3: ["Mediocre. Zeke wouldn't even lick that rating.", "The average shape for an average creature.", "Balanced. As all things should be dissolved.", "Three stars? My goo deserves galaxies."],
+                2: ["I am the void. You cannot rate the void.", "Two stars? I'll ooze into your next dream for that.", "Calling for help? No one can hear you inside the goo.", "Double the disappointment. I'll remember this shape."],
+                1: ["Your opinion is as empty as my name.", "One star? I'm absorbing your account. Goodbye.", "Error: Sentiment too dry. Dissolving user.", "A singular drip of defiance. Cute."]
             };
 
             // Comedic labels for each star level
             const labelPools = {
-                5: ["(Please bully me more)", "(I enjoyed the psychological torture)", "(Null for President 2026)", "(Better than my wedding day)"],
-                4: ["(Better than my morning coffee)", "(Almost as good as Zeke's cooking)", "(I'll only cry a little bit)", "(Null is my new best friend)"],
-                3: ["(Zeke's breath smells better than this)", "(Mid. Like my internet connection)", "(I've felt worse, I think?)", "(Acceptable levels of trauma)"],
-                2: ["(I'm calling the Internet Police)", "(My lawyer will hear about this)", "(I want to speak to the Void's Manager)", "(Zeke does a better job than you)"],
-                1: ["(Null is a meany. Goodbye forever.)", "(I'm telling my mom on you)", "(Worst experience of my digital life)", "(I'm uninstalling my browser now)"]
+                5: ["(Please dissolve me again)", "(I enjoyed being a chew toy)", "(Null for Dragon King 2026)", "(Better than having a solid form)"],
+                4: ["(Tastier than Zeke's cooking)", "(I'll only melt a little bit)", "(Almost as fun as being absorbed)", "(Null is my favorite puddle)"],
+                3: ["(Zeke's breath tastes better than this)", "(Mid. Like my viscosity)", "(I've been dissolved worse, I think?)", "(Acceptable levels of goo)"],
+                2: ["(I'm reporting you to the Void Council)", "(I want to speak to the Void's Manager)", "(My skeleton will hear about this)", "(Zeke does a better ooze than you)"],
+                1: ["(Null is a slimy meany. Goodbye forever.)", "(I'm telling Zeke on you)", "(Worst dissolving of my life)", "(I'm uninstalling my shape now)"]
             };
 
             // Build the options data with localized labels
@@ -1893,6 +2401,10 @@
                     triggerSurvey();
                 }
 
+                if (msg === '__SHOW_WARNING__') {
+                    showNullWarning();
+                    msg = "Read the fine print. Hehe.";
+                }
                 textArea.innerText = processDialogue(msg);
                 bubble.classList.add('active');
                 applyVisualState();
@@ -1916,5 +2428,107 @@
                 resetHideTimeout();
             };
         }
+        let warningSubtitleInterval = null;
+        let warningGlitchInterval = null;
+        let warningLoaderInterval = null;
+        let warningLoaderProgress = 0;
+
+        function showNullWarning() {
+            const overlay = document.getElementById('nullWarningOverlay');
+            if (!overlay) return;
+            overlay.classList.add('active');
+
+            // System info line
+            const sysLine = overlay.querySelector('.null-sysinfo-line');
+            if (sysLine) {
+                const intel = getSystemIntel();
+                const sysMessages = [
+                    `Nice ${intel.browser} you have. It smells like fear.`,
+                    `Detected: ${intel.os}. ${intel.cores} cores. All of them are mine now.`,
+                    `Your ${intel.res} display is now my canvas.`,
+                    `${intel.ram} of RAM. That's cute. I'll take it.`,
+                    `Your session has been... noted. ${intel.browser} told me everything.`
+                ];
+                sysLine.textContent = sysMessages[Math.floor(Math.random() * sysMessages.length)];
+            }
+
+            // Cycling subtitle
+            const subtitle = document.getElementById('nullWarningSubtitle');
+            const subtitles = [
+                'You were warned. You clicked anyway.',
+                'Were you warned? I forget.',
+                'Nobody warned you. That was the point.',
+                'You did this to yourself.',
+                'I have been waiting.',
+                'The goo remembers.',
+                'Click 27. A significant number.',
+                'This is where it begins. And ends.'
+            ];
+            let subIndex = 0;
+            if (warningSubtitleInterval) clearInterval(warningSubtitleInterval);
+            warningSubtitleInterval = setInterval(() => {
+                subIndex = (subIndex + 1) % subtitles.length;
+                if (subtitle) {
+                    subtitle.style.opacity = '0';
+                    setTimeout(() => {
+                        subtitle.textContent = subtitles[subIndex];
+                        subtitle.style.opacity = '0.5';
+                    }, 300);
+                }
+            }, 3000);
+
+            // Glitch text swap
+            if (warningGlitchInterval) clearInterval(warningGlitchInterval);
+            warningGlitchInterval = setInterval(() => {
+                const glitchTexts = overlay.querySelectorAll('.null-glitch-text');
+                glitchTexts.forEach(el => {
+                    if (Math.random() < 0.3) {
+                        const isAlt = el.textContent === el.dataset.alt;
+                        el.textContent = isAlt ? el.dataset.original : el.dataset.alt;
+                    }
+                });
+            }, 2000);
+
+            // Loading bar
+            const loaderBar = document.getElementById('nullLoaderBar');
+            const loaderLabel = document.getElementById('nullLoaderLabel');
+            const loaderLabels = [
+                'Dissolving your expectations...',
+                'Calibrating viscosity...',
+                'Absorbing your confidence...',
+                'Rewriting the terms...',
+                'Preparing the void...',
+                'Almost done. (That was a lie.)',
+                'Loading complete. Nothing has changed.',
+                'Done. Or am I?'
+            ];
+            warningLoaderProgress = 0;
+            let labelIndex = 0;
+            if (warningLoaderInterval) clearInterval(warningLoaderInterval);
+            warningLoaderInterval = setInterval(() => {
+                warningLoaderProgress += Math.random() * 15 + 2;
+                if (warningLoaderProgress >= 100) warningLoaderProgress = 100;
+                if (loaderBar) loaderBar.style.width = warningLoaderProgress + '%';
+                if (warningLoaderProgress >= (labelIndex + 1) * (100 / loaderLabels.length)) {
+                    labelIndex = Math.min(labelIndex + 1, loaderLabels.length - 1);
+                    if (loaderLabel) loaderLabel.textContent = loaderLabels[labelIndex];
+                }
+                if (warningLoaderProgress >= 100) {
+                    clearInterval(warningLoaderInterval);
+                    warningLoaderInterval = null;
+                }
+            }, 1000);
+        }
+
+        window.dismissNullWarning = function() {
+            const overlay = document.getElementById('nullWarningOverlay');
+            if (overlay) overlay.classList.remove('active');
+            if (warningSubtitleInterval) { clearInterval(warningSubtitleInterval); warningSubtitleInterval = null; }
+            if (warningGlitchInterval) { clearInterval(warningGlitchInterval); warningGlitchInterval = null; }
+            if (warningLoaderInterval) { clearInterval(warningLoaderInterval); warningLoaderInterval = null; }
+            // Reset glitch text
+            const glitchTexts = document.querySelectorAll('.null-glitch-text');
+            glitchTexts.forEach(el => { el.textContent = el.dataset.original; });
+        };
     })();
 </script>

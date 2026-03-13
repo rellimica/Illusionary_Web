@@ -23,33 +23,81 @@ require_once 'config.php';
     /* Notifications UI */
     .notif-wrapper { position: relative; display: flex; align-items: center; }
     .notif-bell { 
-        cursor: pointer; position: relative; transition: color 0.2s; color: var(--text-muted); padding: 5px;
+        cursor: pointer; position: relative; transition: all 0.3s; color: var(--text-muted); padding: 5px;
     }
-    .notif-bell:hover { color: var(--accent-secondary); }
+    .notif-bell:hover { color: var(--accent-secondary); filter: drop-shadow(0 0 6px var(--accent-secondary)); }
     .notif-badge {
         position: absolute; top: -5px; right: -5px; background: var(--accent-primary); color: #fff;
-        font-size: 0.6rem; font-weight: 900; min-width: 18px; height: 18px; border-radius: 50%;
+        font-size: 0.55rem; font-weight: 900; min-width: 18px; height: 18px; border-radius: 50%;
         display: none; align-items: center; justify-content: center; border: 2px solid var(--bg-color);
-        box-shadow: 0 0 10px rgba(255, 0, 234, 0.4);
+        box-shadow: 0 0 10px rgba(255, 0, 234, 0.4); font-family: 'Outfit', sans-serif;
+        animation: badgePulse 2s infinite;
     }
+    @keyframes badgePulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
     .notif-dropdown {
-        position: absolute; top: calc(100% + 15px); right: 0; width: 320px; 
-        background: rgba(12, 10, 21, 0.98); backdrop-filter: blur(20px); border: 1px solid var(--glass-border);
-        border-radius: 16px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); z-index: 1000;
-        display: none; flex-direction: column; overflow: hidden; animation: fadeInNotif 0.2s ease-out;
+        position: absolute; top: calc(100% + 15px); right: 0; width: 380px; 
+        background: rgba(12, 10, 21, 0.98); backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px);
+        border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 20px;
+        box-shadow: 0 25px 60px rgba(0,0,0,0.6), 0 0 40px rgba(0, 229, 255, 0.05); z-index: 1000;
+        display: none; flex-direction: column; overflow: hidden; animation: fadeInNotif 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     }
-    @keyframes fadeInNotif { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
-    .notif-header { padding: 15px 20px; border-bottom: 1px solid var(--glass-border); font-family: 'Outfit'; font-weight: 800; font-size: 0.8rem; display: flex; justify-content: space-between; align-items: center; }
-    .notif-list { max-height: 400px; overflow-y: auto; scrollbar-width: thin; }
+    @keyframes fadeInNotif { from { opacity: 0; transform: translateY(-8px) scale(0.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
+    .notif-header {
+        padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.06);
+        font-family: 'Outfit', sans-serif; font-weight: 900; font-size: 0.7rem;
+        display: flex; justify-content: space-between; align-items: center;
+        letter-spacing: 2px; text-transform: uppercase; color: #fff;
+    }
+    .notif-header-actions { display: flex; gap: 12px; }
+    .notif-header-action {
+        color: var(--accent-secondary); text-decoration: none; font-size: 0.55rem;
+        font-weight: 800; letter-spacing: 1px; font-family: 'Outfit', sans-serif;
+        transition: all 0.2s; cursor: pointer; border: none; background: none; padding: 0;
+    }
+    .notif-header-action:hover { filter: brightness(1.3); }
+    .notif-header-action.danger { color: #ff4e4e; }
+    .notif-list { max-height: 450px; overflow-y: auto; scrollbar-width: thin; scrollbar-color: rgba(255,255,255,0.08) transparent; }
+    .notif-list::-webkit-scrollbar { width: 4px; }
+    .notif-list::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); border-radius: 4px; }
+    .notif-list::-webkit-scrollbar-thumb:hover { background: var(--accent-secondary); }
+    .notif-item-wrap {
+        position: relative; border-bottom: 1px solid rgba(255,255,255,0.03);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .notif-item-wrap:last-child { border-bottom: none; }
     .notif-item { 
-        padding: 15px 20px; border-bottom: 1px solid rgba(255,255,255,0.03); transition: all 0.2s; cursor: pointer; text-decoration: none; display: block;
+        display: flex; gap: 12px; padding: 14px 45px 14px 18px;
+        transition: all 0.2s; cursor: pointer; text-decoration: none; color: inherit;
     }
     .notif-item:hover { background: rgba(255,255,255,0.03); }
-    .notif-item.unread { background: rgba(0, 229, 255, 0.03); border-left: 3px solid var(--accent-secondary); }
-    .notif-item-title { font-weight: 800; font-size: 0.8rem; color: #fff; margin-bottom: 4px; display: flex; align-items: center; gap: 8px; }
-    .notif-item-msg { font-size: 0.75rem; color: var(--text-muted); line-height: 1.4; }
-    .notif-item-time { font-size: 0.6rem; color: #444; margin-top: 8px; text-transform: uppercase; font-weight: 800; }
-    .notif-empty { padding: 40px 20px; text-align: center; color: #444; font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; }
+    .notif-item.unread { background: rgba(0, 229, 255, 0.04); border-left: 3px solid var(--accent-secondary); }
+    .notif-item-icon { font-size: 1.3rem; flex-shrink: 0; padding-top: 1px; }
+    .notif-item-body { flex: 1; min-width: 0; }
+    .notif-item-title {
+        font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 0.8rem;
+        color: #fff; margin-bottom: 3px; display: flex; align-items: center; gap: 8px;
+    }
+    .notif-item-type {
+        font-size: 0.5rem; font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase;
+        background: rgba(255,255,255,0.05); padding: 2px 7px; border-radius: 4px;
+        color: var(--text-muted); font-family: 'Outfit', sans-serif;
+    }
+    .notif-item-msg { font-size: 0.73rem; color: var(--text-muted); line-height: 1.4; }
+    .notif-item-time {
+        font-size: 0.55rem; color: #444; margin-top: 6px; text-transform: uppercase;
+        font-weight: 800; font-family: 'Outfit', sans-serif; letter-spacing: 0.5px;
+    }
+    .notif-item-delete {
+        position: absolute; top: 14px; right: 14px; background: none; border: none;
+        color: #333; font-size: 0.9rem; cursor: pointer; padding: 4px; line-height: 1;
+        transition: all 0.2s; border-radius: 6px;
+    }
+    .notif-item-delete:hover { color: #ff4e4e; background: rgba(255, 78, 78, 0.1); }
+    .notif-empty {
+        padding: 50px 20px; text-align: center; color: #444; font-size: 0.65rem;
+        font-weight: 800; text-transform: uppercase; letter-spacing: 2px; font-family: 'Outfit', sans-serif;
+    }
+    .notif-empty-icon { font-size: 2rem; margin-bottom: 12px; opacity: 0.3; filter: grayscale(1); }
 
     /* Giant Notice Banner */
     .giant-banner {
@@ -144,6 +192,8 @@ require_once 'config.php';
     .giant-banner.info .banner-icon { color: var(--accent-secondary); filter: drop-shadow(0 0 8px var(--accent-secondary)); }
     .giant-banner.info .banner-text { color: #ccf5ff; text-shadow: 0 0 10px rgba(0, 229, 255, 0.5); }
 
+        .giant-banner.info .banner-text { color: #ccf5ff; text-shadow: 0 0 10px rgba(0, 229, 255, 0.5); }
+    
     .banner-icon {
         font-size: 1.2rem;
         display: flex;
@@ -282,13 +332,16 @@ $banner_type    = $GLOBAL_BANNER_TYPE ?? 'info';
                 <div class="notif-dropdown" id="notifDropdown">
                     <div class="notif-header">
                         <span>NOTIFICATIONS</span>
-                        <div style="display: flex; gap: 15px;">
-                            <a href="javascript:void(0)" onclick="markAllRead()" style="color: var(--accent-secondary); text-decoration: none; font-size: 0.6rem; letter-spacing: 1px;">MARK ALL READ</a>
-                            <a href="javascript:void(0)" onclick="deleteAllNotifications()" style="color: #ff4e4e; text-decoration: none; font-size: 0.6rem; letter-spacing: 1px;">CLEAR ALL</a>
+                        <div class="notif-header-actions">
+                            <button class="notif-header-action" onclick="markAllRead()">MARK READ</button>
+                            <button class="notif-header-action danger" onclick="deleteAllNotifications()">CLEAR ALL</button>
                         </div>
                     </div>
                     <div class="notif-list" id="notifList">
-                        <div class="notif-empty">No new transmissions</div>
+                        <div class="notif-empty">
+                            <div class="notif-empty-icon">🔔</div>
+                            No new transmissions
+                        </div>
                     </div>
                 </div>
             </div>
@@ -316,6 +369,7 @@ $banner_type    = $GLOBAL_BANNER_TYPE ?? 'info';
     $is_index_active = (!$is_in_subdir && $current_page === 'index.php') || ($is_mobile_dir && $current_page === 'index.php');
     ?>
     <a href="<?php echo $index_link; ?>" id="navIndex" class="sidebar-link <?php echo $is_index_active ? 'active' : ''; ?>">Collection View</a>
+    <a href="<?php echo $is_mobile_dir ? 'leaderboards.php' : $prefix . 'leaderboards.php'; ?>" id="navLeaderboards" class="sidebar-link <?php echo $current_page === 'leaderboards.php' ? 'active' : ''; ?>">Leaderboards</a>
     <a href="<?php echo $is_mobile_dir ? 'draw.php' : $prefix . 'draw.php'; ?>" id="navForge" class="sidebar-link <?php echo $current_page === 'draw.php' ? 'active' : ''; ?>">
         Card Forge <span style="font-size: 0.7rem; margin-left: 5px; opacity: 0.6;"></span>
     </a>
@@ -535,6 +589,44 @@ $banner_type    = $GLOBAL_BANNER_TYPE ?? 'info';
             }
         } catch (e) { console.error("Notif update failed", e); }
     }
+    
+    // Check for urgent (blocking) notifications
+    async function checkUrgentNotifications() {
+        if (!'<?php echo $user_id; ?>') return;
+        try {
+            const prefix = '<?php echo $prefix; ?>';
+            const fd = new FormData();
+            fd.append('action', 'get_urgent_unread');
+            
+            const d = await secureFetch(`${prefix}api/notifications.php`, { method: 'POST', body: fd });
+            if (d && d.urgent) {
+                const n = d.urgent;
+                const icons = {
+                    system: '📣', admin_gift: '🎁', milestone: '🏆', 
+                    rare_draw: '🔥', variation_unlock: '✨', trade_request: '📢'
+                };
+                const icon = icons[n.type] || '🚨';
+
+                Swal.fire({
+                    title: `${icon} ${n.title}`,
+                    text: n.message,
+                    confirmButtonText: n.link ? 'ACKNOWLEDGE & GO TO PAGE' : 'ACKNOWLEDGE & CONTINUE',
+                    allowOutsideClick: false,
+                    allowEscapeKey: false
+                }).then(async (result) => {
+                    if (result.isConfirmed) {
+                        await markAsRead(n.id);
+                        if (n.link) {
+                            window.location.href = n.link;
+                        } else {
+                            checkUrgentNotifications();
+                            updateNotifStatus();
+                        }
+                    }
+                });
+            }
+        } catch (e) { console.error("Urgent check failed", e); }
+    }
 
     function toggleNotifications() {
         const dropdown = document.getElementById('notifDropdown');
@@ -550,9 +642,18 @@ $banner_type    = $GLOBAL_BANNER_TYPE ?? 'info';
         }
     }
 
+    function getNotifIcon(type) {
+        const icons = {
+            trade_request: '📢', trade_accepted: '✅', trade_declined: '⛔', trade_cancelled: '❌',
+            pawn_complete: '🏪', rare_draw: '🔥', variation_unlock: '✨',
+            admin_gift: '🎁', welcome: '🌟', system: '📣', milestone: '🏆'
+        };
+        return icons[type] || 'ℹ️';
+    }
+
     async function hydrateNotifications() {
         const list = document.getElementById('notifList');
-        list.innerHTML = '<div style="padding:40px; text-align:center;"><div class="skeleton" style="height:20px; width:80%; margin:0 auto 10px;"></div><div class="skeleton" style="height:40px; width:90%; margin:0 auto;"></div></div>';
+        list.innerHTML = '<div style="padding:40px; text-align:center;"><div class="skeleton" style="height:16px; width:60%; margin:0 auto 12px; border-radius:8px;"></div><div class="skeleton" style="height:50px; width:90%; margin:0 auto 8px; border-radius:10px;"></div><div class="skeleton" style="height:50px; width:90%; margin:0 auto; border-radius:10px;"></div></div>';
         
         try {
             const prefix = '<?php echo $prefix; ?>';
@@ -561,24 +662,27 @@ $banner_type    = $GLOBAL_BANNER_TYPE ?? 'info';
             const d = await secureFetch(`${prefix}api/notifications.php`, { method: 'POST', body: fd });
             
             if (d.notifications.length === 0) {
-                list.innerHTML = '<div class="notif-empty">No notifications available</div>';
+                list.innerHTML = '<div class="notif-empty"><div class="notif-empty-icon">📭</div>No notifications available</div>';
                 return;
             }
 
             list.innerHTML = d.notifications.map(n => `
-                <div class="notif-item-wrapper" style="position: relative;">
+                <div class="notif-item-wrap" id="notif-${n.id}">
                     <a href="${n.link || 'javascript:void(0)'}" class="notif-item ${n.is_read == 0 ? 'unread' : ''}" onclick="markAsRead(${n.id})">
-                        <div class="notif-item-title">
-                            ${n.type === 'trade_request' ? '📢' : (n.type.includes('accepted') ? '✅' : 'ℹ️')}
-                            ${n.title}
+                        <div class="notif-item-icon">${getNotifIcon(n.type)}</div>
+                        <div class="notif-item-body">
+                            <div class="notif-item-title">
+                                ${n.title}
+                                <span class="notif-item-type">${n.type.replace(/_/g, ' ')}</span>
+                            </div>
+                            <div class="notif-item-msg">${n.message}</div>
+                            <div class="notif-item-time">${formatTimeAgo(n.time_sec)}</div>
                         </div>
-                        <div class="notif-item-msg">${n.message}</div>
-                        <div class="notif-item-time">${formatTimeAgo(n.time_sec)}</div>
                     </a>
-                    <button onclick="event.stopPropagation(); deleteNotification(${n.id})" style="position: absolute; top: 15px; right: 15px; background: none; border: none; color: #444; font-size: 1rem; cursor: pointer; padding: 5px; line-height: 1; transition: color 0.2s;" onmouseover="this.style.color='#ff4e4e'" onmouseout="this.style.color='#444'">×</button>
+                    <button class="notif-item-delete" onclick="event.stopPropagation(); deleteNotification(${n.id})">✕</button>
                 </div>
             `).join('');
-        } catch (e) { list.innerHTML = `<div class="notif-empty" style="color:#ff4e4e">Failed to load notifications: ${e.message}</div>`; }
+        } catch (e) { list.innerHTML = `<div class="notif-empty" style="color:#ff4e4e">Failed to load: ${e.message}</div>`; }
     }
 
     async function markAsRead(id) {
@@ -594,13 +698,21 @@ $banner_type    = $GLOBAL_BANNER_TYPE ?? 'info';
 
     async function deleteNotification(id) {
         try {
+            const el = document.getElementById(`notif-${id}`);
+            if (el) {
+                el.style.transition = 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
+                el.style.opacity = '0';
+                el.style.transform = 'translateX(30px)';
+                el.style.maxHeight = el.offsetHeight + 'px';
+                setTimeout(() => { el.style.maxHeight = '0'; el.style.padding = '0'; el.style.margin = '0'; el.style.overflow = 'hidden'; }, 200);
+                setTimeout(() => el.remove(), 400);
+            }
             const prefix = '<?php echo $prefix; ?>';
             const fd = new FormData();
             fd.append('action', 'delete');
             fd.append('notification_id', id);
             await secureFetch(`${prefix}api/notifications.php`, { method: 'POST', body: fd });
             updateNotifStatus();
-            hydrateNotifications();
         } catch (e) { console.error(e); }
     }
 
@@ -668,5 +780,7 @@ $banner_type    = $GLOBAL_BANNER_TYPE ?? 'info';
 
     updateManaStatus();
     updateNotifStatus();
+    checkUrgentNotifications();
     setInterval(updateNotifStatus, 60000); // Check every minute
+    setInterval(checkUrgentNotifications, 30000); // Check for urgent every 30 seconds
 </script>

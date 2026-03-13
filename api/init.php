@@ -156,10 +156,10 @@ function errorResponse($msg, $code = 403) {
 /**
  * createNotification() - Injects a system alert for a specific user.
  */
-function createNotification($pdo, $uid, $type, $title, $message, $link = null) {
+function createNotification($pdo, $uid, $type, $title, $message, $link = null, $urgent = 0) {
     try {
-        $stmt = $pdo->prepare("INSERT INTO notifications (user_id, type, title, message, link) VALUES (?, ?, ?, ?, ?)");
-        return $stmt->execute([$uid, $type, $title, $message, $link]);
+        $stmt = $pdo->prepare("INSERT INTO notifications (user_id, type, title, message, link, urgent) VALUES (?, ?, ?, ?, ?, ?)");
+        return $stmt->execute([$uid, $type, $title, $message, $link, $urgent]);
     } catch (Exception $e) {
         return false;
     }
