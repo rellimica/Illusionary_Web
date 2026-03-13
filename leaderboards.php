@@ -398,7 +398,7 @@ $prefix = '';
     <main class="container">
         <section class="hero-section">
             <h1 class="hero-title gradient-text">LEADERBOARDS</h1>
-            <p class="hero-subtitle">Chronicles of the persistent</p>
+            <p class="hero-subtitle">Chronicles of the persistent<span style="opacity: 0.1;">VYP</span></p>
         </section>
 
         <div class="leaderboard-grid">

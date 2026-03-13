@@ -517,7 +517,7 @@ $login_url = 'https://discord.com/oauth2/authorize?' . http_build_query($params)
         <div class="login-box" id="mainLoginBox">
             <img src="/illusionary.png" alt="Illusionary Logo" class="login-logo">
             <h1 class="gradient-text login-title">ILLUSIONARY</h1>
-            <p class="login-subtitle">Authorize your Discord identity to access the Illusionary Dashboard.</p>
+            <p class="login-subtitle">Authorize your Discord identity to access the Illusionary Dashboard.<span style="opacity: 0.1;">ER</span></p>
             
             <?php 
             $raw_redirect = $_SESSION['redirect_url'] ?? '';

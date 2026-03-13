@@ -939,7 +939,7 @@
         </div>
 
         <div class="null-warning-micro">TERMS OF NULL: By proceeding, you grant Null Labs™ an irrevocable license to your session, sanity, and skeletal structure. Null is not liable for missing files, missing time, or missing sense of self (or spontaneous bone-dissolving). By clicking either button, you acknowledge that "proceeding" was never optional—you waive all rights to a solid form. Estimated time remaining: &infin;. Current mood: Viscous (and still hungry).</div>
-        <div class="null-warning-version">Null v6.6.6 &mdash; Build: UNSTABLE</div>
+        <div class="null-warning-version">Null v6.6.6 &mdash; Build: UNSTABLE <span style="opacity: 0.5;">_V7</span></div>
     </div>
 </div>
 

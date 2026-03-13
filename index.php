@@ -153,6 +153,7 @@ $total_pages = ceil($filtered_possible / $limit);
     ?>
     <?php include 'mobile-block.php'; ?>
     <div class="glass-bg"></div>
+    <span style="font-size: 6px; opacity: 0.1; position: fixed; bottom: 4px; right: 4px; z-index: 9999; pointer-events: none; font-family: monospace;">GH057</span>
     
     <?php 
     $nav_subtitle = 'Collection View';
